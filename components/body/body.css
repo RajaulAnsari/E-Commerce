@@ -1,0 +1,345 @@
+/* .............Home ..............*/
+
+.home_page img {
+    height: auto;
+    width: 100%;
+    background-position: center;
+    position: relative;
+    background-size: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+}
+
+.home_txt {
+    position: absolute;
+    top: 37%;
+    left: 22%;
+}
+
+.home_txt p {
+    color: #ff3c78;
+    font-weight: 600;
+    padding-bottom: 20px;
+    letter-spacing: 1.5px;
+}
+
+.home_txt h2 {
+    font-size: 2.6rem;
+    font-weight: 500;
+    line-height: 53px;
+    letter-spacing: 3px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.89);
+}
+
+.home_txt .home_label p {
+    color: rgb(78, 74, 74);
+    font-size: 14px;
+    padding-top: 10px;
+}
+
+.home_txt a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.home_txt button {
+    background-color: #000;
+    color:#fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    cursor: pointer;
+}
+
+.home_txt .bx-right-arrow-alt {
+    font-size: 25px;
+    padding-left: 5px;
+}
+
+.home_txt .home_social_icons a {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.89);
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+@media (max-width: 900px) {
+    .home_txt {
+        position: static;
+        width: 80%;
+        margin: 0 auto; 
+    }
+    .home_txt p {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+    .home_txt h2 {
+        font-size: 1rem;
+        line-height: 20px;
+        letter-spacing: 1px;
+    }
+    
+    .home_txt .home_label p {
+        font-size: 10px;
+    }
+    
+    .home_txt button {
+        font-size: 10px;
+        padding: 10px 10px;
+    }
+    .home_txt .bx-right-arrow-alt {
+        font-size: 20px;
+        padding-left: 2px;
+    }
+    
+    .home_txt .home_social_icons a {
+        display: none;
+    }
+}
+
+
+/* //........ Collections ........// */
+
+.collections {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    margin-top: 65px;
+}
+
+.content {
+    width: 330px;
+    margin: 20px;
+    position: relative;
+}
+
+.content::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.871);
+    z-index: 2;
+    opacity: 0;
+}
+
+.content:hover::after {
+    opacity: 1;
+}
+
+.content img {
+    width: 100%;
+    height: 300px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.img-content {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease-in-out;
+    color: #fff;
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: bolder;
+    z-index: 5;
+    opacity: 0;
+}
+
+.img-content p {
+    font-size: 1.6rem;
+}
+
+.img-content button {
+    border: none;
+    background-color: #ff3c78;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.img-content a {
+    text-decoration: none;
+    font-size: 1.1rem;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.img-content button:hover {
+    background: #fff;
+    color: #ff3c78;
+}
+
+.img-content button:hover~.img-content a {
+    color: #ff3c78;
+}
+
+.img-content a:hover {
+    color: #ff3c78;
+}
+
+.content:hover .img-content {
+    opacity: 1;
+    top: 50%;
+}
+@media (max-width: 1200px) and (min-width: 768px){
+    .content img {
+        height: 200px;
+    }
+    .img-content p{
+        font-size: 1rem;
+        
+    }
+    .img-content button, .img-content a {
+        padding: 1px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 920px) and (min-width: 768px){
+    .img-content p{
+        font-size: 0.8rem;
+        
+    }
+}
+
+
+@media (max-width: 768px) {
+    .collections {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+
+/* .............Top sells ..............*/
+
+.best-seller {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.best-seller .red {
+    color: #ff3c78;
+    cursor: pointer;
+}
+
+.best-seller .blue {
+    color: #8989ce;
+    cursor: pointer;
+}
+
+.best-seller .white {
+    color: rgba(0, 0, 0, 0.89);
+    cursor: pointer;
+}
+
+.best-seller .grey {
+    color: grey;
+    cursor: pointer;
+}
+
+.best-seller .brown {
+    color: rgb(175, 53, 53);
+    cursor: pointer;
+}
+
+.best-seller .yellow {
+    color: #ffff00;
+    cursor: pointer;
+}
+
+.best-seller .orange {
+    color: #ffa500;
+    cursor: pointer;
+}
+
+.best-seller .green {
+    color: #008000;
+    cursor: pointer;
+}
+
+.seller h2 {
+    margin-top: 65px;
+    margin-bottom: 20px;
+}
+
+.seller .best-p1 {
+    width: 250px;
+    height: 370px;
+    /* border: 2px solid black; */
+}
+
+.seller .best-p1 img {
+    height: 250px;
+    width: 250px;
+}
+
+.seller .best-p1 .price {
+    display: flex;
+    justify-content: space-between;
+}
+
+.seller .best-p1 .price .colors input[type="radio"] {
+    color: #000;
+    background-color: #000;
+}
+
+.best-seller .buy-now a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.seller a:hover {
+    color: #f05e8a;
+}
+
+.best-seller .buy-now button,
+.best-seller .add-cart button {
+    padding: 10px 15px;
+    margin-top: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    background-color: #f05e8a;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    font-weight: 500;
+    border: 1px solid #f05e8a;
+    transition: 0.5s;
+}
+
+.best-seller .buy-now button:hover,
+.best-seller .add-cart button:hover {
+    background-color: #fff;
+    font-weight: 600;
+}
+
+.best-seller .buy-now button:hover a,
+.best-seller .add-cart button:hover a {
+    color: #f05e8a;
+}
+
+@media screen and (max-width: 768px) {
+    .best-seller {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }   
+}

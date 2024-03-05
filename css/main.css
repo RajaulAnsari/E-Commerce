@@ -1,0 +1,55 @@
+@import url(font.css);
+@import url(colors.css);
+@import url(../components/body/body.css);
+@import url(../components/navbar/nav.css);
+@import url(../components/footer/footer.css);
+
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html {
+  font-family: var(--body-font);
+  font-size: 18px;
+  color: var(--primarytextcolor);
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+section {
+  padding: 20px;
+}
+
+
+img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+p {
+  font-size: 16px;
+}
+
+
+.container {
+  width: 100%;
+  max-width: 1225px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
