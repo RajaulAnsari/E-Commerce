@@ -8,7 +8,7 @@ session_start();
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>E-Commerce</title>
+    <title>E-Commerce | Account</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="icon" href="./images/icon.svg">
@@ -26,9 +26,7 @@ session_start();
     require "./components/navbar/nav.php";
     ?>
 
-    <?PHP
-    require "./components/body/body.php";
-    ?>
+    <h1>This is account</h1>
 
     <?PHP
     require "./components/footer/footer.php";
