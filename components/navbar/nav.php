@@ -20,7 +20,7 @@
           <div class="icon search-icon-nav" onclick="showSearch()"><a href="#"><i
                 class='bx bx-search-alt'></i>Search</a></div>
 
-          <div class="icon cart"><a href="../cart.php"><i class='bx bx-cart'></i>Cart
+          <div class="icon cart"><a href="../E-Commerce/cart.php"><i class='bx bx-cart'></i>Cart
               <?php
               if (isset($_SESSION['cart'])) {
                   $count = count($_SESSION['cart']);
