@@ -4,13 +4,13 @@
 <div class="swiper mySwiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide">
-        <img src="./images/img_mountains_wide.jpg" alt="img" />
+        <img src="./images/HomeSlider/HomeSlider1.jpg" alt="img" />
       </div>
       <div class="swiper-slide">
-        <img src="./images/img_snow_wide.jpg" alt="img" />
+        <img src="./images/HomeSlider/HomeSlider2.jpg" alt="img" />
       </div>
       <div class="swiper-slide">
-        <img src="./images/img_nature_wide.jpg" alt="img" />
+        <img src="./images/HomeSlider/HomeSlider3.jpg" alt="img" />
       </div>
     
     </div>
