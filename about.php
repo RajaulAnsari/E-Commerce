@@ -23,13 +23,13 @@ session_start();
 <body>
 
     <?PHP
-    require "./components/navbar/nav.php";
+    include "./components/navbar/nav.php";
     ?>
 
     <h1>This is about us</h1>
 
     <?PHP
-    require "./components/footer/footer.php";
+    include "./components/footer/footer.php";
     ?>
 
 

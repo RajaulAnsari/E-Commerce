@@ -1,0 +1,59 @@
+.user-div{
+    /* align-items: flex-end; */
+    margin-top: 5%;
+    justify-content: end;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+.user-div>p>a{
+    text-decoration: underline;
+    color: blue;
+
+}
+.user-div>img{
+    margin: 0;
+    width: 50%;
+    height: 100%;
+    margin-left: 2%;
+
+}
+.user-div>p{
+    /* margin: 0; */
+    margin-top: 2%;
+    margin-left: 82%;
+    color: red;
+}
+.greet{
+    /* margin-top: 5%; */
+    margin-left: 20%;
+    font-size: 20px;
+}
+.user-form{
+    position: absolute;
+    top: 45%;
+    left: 55%;
+}
+.uform>input, .uform>button{
+    margin: 0;
+    margin-top: 2%;
+    margin-left: 10%;
+    /* padding:10px 200px 10px 5px; */
+    margin-bottom: 20px;
+    border-radius: 5px; 
+    width: 350px;
+    height: 60px;
+    font-size: 1.5rem;
+}
+.remember>input{
+    margin: 0;
+    margin-top: 2%;
+    margin-left: 10%;
+    padding:10px 200px 10px 5px;
+    margin-bottom: 20px;
+    border-radius: 5px; 
+}
+.uform>button{
+    padding:10px 0 10px 5px;
+    width: 100%;
+    text-align: center;
+}

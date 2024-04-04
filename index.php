@@ -24,15 +24,15 @@ session_start();
 <body>
 
     <?PHP
-    require "./components/navbar/nav.php";
+    include "./components/navbar/nav.php";
     ?>
 
     <?PHP
-    require "./components/body/body.php";
+    include "./components/body/body.php";
     ?>
 
     <?PHP
-    require "./components/footer/footer.php";
+    include "./components/footer/footer.php";
     ?>
 
 <script src="./js/main.js" async defer></script>

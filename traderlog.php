@@ -16,6 +16,7 @@ session_start();
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./components/account/user-account-css.css">
     
   
 </head>
@@ -23,7 +24,7 @@ session_start();
 <body>
 
     <?PHP
-    require "./components/navbar/nav.php";
+    include "./components/navbar/nav.php";
     ?>
 
     <?PHP
@@ -31,7 +32,7 @@ session_start();
     ?>
 
     <?PHP
-    require "./components/footer/footer.php";
+    include "./components/footer/footer.php";
     ?>
 
 
