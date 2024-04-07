@@ -15,7 +15,6 @@ session_start();
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     
   
@@ -36,9 +35,7 @@ session_start();
     ?>
 
 <script src="./js/main.js" async defer></script>
-<script src="./js/imageslider.js" async defer></script>
+<script src="./js/slider.js" async defer></script>
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </body>
-
 </html>

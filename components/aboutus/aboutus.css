@@ -1,0 +1,110 @@
+.abouthead {
+    margin: 20px auto;
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid black;
+    height: 100%;
+  
+  }
+  
+  .abtheading {
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: var(--primarycolor);
+    padding: 10px;
+    border-radius: 12px 12px 0px 0px;
+    font-size: 32px;
+    color: black;
+  
+  }
+  
+  .aboutinfo .stamp {
+    margin: 0 auto;
+    height: 250px;
+    width: 250px;
+  
+  }
+  
+  .stamp img {
+    position: relative;
+    align-items: center;
+  
+  }
+  
+  .aboutinfo p {
+    padding: 10px;
+    text-align: justify;
+    font-weight: 400;
+    font-family: var(--body-font);
+    font-size: 18px;
+  }
+  
+  
+  .teamheading {
+    font-family: var(--heading-font);
+    text-align: center;
+    position: relative;
+    margin-top: 30px;
+    text-transform: uppercase;
+  }
+  
+  #ourteam {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .teamcard {
+    position: relative;
+    width: 200px;
+    margin: 10px auto;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .teamcard:hover {
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    transition: 0.4s;
+  }
+  
+  .teamcard .bg-image img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    clip-path: polygon(0 0, 100% 0%, 100% 70%, 45% 100%, 0 70%);
+  }
+  
+  .teamcard a,
+  .teamcard h3 {
+    font-weight: 400;
+    font-size: 16px;
+    font-family: var(--body-font);
+  }
+  
+  .teamcard span {
+    font-weight: 400;
+    font-size: 16px;
+    font-family: var(--body-font);
+  
+  }
+  
+  .teamcard .pic img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+  }
+  
+  .teamicons .a {
+    font-size: 18px;
+  
+  }
+
+  @media screen and (max-width: 768px){
+    #ourteam{
+        display: grid;
+    }
+  }

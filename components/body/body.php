@@ -1,24 +1,25 @@
 <!-- Main page banner  -->
 <div class="container">
-<section id="home">
-<div class="swiper mySwiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <img src="./images/HomeSlider/HomeSlider1.jpg" alt="img" />
-      </div>
-      <div class="swiper-slide">
-        <img src="./images/HomeSlider/HomeSlider2.jpg" alt="img" />
-      </div>
-      <div class="swiper-slide">
-        <img src="./images/HomeSlider/HomeSlider3.jpg" alt="img" />
-      </div>
-    
+<section class="slider">
+  <div class="slideshow-container">
+    <div class="mySlides fade">
+      <img src="./images/HomeSlider/HomeSlider1.jpg" style="width:100%">
     </div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-pagination"></div>
+    <div class="mySlides fade">
+      <img src="./images/HomeSlider/HomeSlider2.jpg" style="width:100%">
+    </div>
+    <div class="mySlides fade">
+      <img src="./images/HomeSlider/HomeSlider3.jpg" style="width:100%">
+    </div>
   </div>
-    </section>
+  <!-- <br>
+  <div style="text-align:center">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div> -->
+</section>
+
 <!-- collection -->
     <section id="collection">
         <h1>Product Categories</h1>
