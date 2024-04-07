@@ -1,0 +1,59 @@
+.overlay {
+  height: 100%;
+  width: 100%;
+  display: none;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgba(184, 184, 184, 0.863);
+}
+
+.overlay-content {
+  position: relative;
+  top: 46%;
+  width: 80%;
+  text-align: center;
+  margin-top: 30px;
+  margin: auto;
+}
+
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+  cursor: pointer;
+  color: white;
+}
+
+.overlay .closebtn:hover {
+  color: var(--primarycolor);
+}
+
+.overlay input[type="text"] {
+  padding: 15px;
+  font-size: 24px;
+  border: none;
+  float: left;
+  width: 80%;
+  background: white;
+  border-radius: 32px 0px 0px 32px;
+}
+
+.overlay button {
+  float: left;
+  width: 20%;
+  padding: 15px;
+  background: var(--secondarycolor);
+  font-size: 24px;
+  border: none;
+  border-radius: 0px 32px 32px 0px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.overlay button:hover {
+  background: var(--primarycolor);
+  transition: 0.5s;
+}

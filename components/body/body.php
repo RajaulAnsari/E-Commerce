@@ -1,26 +1,26 @@
 <!-- Main page banner  -->
 <div class="container">
-<section class="slider">
-  <div class="slideshow-container">
-    <div class="mySlides fade">
-      <img src="./images/HomeSlider/HomeSlider1.jpg" style="width:100%">
-    </div>
-    <div class="mySlides fade">
-      <img src="./images/HomeSlider/HomeSlider2.jpg" style="width:100%">
-    </div>
-    <div class="mySlides fade">
-      <img src="./images/HomeSlider/HomeSlider3.jpg" style="width:100%">
-    </div>
-  </div>
-  <!-- <br>
-  <div style="text-align:center">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-  </div> -->
-</section>
+    <section>
+        <div class="slideshow-container">
+            <div class="mySlides fade">
+                <img src="./images/HomeSlider/HomeSlider1.jpg" style="width:100%">
+            </div>
+            <div class="mySlides fade">
+                <img src="./images/HomeSlider/HomeSlider2.jpg" style="width:100%">
+            </div>
+            <div class="mySlides fade">
+                <img src="./images/HomeSlider/HomeSlider3.jpg" style="width:100%">
+            </div>
+        </div>
+        <br>
+        <div style="text-align:center">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </section>
 
-<!-- collection -->
+    <!-- collection -->
     <section id="collection">
         <h1>Product Categories</h1>
         <div class="collections container">
@@ -46,7 +46,8 @@
                 </div>
             </div>
             <div class="content">
-                <img src="https://th.bing.com/th/id/R.b28240c62d2f64a89e911230bf82ce9b?rik=AKTMEGtLxe%2fsVg&pid" alt="img" />
+                <img src="https://th.bing.com/th/id/R.b28240c62d2f64a89e911230bf82ce9b?rik=AKTMEGtLxe%2fsVg&pid"
+                    alt="img" />
                 <div class="img-content">
                     <p>Watch</p>
                     <button><a href="#sellers">SHOP NOW</a></button>
@@ -63,7 +64,7 @@
     </section>
 
 
-<!-- Top sells -->
+    <!-- Top sells -->
 
     <section id="sellers">
         <div class="seller container">
@@ -91,7 +92,7 @@
                             </div>
                         </div>
                         <div class="buy-now">
-                            <button><a href="https://codepen.io/sanketbodke/full/mdprZOq">Buy  Now</a></button>
+                            <button><a href="https://codepen.io/sanketbodke/full/mdprZOq">Buy Now</a></button>
                         </div>
                     </div>
                 </div>
@@ -117,7 +118,7 @@
                             </div>
                         </div>
                         <div class="buy-now">
-                            <button><a href="https://codepen.io/sanketbodke/full/mdprZOq">Buy  Now</a></button>
+                            <button><a href="https://codepen.io/sanketbodke/full/mdprZOq">Buy Now</a></button>
                         </div>
                     </div>
                 </div>
@@ -143,7 +144,7 @@
                             </div>
                         </div>
                         <div class="buy-now">
-                            <button><a href="https://codepen.io/sanketbodke/full/mdprZOq">Buy  Now</a></button>
+                            <button><a href="https://codepen.io/sanketbodke/full/mdprZOq">Buy Now</a></button>
                         </div>
                     </div>
                 </div>
@@ -169,7 +170,7 @@
                             </div>
                         </div>
                         <div class="buy-now">
-                            <button><a href="https://codepen.io/sanketbodke/full/mdprZOq">Buy  Now</a></button>
+                            <button><a href="https://codepen.io/sanketbodke/full/mdprZOq">Buy Now</a></button>
                         </div>
                     </div>
                 </div>
@@ -177,14 +178,16 @@
         </div>
     </section>
 
-<!-- Maps -->
+    <!-- Maps -->
 
     <section id="maps">
         <div class="contact container">
-        <div class="map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.8142914216164!2d85.31694337615131!3d27.692134076191408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19b19295555f%3A0xabfe5f4b310f97de!2sThe%20British%20College%2C%20Kathmandu!5e0!3m2!1sen!2snp!4v1709404091285!5m2!1sen!2snp"
-                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
+            <div class="map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.8142914216164!2d85.31694337615131!3d27.692134076191408!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19b19295555f%3A0xabfe5f4b310f97de!2sThe%20British%20College%2C%20Kathmandu!5e0!3m2!1sen!2snp!4v1709404091285!5m2!1sen!2snp"
+                    width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
         </div>
     </section>
 

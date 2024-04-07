@@ -4,8 +4,6 @@
 @import url(../components/navbar/nav.css);
 @import url(../components/footer/footer.css);
 
-
-
 *,
 *::before,
 *::after {
@@ -29,7 +27,6 @@ section {
   padding: 20px;
 }
 
-
 img {
   width: 100%;
   max-width: 100%;
@@ -45,11 +42,9 @@ p {
   font-size: 16px;
 }
 
-
 .container {
   width: 100%;
   max-width: 1225px;
   margin: 0 auto;
   padding: 0 24px;
 }
-

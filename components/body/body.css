@@ -1,285 +1,280 @@
 /* .............Slider ..............*/
 .mySlides {
-    display: none;
-  }
-  img {
-    vertical-align: middle;
-  }
+  display: none;
+}
+img {
+  vertical-align: middle;
+}
 
-  /* Slideshow container */
-  .slideshow-container {
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
-  }
-  
-  /* The dots/bullets/indicators */
-  .dot {
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color:#bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
-  }
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
 
-  .active {
-    background-color:red;
-    width: 15px;
-    height: 15px;
+/* The dots/bullets/indicators */
+.dot {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active {
+  background-color: var(--primarycolor);
+  width: 15px;
+  height: 15px;
+}
+
+/* Fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0.4;
   }
-  
-  /* Fading animation */
-  .fade {
-      animation-name: fade;
-      animation-duration: 1.5s;
-    }
-    
-    
-    @keyframes fade {
-      from {
-        opacity: 0.4;
-      }
-      to {
-        opacity: 1;
-      }
-    }
+  to {
+    opacity: 1;
+  }
+}
 
 /* //........ Collections ........// */
 
 .collections {
-    display: flex;
-    justify-content: center;
-    flex-wrap: nowrap;
-    margin-top: 65px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-top: 65px;
 }
 
 .content {
-    width: 330px;
-    margin: 20px;
-    position: relative;
+  width: 330px;
+  margin: 20px;
+  position: relative;
 }
 
 .content::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0%;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.871);
-    z-index: 2;
-    opacity: 0;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.871);
+  z-index: 2;
+  opacity: 0;
 }
 
 .content:hover::after {
-    opacity: 1;
+  opacity: 1;
 }
 
 .content img {
-    width: 100%;
-    height: 300px;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  width: 100%;
+  height: 300px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .img-content {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: all 0.3s ease-in-out;
-    color: #fff;
-    text-align: center;
-    font-size: 2.2rem;
-    font-weight: bolder;
-    z-index: 5;
-    opacity: 0;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease-in-out;
+  color: #fff;
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: bolder;
+  z-index: 5;
+  opacity: 0;
 }
 
 .img-content p {
-    font-size: 1.6rem;
+  font-size: 1.6rem;
 }
 
 .img-content button {
-    border: none;
-    background-color: #ff3c78;
-    color: #fff;
-    border-radius: 10px;
-    padding: 10px;
+  border: none;
+  background-color: #ff3c78;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 .img-content a {
-    text-decoration: none;
-    font-size: 1.1rem;
-    color: #fff;
-    transition: 0.3s;
+  text-decoration: none;
+  font-size: 1.1rem;
+  color: #fff;
+  transition: 0.3s;
 }
 
 .img-content button:hover {
-    background: #fff;
-    color: #ff3c78;
+  background: #fff;
+  color: #ff3c78;
 }
 
-.img-content button:hover~.img-content a {
-    color: #ff3c78;
+.img-content button:hover ~ .img-content a {
+  color: #ff3c78;
 }
 
 .img-content a:hover {
-    color: #ff3c78;
+  color: #ff3c78;
 }
 
 .content:hover .img-content {
-    opacity: 1;
-    top: 50%;
+  opacity: 1;
+  top: 50%;
 }
-@media (max-width: 1200px) and (min-width: 768px){
-    .content img {
-        height: 200px;
-    }
-    .img-content p{
-        font-size: 1rem;
-        
-    }
-    .img-content button, .img-content a {
-        padding: 1px;
-        font-size: 1rem;
-    }
-}
-
-@media (max-width: 920px) and (min-width: 768px){
-    .img-content p{
-        font-size: 0.8rem;
-        
-    }
+@media (max-width: 1200px) and (min-width: 768px) {
+  .content img {
+    height: 200px;
+  }
+  .img-content p {
+    font-size: 1rem;
+  }
+  .img-content button,
+  .img-content a {
+    padding: 1px;
+    font-size: 1rem;
+  }
 }
 
+@media (max-width: 920px) and (min-width: 768px) {
+  .img-content p {
+    font-size: 0.8rem;
+  }
+}
 
 @media (max-width: 768px) {
-    .collections {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+  .collections {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
-
-
 
 /* .............Top sells ..............*/
 
 .best-seller {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 
 .best-seller .red {
-    color: #ff3c78;
-    cursor: pointer;
+  color: #ff3c78;
+  cursor: pointer;
 }
 
 .best-seller .blue {
-    color: #8989ce;
-    cursor: pointer;
+  color: #8989ce;
+  cursor: pointer;
 }
 
 .best-seller .white {
-    color: rgba(0, 0, 0, 0.89);
-    cursor: pointer;
+  color: rgba(0, 0, 0, 0.89);
+  cursor: pointer;
 }
 
 .best-seller .grey {
-    color: grey;
-    cursor: pointer;
+  color: grey;
+  cursor: pointer;
 }
 
 .best-seller .brown {
-    color: rgb(175, 53, 53);
-    cursor: pointer;
+  color: rgb(175, 53, 53);
+  cursor: pointer;
 }
 
 .best-seller .yellow {
-    color: #ffff00;
-    cursor: pointer;
+  color: #ffff00;
+  cursor: pointer;
 }
 
 .best-seller .orange {
-    color: #ffa500;
-    cursor: pointer;
+  color: #ffa500;
+  cursor: pointer;
 }
 
 .best-seller .green {
-    color: #008000;
-    cursor: pointer;
+  color: #008000;
+  cursor: pointer;
 }
 
 .seller h2 {
-    margin-top: 65px;
-    margin-bottom: 20px;
+  margin-top: 65px;
+  margin-bottom: 20px;
 }
 
 .seller .best-p1 {
-    width: 250px;
-    height: 370px;
-    /* border: 2px solid black; */
+  width: 250px;
+  height: 370px;
+  /* border: 2px solid black; */
 }
 
 .seller .best-p1 img {
-    height: 250px;
-    width: 250px;
+  height: 250px;
+  width: 250px;
 }
 
 .seller .best-p1 .price {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .seller .best-p1 .price .colors input[type="radio"] {
-    color: #000;
-    background-color: #000;
+  color: #000;
+  background-color: #000;
 }
 
 .best-seller .buy-now a {
-    text-decoration: none;
-    color: #fff;
+  text-decoration: none;
+  color: #fff;
 }
 
 .seller a:hover {
-    color: #f05e8a;
+  color: #f05e8a;
 }
 
 .best-seller .buy-now button,
 .best-seller .add-cart button {
-    padding: 10px 15px;
-    margin-top: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    text-transform: uppercase;
-    background-color: #f05e8a;
-    color: #fff;
-    border: none;
-    border-radius: 15px;
-    font-weight: 500;
-    border: 1px solid #f05e8a;
-    transition: 0.5s;
+  padding: 10px 15px;
+  margin-top: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  background-color: #f05e8a;
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  font-weight: 500;
+  border: 1px solid #f05e8a;
+  transition: 0.5s;
 }
 
 .best-seller .buy-now button:hover,
 .best-seller .add-cart button:hover {
-    background-color: #fff;
-    font-weight: 600;
+  background-color: #fff;
+  font-weight: 600;
 }
 
 .best-seller .buy-now button:hover a,
 .best-seller .add-cart button:hover a {
-    color: #f05e8a;
+  color: #f05e8a;
 }
 
 @media screen and (max-width: 768px) {
-    .best-seller {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }   
+  .best-seller {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }

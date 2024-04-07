@@ -7,3 +7,12 @@ document.querySelector(".fourline").onclick = () => {
 document.querySelector(".close").onclick = () => {
   navList.classList.remove("show");
 };
+
+//For Search popup
+function openSearch() {
+  document.getElementById("myOverlay").style.display = "block";
+}
+
+function closeSearch() {
+  document.getElementById("myOverlay").style.display = "none";
+}
