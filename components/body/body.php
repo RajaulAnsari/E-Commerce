@@ -25,36 +25,35 @@
         <h1>Product Categories</h1>
         <div class="collections container">
             <div class="content">
-                <img src="https://i.postimg.cc/Xqmwr12c/clothing.webp" alt="img" />
+                <img src="./images/Vegetables-Fruits/FRAISE.jpg" alt="img" />
                 <div class="img-content">
                     <p>Clothing Collections</p>
                     <button><a href="#sellers">SHOP NOW</a></button>
                 </div>
             </div>
             <div class="content">
-                <img src="https://i.postimg.cc/8CmBZH5N/shoes.webp" alt="img" />
+                <img src="./images/Vegetables-Fruits/MELON.jpg" alt="img" />
                 <div class="img-content">
                     <p>Shoes Spring</p>
                     <button><a href="#sellers">SHOP NOW</a></button>
                 </div>
             </div>
             <div class="content">
-                <img src="https://i.postimg.cc/MHv7KJYp/access.webp" alt="img" />
+                <img src="./images/Vegetables-Fruits/ORANGE.jpg" alt="img" />
                 <div class="img-content">
                     <p>Accessories</p>
                     <button><a href="#sellers">SHOP NOW</a></button>
                 </div>
             </div>
             <div class="content">
-                <img src="https://th.bing.com/th/id/R.b28240c62d2f64a89e911230bf82ce9b?rik=AKTMEGtLxe%2fsVg&pid"
-                    alt="img" />
+                <img src="./images/Vegetables-Fruits/PASTEQUE.jpg" alt="img" />
                 <div class="img-content">
                     <p>Watch</p>
                     <button><a href="#sellers">SHOP NOW</a></button>
                 </div>
             </div>
             <div class="content">
-                <img src="https://th.bing.com/th/id/OIP.e15QrN2TKh9_3_s1-qtJnwHaHa?rs" alt="img" />
+                <img src="./images/Vegetables-Fruits/PECHE.jpg" alt="img" />
                 <div class="img-content">
                     <p>Bag</p>
                     <button><a href="#sellers">SHOP NOW</a></button>
@@ -71,10 +70,10 @@
             <h2>Top Sales</h2>
             <div class="best-seller">
                 <div class="best-p1">
-                    <img src="https://i.postimg.cc/8CmBZH5N/shoes.webp" alt="img">
+                    <img src="./images/Vegetables-Fruits/POIRE.jpg" alt="img">
                     <div class="best-p1-txt">
                         <div class="name-of-p">
-                            <p>PS England Shoes</p>
+                            <p>POIRE</p>
                         </div>
                         <div class="rating">
                             <i class='bx bxs-star'></i>
@@ -84,7 +83,7 @@
                             <i class='bx bx-star'></i>
                         </div>
                         <div class="price">
-                            &dollar;37.24
+                            &dollar;3.24
                             <div class="colors">
                                 <i class='bx bxs-circle red'></i>
                                 <i class='bx bxs-circle blue'></i>
@@ -97,10 +96,10 @@
                     </div>
                 </div>
                 <div class="best-p1">
-                    <img src="https://i.postimg.cc/76X9ZV8m/Screenshot_from_2022-06-03_18-45-12.png" alt="img">
+                    <img src="./images/Vegetables-Fruits/POMME.jpg" alt="img">
                     <div class="best-p1-txt">
                         <div class="name-of-p">
-                            <p>PS England Jacket</p>
+                            <p>POMME</p>
                         </div>
                         <div class="rating">
                             <i class='bx bxs-star'></i>
@@ -110,7 +109,7 @@
                             <i class='bx bx-star'></i>
                         </div>
                         <div class="price">
-                            &dollar;17.24
+                            &dollar;1.24
                             <div class="colors">
                                 <i class='bx bxs-circle green'></i>
                                 <i class='bx bxs-circle grey'></i>
@@ -123,10 +122,10 @@
                     </div>
                 </div>
                 <div class="best-p1">
-                    <img src="https://i.postimg.cc/j2FhzSjf/bs2.png" alt="img">
+                    <img src="./images/Vegetables-Fruits/PRUNE.jpg" alt="img">
                     <div class="best-p1-txt">
                         <div class="name-of-p">
-                            <p>PS England Shirt</p>
+                            <p>PRUNE</p>
                         </div>
                         <div class="rating">
                             <i class='bx bxs-star'></i>
@@ -136,7 +135,7 @@
                             <i class='bx bx-star'></i>
                         </div>
                         <div class="price">
-                            &dollar;27.24
+                            &dollar;2.24
                             <div class="colors">
                                 <i class='bx bxs-circle brown'></i>
                                 <i class='bx bxs-circle green'></i>
@@ -149,10 +148,10 @@
                     </div>
                 </div>
                 <div class="best-p1">
-                    <img src="https://i.postimg.cc/QtjSDzPF/bs3.png" alt="img">
+                    <img src="./images/Vegetables-Fruits/RAISIN.jpg" alt="img">
                     <div class="best-p1-txt">
                         <div class="name-of-p">
-                            <p>PS England Shoes</p>
+                            <p>RAISIN</p>
                         </div>
                         <div class="rating">
                             <i class='bx bxs-star'></i>
@@ -162,7 +161,7 @@
                             <i class='bx bxs-star'></i>
                         </div>
                         <div class="price">
-                            &dollar;43.67
+                            &dollar;3.67
                             <div class="colors">
                                 <i class='bx bxs-circle red'></i>
                                 <i class='bx bxs-circle grey'></i>
