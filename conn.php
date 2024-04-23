@@ -1,16 +1,16 @@
 <?php
-session_start();
+// session_start();
 
-$user = "admin";
-$pass = "pass";
-$host = "localhost/XE";
+$user = "rajaul";
+$pass = "root";
+$host = "//localhost/XE";
 $dbconn = oci_connect($user, $pass, $host);
 
 if (!$dbconn) {
     $e = oci_error();
     trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
 } else {
-    echo "Connection Successful";
+    echo "Connection Successful ok!";
 }
 
 oci_close($dbconn);
