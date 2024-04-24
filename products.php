@@ -18,6 +18,8 @@ session_start();
 
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./components/searchbox/searchbox.css">
+    <link rel="stylesheet" href="./components/product/all_products.css">
+
 
 
 </head>
@@ -32,7 +34,9 @@ session_start();
     include "./components/searchbox/searchbox.php";
     ?>
 
-    <h1 style="color:red;">This is products</h1>
+    <?PHP
+    include "./components/product/all_products.php";
+    ?>
 
     <?PHP
     include "./components/footer/footer.php";

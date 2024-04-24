@@ -1,0 +1,16 @@
+.container {
+  width: 100%;
+}
+
+.product-container {
+  display: flex;
+  flex-wrap: nowrap; /* Ensures the products don't wrap to the next line */
+  overflow-x: auto; /* Allow horizontal scrolling if needed */
+  padding: 10px;
+  border-start-end-radius: 10px;
+}
+
+.best-p1 {
+  width: 200px; /* Set width of each product */
+  margin-right: 10px; /* Adjust spacing between products */
+}
