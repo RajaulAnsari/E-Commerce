@@ -1,16 +1,79 @@
-.container {
-  width: 100%;
-}
-
 .product-container {
+  margin-top: 5%;
   display: flex;
-  flex-wrap: nowrap; /* Ensures the products don't wrap to the next line */
-  overflow-x: auto; /* Allow horizontal scrolling if needed */
-  padding: 10px;
-  border-start-end-radius: 10px;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.best-p1 {
-  width: 200px; /* Set width of each product */
-  margin-right: 10px; /* Adjust spacing between products */
+.product-item {
+  width: 20%; /* Default width for larger screens */
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-details {
+  padding: 10px;
+}
+
+.product-name {
+  font-weight: bold;
+}
+
+.shop-id {
+  margin-top: 5px;
+  color: #666;
+}
+
+.rating {
+  margin-top: 5px;
+}
+
+.price {
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.add-to-cart {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.add-to-cart button {
+  padding: 5px 10px;
+  background-color: var(--themecolor);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-to-cart button:hover {
+  background-color: var(--primarycolor);
+}
+
+/* Media Queries for responsiveness */
+@media only screen and (max-width: 1200px) {
+  .product-item {
+    width: 45%; /* Adjust width for medium-sized screens */
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .product-item {
+    width: 100%; /* Adjust width for smaller screens */
+  }
+}
+
+.empty-product-item {
+  width: 50%;
+  margin-bottom: 20px;
 }

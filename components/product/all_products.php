@@ -4,7 +4,6 @@ include 'connection.php';
 
 $categoryFilter = isset($_GET['category']) ? $_GET['category'] : 'all';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'none';
-$rating = isset($_GET['rating']) ? $_GET['rating'] : 'none';
 $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Construct base SQL query
@@ -25,11 +24,9 @@ if ($sort === 'price_asc') {
     $sql .= " ORDER BY productprice ASC";
 } elseif ($sort === 'price_desc') {
     $sql .= " ORDER BY productprice DESC";
-}
-
-if ($rating === 'rating_asc') {
+} elseif ($sort === 'rating_asc') {
     $sql .= " ORDER BY rating ASC";
-} elseif ($rating === 'rating_desc') {
+} elseif ($sort === 'rating_desc') {
     $sql .= " ORDER BY rating DESC";
 }
 
@@ -55,51 +52,46 @@ echo "<option value='fruits' " . ($categoryFilter === 'fruits' ? 'selected' : ''
 echo "<option value='vegetables' " . ($categoryFilter === 'vegetables' ? 'selected' : '') . ">Vegetables</option>";
 echo "</select>";
 
-echo "<label value='none'>Sort by Price : </label>";
+echo "<label value='none'>&nbsp &nbsp &nbsp Sort by Price & Rating : </label>";
 echo "<select name='sort' id='sort' onchange='this.form.submit()'>";
 echo "<option value='none' " . ($sort === 'none' ? 'selected' : '') . ">None</option>";
 echo "<option value='price_asc' " . ($sort === 'price_asc' ? 'selected' : '') . ">Price: Low to High</option>";
 echo "<option value='price_desc' " . ($sort === 'price_desc' ? 'selected' : '') . ">Price: High to Low</option>";
-echo "</select>";
-
-echo "<label value='none'>Sort by Rating : </label>";
-echo "<select name='rating' id='rating' onchange='this.form.submit()'>";
-echo "<option value='none' " . ($rating === 'none' ? 'selected' : '') . ">None</option>";
-echo "<option value='rating_asc' " . ($rating === 'rating_asc' ? 'selected' : '') . ">Rating: Low to High</option>";
-echo "<option value='rating_desc' " . ($rating === 'rating_desc' ? 'selected' : '') . ">Rating: High to Low</option>";
+echo "<option value='rating_asc' " . ($sort === 'rating_asc' ? 'selected' : '') . ">Rating: Low to High</option>";
+echo "<option value='rating_desc' " . ($sort === 'rating_desc' ? 'selected' : '') . ">Rating: High to Low</option>";
 echo "</select>";
 
 echo "</form>";
 echo "</div>";
 
 echo "<div class='product-container'>";
+$index = 0;
 if (oci_fetch($stmt)) { // Check if there are any results
     do {
         echo "
-        <div class='best-p1'>
-            <img src='./images/Vegetables-Fruits/" . oci_result($stmt, 'PRODUCTIMAGE') . "' alt='Product Photo'>
-            <div class='best-p1-txt'>
-                <div class='name-of-p'>
-                    <p>" . oci_result($stmt, 'PRODUCTNAME') . "</p>
-                </div>
-                <div class='name-of-p'>
-                    <p> Shop ID : " . oci_result($stmt, 'SHOPID') . "</p>
-                </div>
-                <div class='rating'>
-                    " . generateStars(oci_result($stmt, 'RATING')) . "
-                </div>
-                <div class='price'>
-                    Price : $" . oci_result($stmt, 'PRODUCTPRICE') . "
-                </div>
-                <div class='buy-now'>
-                    <button><a href='#'>Add To Cart</a></button>
+        <div class='product-item'>
+            <img src='./images/Vegetables-Fruits/" . oci_result($stmt, 'PRODUCTIMAGE') . "' alt='Product Photo' class='product-image'>
+            <div class='product-details'>
+                <div class='product-name'>" . oci_result($stmt, 'PRODUCTNAME') . "</div>
+                <div class='shop-id'>Shop ID : " . oci_result($stmt, 'SHOPID') . "</div>
+                <div class='rating'>" . generateStars(oci_result($stmt, 'RATING')) . "</div>
+                <div class='price'>Price : $" . oci_result($stmt, 'PRODUCTPRICE') . "</div>
+                <div class='add-to-cart'>
+                    <form action='add_to_cart.php' method='POST'>
+                        <input type='hidden' name='product_id' value='" . oci_result($stmt, 'PRODUCTID') . "'>
+                        <button type='submit' name='add_to_cart'>Add To Cart</button>
+                    </form>
                 </div>
             </div>
         </div>
         ";
+        $index++;
     } while (oci_fetch($stmt));
 } else {
     echo "<p>No products found.</p>";
+}
+for ($i=$index; $i<3; $i++) {
+    echo "<div class='empty-product-item'></div>";
 }
 echo "</div>";
 

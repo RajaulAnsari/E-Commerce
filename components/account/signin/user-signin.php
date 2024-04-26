@@ -5,7 +5,7 @@
             <p>Glad to see you back! 😊</p>
         </div>
         <div class="register">
-            <p>Not A User? <a href="#">Register Now</a></p>
+            <p>Not A User? <a href="./usersignup.php">Register Now</a></p>
         </div>
         <div class="image-container">
             <img src="./images/User-Trader/Users.png" alt="banner">
@@ -16,7 +16,7 @@
                 <form class="uform">
                     <input type="email" name="username" placeholder="Username" required><br>
                     <input type="password" name="password" id="password" placeholder="Password" required><br>
-                    <label class="remember"><input type="checkbox" name="remember" value="remember">Remember
+                    <label class="remember"><input type="checkbox" name="remember" value="remember">&nbsp Remember
                         Me</label><br>
                     <button type="submit">Login</button>
                 </form>

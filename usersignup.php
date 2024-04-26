@@ -8,7 +8,7 @@ session_start();
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>E-Commerce | Account</title>
+    <title>E-Commerce | User-Login</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="icon" href="./images/icons/SVG/SvgIcoLogo.svg">
@@ -17,9 +17,9 @@ session_start();
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
     <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./components/account/accnt-home.css">
-
+    <link rel="stylesheet" href="./components/account/signup/user-trader-signup.css">
     <link rel="stylesheet" href="./components/searchbox/searchbox.css">
+
 
 </head>
 
@@ -34,15 +34,15 @@ session_start();
     ?>
 
     <?PHP
-    include "./components/account/account-home.php";
+    include "./components/account/signup/user-signup.php";
     ?>
 
     <?PHP
     include "./components/footer/footer.php";
     ?>
 
-
     <script src="./js/main.js" async defer></script>
+
 </body>
 
 </html>

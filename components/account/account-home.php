@@ -4,14 +4,14 @@
     <div class="banner">
         <ul class="image-list">
             <li class="image-container">
-                <a href="./userlog.php">
+                <a href="./usersignin.php">
                     <img src="./images/User-Trader/Users.png" alt="banner" class="User">
                     <h1>USER</h1>
                 </a>
             </li>
             <li class="gap"></li>
             <li class="image-container">
-                <a href="./traderlog.php">
+                <a href="./tradersignin.php">
                     <img src=" ./images/User-Trader/Traders.png" alt="banner" class="Trader">
                     <h1>TRADER</h1>
                 </a>
