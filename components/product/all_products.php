@@ -42,6 +42,13 @@ if (!empty($searchQuery)) {
 }
 
 oci_execute($stmt);
+echo "<section>";
+echo "</secction>";
+        echo "<div class='shop-page-title'>";
+            echo "<h2>Products</h2>";
+        echo " </div>";
+echo "<section>";
+echo "</secction>";
 
 echo "<div class='category-filter'>";
 echo "<form method='GET'>";

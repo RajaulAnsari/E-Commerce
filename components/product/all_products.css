@@ -5,6 +5,18 @@
   justify-content: space-between;
 }
 
+.shop-page-title h2 {
+  font-family: "Times New Roman", Times, serif;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: #7c7777;
+  padding: 10px;
+  margin: 0 auto;
+  border-radius: 12px 12px 0px 0px;
+  font-size: 35px;
+  color: black;
+}
+
 .product-item {
   width: 20%; /* Default width for larger screens */
   margin-bottom: 20px;

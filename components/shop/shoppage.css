@@ -1,0 +1,82 @@
+.shop img {
+  width: 400px;
+  border-radius: 32px;
+}
+
+h5 {
+  font-size: 20px;
+}
+#shop-page {
+  /* margin-top: 50px; */
+  max-height: 100vh;
+}
+
+.shops {
+  display: grid;
+  margin: 30px auto;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 20px;
+}
+
+.shop {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border-radius: 32px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.shop:hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  transition: 0.4s;
+}
+
+.shop-page-title h2 {
+  font-family: "Times New Roman", Times, serif;
+  text-align: center;
+  text-transform: uppercase;
+  background-color: #7c7777;
+  padding: 10px;
+  margin: 0 auto;
+  border-radius: 12px 12px 0px 0px;
+  font-size: 35px;
+  color: black;
+}
+
+@media (max-width: 768px) {
+  .shops {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 20px;
+  }
+}
+
+@media (max-width: 663px) {
+  h5 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 457px) {
+  .shops {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 20px;
+  }
+}
+
+@media (max-width: 337px) {
+  h5 {
+    font-size: 12px;
+  }
+}
