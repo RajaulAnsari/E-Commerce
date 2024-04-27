@@ -124,7 +124,7 @@ if (isset($_POST['logout'])) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 50vh;
+        height: 60vh;
         text-align: center;
     }
 
@@ -167,6 +167,19 @@ if (isset($_POST['logout'])) {
     .userprofile-container button:hover {
         background-color: #45a049;
     }
+
+    .user-dashboard h2 {
+        font-family: "Times New Roman", Times, serif;
+        text-align: center;
+        text-transform: uppercase;
+        background-color: #7c7777;
+        padding: 10px;
+        margin: 0 auto;
+        border-radius: 12px 12px 12px 12px;
+        font-size: 35px;
+        color: black;
+        /* width: 800px; */
+    }
     </style>
 </head>
 
@@ -181,6 +194,11 @@ if (isset($_POST['logout'])) {
     ?>
 
     <div class="userprofile-container">
+        <section></section>
+        <div class="user-dashboard">
+            <h2>User Dashboard</h2>
+        </div>
+        <section></section>
 
         <!-- Display user's image -->
         <div class="user-image">

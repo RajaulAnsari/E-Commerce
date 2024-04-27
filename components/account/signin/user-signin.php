@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Prepare the SQL statement
-    $sql = "SELECT * FROM \"user\" WHERE username =:username";
+    $sql = "SELECT * FROM \"user\" WHERE username = :username";
 
     $stmt = oci_parse($conn, $sql);
 
@@ -27,22 +27,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = oci_execute($stmt);
 
     if ($result) {
+        // Fetch the row associated with the username
         $row = oci_fetch_assoc($stmt);
 
-        // Verify password
-        if (password_verify($password, $row['PASSWORD'])) {
-            // Store the username in session
-            $_SESSION['username'] = $username;
+        // Check if $row contains a valid result
+        if ($row !== false) {
+            // Verify password
+            if (password_verify($password, $row['PASSWORD'])) {
+                // Store the username in session
+                $_SESSION['username'] = $username;
 
-            echo "Login successful!";
-            // Redirect to dashboard or other page
-            header("Location: userhomepage.php");
-            exit();
+                echo "Login successful!";
+                // Redirect to dashboard or other page
+                header("Location: userhomepage.php");
+                exit();
+            } else {
+                echo "Invalid password!";
+            }
         } else {
-            echo "Invalid username or password!";
+            echo "Username not found!";
         }
     } else {
-        echo "User not found!";
+        echo "Error fetching user data!";
     }
     oci_free_statement($stmt);
     oci_close($conn);
