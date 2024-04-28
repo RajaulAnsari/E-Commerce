@@ -21,7 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Prepare the SQL statement
-        $sql = "INSERT INTO \"user\" (firstname, lastname, username, email, password, address, contact) VALUES (:firstname, :lastname, :username, :email, :password, :address, :contact)";
+        $sql = "INSERT INTO \"USER_CLECK\" (FIRST_NAME, LAST_NAME, USER_NAME, EMAIL_ADDRESS, PASSWORD, ADDRESS, PHONE_NUMBER) 
+                VALUES (:firstname, :lastname, :username, :email, :password, :address, :contact)";
 
         $stmt = oci_parse($conn, $sql);
 
@@ -40,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($result) {
             echo "Registration successful!";
         } else {
-            echo "Error: " . oci_error($stmt);
+            echo "Error: Unable to register. Please try again later.";
         }
 
         oci_free_statement($stmt);
@@ -48,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
 
 
 <div class="container">

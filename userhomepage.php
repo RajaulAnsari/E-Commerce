@@ -11,7 +11,7 @@ if (!isset($_SESSION['username'])) {
 
 // Fetch user's data from the database
 $username = $_SESSION['username'];
-$sql = "SELECT * FROM \"user\" WHERE username = :username";
+$sql = "SELECT * FROM USER_CLECK WHERE USER_NAME = :username";
 $stmt = oci_parse($conn, $sql);
 oci_bind_by_name($stmt, ":username", $username);
 
@@ -21,10 +21,10 @@ if (oci_execute($stmt)) {
 
     if ($userData) {
         // Display user's data
-        $displayName = isset($userData['username']) ? $userData['username'] : '';
-        $fullName = isset($userData['firstname'], $userData['lastname']) ? $userData['firstname'] . ' ' . $userData['lastname'] : '';
-        $email = isset($userData['email']) ? $userData['email'] : '';
-        $imagePath = isset($userData['IMAGE_PATH']) ? $userData['IMAGE_PATH'] : ''; // Corrected column name
+        $displayName = isset($userData['USER_NAME']) ? $userData['USER_NAME'] : '';
+        $fullName = isset($userData['FIRST_NAME'], $userData['LAST_NAME']) ? $userData['FIRST_NAME'] . ' ' . $userData['LAST_NAME'] : '';
+        $email = isset($userData['EMAIL_ADDRESS']) ? $userData['EMAIL_ADDRESS'] : '';
+        $imagePath = isset($userData['USER_IMAGE']) ? $userData['USER_IMAGE'] : ''; // Corrected column name
 
         // Close the statement
         oci_free_statement($stmt);
@@ -73,11 +73,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
     } else {
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
             // Image uploaded successfully, update image path in the database
-            $IMAGE_PATH = $targetFile;
+            $imagePath = $targetFile;
             // Update the database with the new image path
-            $updateSql = "UPDATE \"user\" SET image_path = :IMAGE_PATH WHERE username = :username";
+            $updateSql = "UPDATE USER_CLECK SET USER_IMAGE = :IMAGE_PATH WHERE USER_NAME = :username";
             $updateStmt = oci_parse($conn, $updateSql);
-            oci_bind_by_name($updateStmt, ":IMAGE_PATH", $IMAGE_PATH);
+            oci_bind_by_name($updateStmt, ":IMAGE_PATH", $imagePath);
             oci_bind_by_name($updateStmt, ":username", $username);
             oci_execute($updateStmt);
             oci_free_statement($updateStmt);
@@ -220,9 +220,9 @@ if (isset($_POST['logout'])) {
         </form>
 
         <!-- Display user's data including the image -->
-        <h1>Welcome, <?php echo ucfirst($userData['USERNAME']); ?>😊</h1>
-        <p>Name: <?php echo $userData['FIRSTNAME'] . " " . $userData['LASTNAME']; ?></p>
-        <p>Email: <?php echo $userData['EMAIL']; ?></p>
+        <h1>Welcome, <?php echo ucfirst($userData['USER_NAME']); ?>😊</h1>
+        <p>Name: <?php echo $userData['FIRST_NAME'] . " " . $userData['LAST_NAME']; ?></p>
+        <p>Email: <?php echo $userData['EMAIL_ADDRESS']; ?></p>
 
         <!-- Logout form -->
         <form method="post">

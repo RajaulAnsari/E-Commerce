@@ -17,8 +17,8 @@
                     <div class="close nav-toggle"><i class='bx bx-x'></i></div>
                     <div class="icons">
                         <div class="icon">
-                            <?php if (isset($_SESSION['username'])) {
-                            echo "<a href='./userhomepage.php'><i class='bx bx-user'></i>" . ucfirst($_SESSION['username']) . "</a>";
+                            <?php if (isset($_SESSION['USER_NAME'])) {
+                                echo "<a href='./userhomepage.php'><i class='bx bx-user'></i>" . ucfirst($_SESSION['USER_NAME']) . "</a>";
                             }else{
                             echo "<a href='./account.php'><i class='bx bx-user'></i>Account</a>";
                             }

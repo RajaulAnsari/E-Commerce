@@ -9,7 +9,7 @@
         include 'connection.php';
 
         // Query to fetch shop name and image
-        $sql = "SELECT * FROM \"shop\"";
+        $sql = "SELECT * FROM \"SHOP\"";
         $stmt = oci_parse($conn, $sql);
 
         // Execute the query
