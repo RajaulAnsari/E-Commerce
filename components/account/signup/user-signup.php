@@ -1,4 +1,5 @@
 <?php
+include './mailing.php';
 include 'connection.php';
 
 // Check if the form is submitted
@@ -21,8 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Prepare the SQL statement
-        $sql = "INSERT INTO \"USER_CLECK\" (FIRST_NAME, LAST_NAME, USER_NAME, EMAIL_ADDRESS, PASSWORD, ADDRESS, PHONE_NUMBER) 
-                VALUES (:firstname, :lastname, :username, :email, :password, :address, :contact)";
+        $sql = "INSERT INTO \"USER_CLECK\" (FIRST_NAME, LAST_NAME, USER_NAME, EMAIL_ADDRESS, PASSWORD, ADDRESS, PHONE_NUMBER,IS_VERIFIED) 
+                VALUES (:firstname, :lastname, :username, :email, :password, :address, :contact,0)";
 
         $stmt = oci_parse($conn, $sql);
 
@@ -39,7 +40,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $result = oci_execute($stmt);
 
         if ($result) {
-            echo "Registration successful!";
+            // Define email subject and body
+            $subject = "Verify Your Email Address";
+            $html = "
+            <div style='font-family: Arial, sans-serif; border: 2px solid #007bff; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
+        <h2 style='color: green; margin-bottom: 20px;'>Welcome to CleckHub!</h2>
+        <p>Hello $firstname,</p>
+        <p>Thank you for registering with CleckHub. To complete your registration, please click the button below to verify your email address:</p>
+        <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/verify.php?email=" . urlencode($email) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Email Address</a>
+        <p style='margin-top: 20px; font-size: 14px; color: #777;'>If you did not register for CleckHub, please ignore this email.</p>
+    </div>
+";
+            
+                        
+            // Send verification email
+            sendVerificationEmail($email, $subject, $html);
+
+            echo "<script>alert('Registration successful! Verification Required.');</script>";
+            echo "<script>window.location = './usersignin.php'</script>";
         } else {
             echo "Error: Unable to register. Please try again later.";
         }
@@ -49,7 +67,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 
 
 <div class="container">

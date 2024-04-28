@@ -30,12 +30,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($row !== false) {
         // Verify password
         if (password_verify($password, $row['PASSWORD'])) {
-            // Store the username in session
-            $_SESSION['username'] = $username;
+            // Check if user is verified
+            if ($row['IS_VERIFIED'] == 1) {
+                // Store the username in session
+                $_SESSION['username'] = $username;
 
-            // Redirect to dashboard or other page
-            header("Location: userhomepage.php");
-            exit();
+                // Redirect to dashboard or other page
+                header("Location: userhomepage.php");
+                exit();
+            } else {
+                echo "Account not verified. Please verify your email before logging in.";
+            }
         } else {
             echo "Invalid password!";
         }
@@ -47,8 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     oci_close($conn);
 }
 ?>
-
-
 
 <div class="container">
     <div class="user-div">
