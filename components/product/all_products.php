@@ -1,5 +1,6 @@
-<?php
-echo "<div class='container'>";
+<section id="product-page">
+
+    <?php
 include 'connection.php';
 
 $categoryFilter = isset($_GET['category']) ? $_GET['category'] : 'all';
@@ -17,20 +18,20 @@ if ($categoryFilter !== 'all') {
 
 // Add search filter if provided
 if (!empty($searchQuery)) {
-    $sql .= " AND LOWER(productname) LIKE LOWER(:searchQuery)";
+    $sql .= " AND LOWER(product_name) LIKE LOWER(:searchQuery)";
 }
 
 // Constructing SQL query with sorting
 if ($sort === 'price_asc') {
-    $sql .= " ORDER BY productprice ASC";
+    $sql .= " ORDER BY product_price ASC";
 } elseif ($sort === 'price_desc') {
-    $sql .= " ORDER BY productprice DESC";
+    $sql .= " ORDER BY product_price DESC";
 }
 
-if ($rating === 'rating_asc') {
-    $sql .= " ORDER BY rating ASC";
-} elseif ($rating === 'rating_desc') {
-    $sql .= " ORDER BY rating DESC";
+elseif ($sort === 'rating_asc') {
+    $sql .= " ORDER BY RATING ASC";
+} elseif ($sort === 'rating_desc') {
+    $sql .= " ORDER BY RATING DESC";
 }
 
 $stmt = oci_parse($conn, $sql);
@@ -45,6 +46,11 @@ if (!empty($searchQuery)) {
 }
 
 oci_execute($stmt);
+echo "<div class='container'>";
+echo "<div class='shop-page-title'>";
+echo "<h2>Products</h2>";
+echo "</div>";
+echo "</br>";
 
 echo "<div class='category-filter'>";
 echo "<form method='GET'>";
@@ -55,22 +61,20 @@ echo "<option value='fruits' " . ($categoryFilter === 'fruits' ? 'selected' : ''
 echo "<option value='vegetables' " . ($categoryFilter === 'vegetables' ? 'selected' : '') . ">Vegetables</option>";
 echo "</select>";
 
-echo "<label value='none'>Sort by Price : </label>";
+echo "<label value='none'>&nbspSort by Price or Rating : </label>";
 echo "<select name='sort' id='sort' onchange='this.form.submit()'>";
 echo "<option value='none' " . ($sort === 'none' ? 'selected' : '') . ">None</option>";
 echo "<option value='price_asc' " . ($sort === 'price_asc' ? 'selected' : '') . ">Price: Low to High</option>";
 echo "<option value='price_desc' " . ($sort === 'price_desc' ? 'selected' : '') . ">Price: High to Low</option>";
+echo "<option value='rating_asc' " . ($sort === 'rating_asc' ? 'selected' : '') . ">Rating: Low to High</option>";
+echo "<option value='rating_desc' " . ($sort === 'rating_desc' ? 'selected' : '') . ">Rating: High to Low</option>";
 echo "</select>";
 
-echo "<label value='none'>Sort by Rating : </label>";
-echo "<select name='rating' id='rating' onchange='this.form.submit()'>";
-echo "<option value='none' " . ($rating === 'none' ? 'selected' : '') . ">None</option>";
-echo "<option value='rating_asc' " . ($rating === 'rating_asc' ? 'selected' : '') . ">Rating: Low to High</option>";
-echo "<option value='rating_desc' " . ($rating === 'rating_desc' ? 'selected' : '') . ">Rating: High to Low</option>";
-echo "</select>";
 
 echo "</form>";
 echo "</div>";
+echo "</br>";
+echo "</br>";
 
 echo "<div class='product-container'>";
 if (oci_fetch($stmt)) { // Check if there are any results
@@ -80,16 +84,16 @@ if (oci_fetch($stmt)) { // Check if there are any results
             <img src='./images/Vegetables-Fruits/" . oci_result($stmt, 'PRODUCTIMAGE') . "' alt='Product Photo'>
             <div class='best-p1-txt'>
                 <div class='name-of-p'>
-                    <p>" . oci_result($stmt, 'PRODUCTNAME') . "</p>
+                    <p>" . oci_result($stmt, 'PRODUCT_NAME') . "</p>
                 </div>
                 <div class='name-of-p'>
-                    <p> Shop ID : " . oci_result($stmt, 'SHOPID') . "</p>
+                    <p> Shop ID : " . oci_result($stmt, 'SHOP_ID') . "</p>
                 </div>
                 <div class='rating'>
                     " . generateStars(oci_result($stmt, 'RATING')) . "
                 </div>
                 <div class='price'>
-                    Price : $" . oci_result($stmt, 'PRODUCTPRICE') . "
+                    Price : $" . oci_result($stmt, 'PRODUCT_PRICE') . "
                 </div>
                 <div class='buy-now'>
                     <button><a href='#'>Add To Cart</a></button>
@@ -115,3 +119,4 @@ function generateStars($rating) {
     return $stars;
 }
 ?>
+</section>

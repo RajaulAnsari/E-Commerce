@@ -1,3 +1,6 @@
+</br>
 <div class="container">
-    <h1>This is cart</h1>
+    <div class="cart-title">
+        <h2>Cart</h2>
+    </div>
 </div>

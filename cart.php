@@ -17,7 +17,7 @@ session_start();
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
     <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./components/cartmain/ccc.css">
+    <link rel="stylesheet" href="./components/cartmain/cart.css">
     <link rel="stylesheet" href="./components/searchbox/searchbox.css">
 
 

@@ -1,6 +1,9 @@
 <!-- Main page banner  -->
+</br>
 <div class="container">
-    <h1 class="account-type">ACCOUNT TYPE</h1>
+    <div class="account-type-title">
+        <h2>Account Type</h2>
+    </div>
     <div class="banner">
         <ul class="image-list">
             <li class="image-container">

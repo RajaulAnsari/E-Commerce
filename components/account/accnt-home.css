@@ -1,9 +1,14 @@
-.account-type {
-  margin-top: 10px;
+
+.account-type-title h2 {
+  font-family: "Times New Roman", Times, serif;
   text-align: center;
-  color: #f34848;
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: rgba(0, 0, 0, 0.822);
+  text-transform: uppercase;
+  background-color: #7c7777;
+  padding: 10px;
+  margin: 0 auto;
+  border-radius: 12px 12px 0px 0px;
+  font-size: 35px;
+  color: black;
 }
 .banner {
   display: flex;
