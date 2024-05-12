@@ -16,6 +16,7 @@ if ($categoryFilter !== 'all') {
     $sql .= " AND categoryname = :categoryFilter";
 }
 
+
 // Add search filter if provided
 if (!empty($searchQuery)) {
     $sql .= " AND LOWER(product_name) LIKE LOWER(:searchQuery)";

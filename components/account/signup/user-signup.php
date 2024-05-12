@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Prepare the SQL statement
-        $sql = "INSERT INTO \"USER_CLECK\" (FIRST_NAME, LAST_NAME, USER_NAME, EMAIL_ADDRESS, PASSWORD, ADDRESS, PHONE_NUMBER,IS_VERIFIED) 
+        $sql = "INSERT INTO \"USERS\" (FIRST_NAME, LAST_NAME, USER_NAME, EMAIL_ADDRESS, PASSWORD, ADDRESS, PHONE_NUMBER,IS_VERIFIED) 
                 VALUES (:firstname, :lastname, :username, :email, :password, :address, :contact,0)";
 
         $stmt = oci_parse($conn, $sql);
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2 style='color: green; margin-bottom: 20px;'>Welcome to CleckHub!</h2>
         <p>Hello $firstname,</p>
         <p>Thank you for registering with CleckHub. To complete your registration, please click the button below to verify your email address:</p>
-        <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/verify.php?email=" . urlencode($email) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Email Address</a>
+        <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/userverify.php?email=" . urlencode($email) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Email Address</a>
         <p style='margin-top: 20px; font-size: 14px; color: #777;'>If you did not register for CleckHub, please ignore this email.</p>
     </div>
 ";

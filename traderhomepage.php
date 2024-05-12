@@ -5,13 +5,13 @@ include 'connection.php';
 // Check if the user is logged in
 if (!isset($_SESSION['username'])) {
     // Redirect to the login page if not logged in
-    header("Location: usersignin.php");
+    header("Location: tradersignin.php");
     exit();
 }
 
 // Fetch user's data from the database
 $username = $_SESSION['username'];
-$sql = "SELECT * FROM USERS WHERE USER_NAME = :username";
+$sql = "SELECT * FROM TRADER WHERE USER_NAME = :username";
 $stmt = oci_parse($conn, $sql);
 oci_bind_by_name($stmt, ":username", $username);
 
@@ -24,7 +24,7 @@ if (oci_execute($stmt)) {
         $displayName = isset($userData['USER_NAME']) ? $userData['USER_NAME'] : '';
         $fullName = isset($userData['FIRST_NAME'], $userData['LAST_NAME']) ? $userData['FIRST_NAME'] . ' ' . $userData['LAST_NAME'] : '';
         $email = isset($userData['EMAIL_ADDRESS']) ? $userData['EMAIL_ADDRESS'] : '';
-        $imagePath = isset($userData['USER_IMAGE']) ? $userData['USER_IMAGE'] : ''; // Corrected column name
+        $imagePath = isset($userData['TRADER_IMAGE']) ? $userData['TRADER_IMAGE'] : ''; // Corrected column name
 
         // Close the statement
         oci_free_statement($stmt);
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
             // Image uploaded successfully, update image path in the database
             $imagePath = $targetFile;
             // Update the database with the new image path
-            $updateSql = "UPDATE USERS SET USER_IMAGE = :IMAGE_PATH WHERE USER_NAME = :username";
+            $updateSql = "UPDATE TRADER SET TRADER_IMAGE = :IMAGE_PATH WHERE USER_NAME = :username";
             $updateStmt = oci_parse($conn, $updateSql);
             oci_bind_by_name($updateStmt, ":IMAGE_PATH", $imagePath);
             oci_bind_by_name($updateStmt, ":username", $username);

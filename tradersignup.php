@@ -43,6 +43,7 @@ session_start();
 
 
     <script src="./js/main.js" async defer></script>
+    <script src="./js/real-time-password.js" async defer></script>
 </body>
 
 </html>

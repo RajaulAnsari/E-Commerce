@@ -4,7 +4,7 @@
             <div class="footer-col">
                 <h4>cleckHub</h4>
                 <ul>
-                    <li><a href="#">about us</a></li>
+                    <li><a href="./about.php">about us</a></li>
                     <li><a href="#">our services</a></li>
                     <li><a href="#">privacy policy</a></li>
 

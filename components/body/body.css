@@ -35,6 +35,10 @@ img {
   animation-name: fade;
   animation-duration: 1.5s;
 }
+.fade img {
+  width: 100%;
+  height: 99%;
+}
 
 @keyframes fade {
   from {
