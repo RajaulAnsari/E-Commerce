@@ -11,7 +11,7 @@ if (!isset($_SESSION['username'])) {
 
 // Fetch user's data from the database
 $username = $_SESSION['username'];
-$sql = "SELECT * FROM TRADER WHERE USER_NAME = :username";
+$sql = "SELECT * FROM TRADER WHERE TUSER_NAME = :username";
 $stmt = oci_parse($conn, $sql);
 oci_bind_by_name($stmt, ":username", $username);
 
@@ -21,8 +21,8 @@ if (oci_execute($stmt)) {
 
     if ($userData) {
         // Display user's data
-        $displayName = isset($userData['USER_NAME']) ? $userData['USER_NAME'] : '';
-        $fullName = isset($userData['FIRST_NAME'], $userData['LAST_NAME']) ? $userData['FIRST_NAME'] . ' ' . $userData['LAST_NAME'] : '';
+        $displayName = isset($userData['TUSER_NAME']) ? $userData['TUSER_NAME'] : '';
+        $fullName = isset($userData['TRADER_FIRST_NAME'], $userData['TRADER_LAST_NAME']) ? $userData['FIRST_NAME'] . ' ' . $userData['LAST_NAME'] : '';
         $email = isset($userData['EMAIL_ADDRESS']) ? $userData['EMAIL_ADDRESS'] : '';
         $imagePath = isset($userData['TRADER_IMAGE']) ? $userData['TRADER_IMAGE'] : ''; // Corrected column name
 
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
             // Image uploaded successfully, update image path in the database
             $imagePath = $targetFile;
             // Update the database with the new image path
-            $updateSql = "UPDATE TRADER SET TRADER_IMAGE = :IMAGE_PATH WHERE USER_NAME = :username";
+            $updateSql = "UPDATE TRADER SET TRADER_IMAGE = :IMAGE_PATH WHERE TUSER_NAME = :username";
             $updateStmt = oci_parse($conn, $updateSql);
             oci_bind_by_name($updateStmt, ":IMAGE_PATH", $imagePath);
             oci_bind_by_name($updateStmt, ":username", $username);
@@ -196,7 +196,7 @@ if (isset($_POST['logout'])) {
     <div class="userprofile-container">
         <section></section>
         <div class="user-dashboard">
-            <h2>User Dashboard</h2>
+            <h2>Trader Dashboard</h2>
         </div>
         <section></section>
 
@@ -220,8 +220,8 @@ if (isset($_POST['logout'])) {
         </form>
 
         <!-- Display user's data including the image -->
-        <h1>Welcome, <?php echo ucfirst($userData['USER_NAME']); ?>😊</h1>
-        <p>Name: <?php echo $userData['FIRST_NAME'] . " " . $userData['LAST_NAME']; ?></p>
+        <h1>Welcome, <?php echo ucfirst($userData['TUSER_NAME']); ?>😊</h1>
+        <p>Name: <?php echo $userData['TRADER_FIRST_NAME'] . " " . $userData['TRADER_LAST_NAME']; ?></p>
         <p>Email: <?php echo $userData['EMAIL_ADDRESS']; ?></p>
 
         <!-- Logout form -->

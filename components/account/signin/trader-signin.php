@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Prepare the SQL statement
-    $sql = "SELECT * FROM TRADER WHERE USER_NAME = :USERNAME";
+    $sql = "SELECT * FROM TRADER WHERE TUSER_NAME = :USERNAME";
 
     $stmt = oci_parse($conn, $sql);
 
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if $row contains a valid result
     if ($row !== false) {
         // Verify password
-        if (password_verify($password, $row['PASSWORD'])) {
+        if (password_verify($password, $row['TRADER_PASSWORD'])) {
             // Check if user is verified
             if ($row['IS_VERIFIED'] == 1) {
                 // Store the username in session

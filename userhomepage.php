@@ -11,7 +11,7 @@ if (!isset($_SESSION['username'])) {
 
 // Fetch user's data from the database
 $username = $_SESSION['username'];
-$sql = "SELECT * FROM USERS WHERE USER_NAME = :username";
+$sql = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = :username";
 $stmt = oci_parse($conn, $sql);
 oci_bind_by_name($stmt, ":username", $username);
 
@@ -21,7 +21,7 @@ if (oci_execute($stmt)) {
 
     if ($userData) {
         // Display user's data
-        $displayName = isset($userData['USER_NAME']) ? $userData['USER_NAME'] : '';
+        $displayName = isset($userData['UUSER_NAME']) ? $userData['UUSER_NAME'] : '';
         $fullName = isset($userData['FIRST_NAME'], $userData['LAST_NAME']) ? $userData['FIRST_NAME'] . ' ' . $userData['LAST_NAME'] : '';
         $email = isset($userData['EMAIL_ADDRESS']) ? $userData['EMAIL_ADDRESS'] : '';
         $imagePath = isset($userData['USER_IMAGE']) ? $userData['USER_IMAGE'] : ''; // Corrected column name
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
             // Image uploaded successfully, update image path in the database
             $imagePath = $targetFile;
             // Update the database with the new image path
-            $updateSql = "UPDATE USERS SET USER_IMAGE = :IMAGE_PATH WHERE USER_NAME = :username";
+            $updateSql = "UPDATE USER_CLECK SET USER_IMAGE = :IMAGE_PATH WHERE UUSER_NAME = :username";
             $updateStmt = oci_parse($conn, $updateSql);
             oci_bind_by_name($updateStmt, ":IMAGE_PATH", $imagePath);
             oci_bind_by_name($updateStmt, ":username", $username);
@@ -220,7 +220,7 @@ if (isset($_POST['logout'])) {
         </form>
 
         <!-- Display user's data including the image -->
-        <h1>Welcome, <?php echo ucfirst($userData['USER_NAME']); ?>😊</h1>
+        <h1>Welcome, <?php echo ucfirst($userData['UUSER_NAME']); ?>😊</h1>
         <p>Name: <?php echo $userData['FIRST_NAME'] . " " . $userData['LAST_NAME']; ?></p>
         <p>Email: <?php echo $userData['EMAIL_ADDRESS']; ?></p>
 

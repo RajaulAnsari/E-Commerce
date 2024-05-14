@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Prepare the SQL statement
-        $sql = "INSERT INTO \"TRADER\" (FIRST_NAME, LAST_NAME, EMAIL_ADDRESS, PASSWORD, TRADER_ADDRESS, PHONE_NUMBER,IS_VERIFIED,PRODUCT_CATEGORY,SHOP_NAME,USER_NAME) 
+        $sql = "INSERT INTO \"TRADER\" (TRADER_FIRST_NAME, TRADER_LAST_NAME, EMAIL_ADDRESS, TRADER_PASSWORD, TRADER_ADDRESS, CONTACT_NO,IS_VERIFIED,PRODUCT_CATEGORY,SHOP_NAME,TUSER_NAME) 
                 VALUES (:firstname, :lastname, :email, :password, :address, :contact,0,:productcategories,:shopname,:username)";
 
         $stmt = oci_parse($conn, $sql);

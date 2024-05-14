@@ -28,15 +28,33 @@
                             <a href="./cart.php">
                                 <i class='bx bx-cart'></i>Cart
                                 <?php
-                                    if (isset($_SESSION['cart'])) {
-                                        $count = count($_SESSION['cart']);
-                                        echo "<span>" . $count . "</span>";
-                                    } else {
-                                        echo "<span>0</span>";
-                                    }
-                                ?>
+        if (isset($_SESSION['username'])) {
+            $user_id = isset($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
+            if ($user_id !== null) {
+                include('./connection.php');
+                $sql_query = "SELECT COUNT(PRODUCT_ID) AS NUMBER_OF_ROWS FROM CART WHERE USER_ID = '$user_id'";
+
+                $stmt = oci_parse($conn, $sql_query);
+                oci_define_by_name($stmt, 'NUMBER_OF_ROWS', $number_of_rows);
+                oci_execute($stmt);
+                oci_fetch($stmt);
+
+                echo "<span>" . $number_of_rows . "</span>";
+            } else {
+                echo "<span>0</span>";
+            }
+        } else {
+            if (isset($_SESSION['cart'])) {
+                $count = count($_SESSION['cart']);
+                echo "<span>$count</span>";
+            } else {
+                echo "<span>0</span>";
+            }
+        }
+        ?>
                             </a>
                         </div>
+
                     </div>
                 </div>
             </div>

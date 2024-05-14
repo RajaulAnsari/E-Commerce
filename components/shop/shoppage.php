@@ -9,7 +9,7 @@
             include 'connection.php';
 
             // Query to fetch shop name and image
-            $sql = "SELECT * FROM \"SHOP\"";
+            $sql = "SELECT * FROM SHOP";
             $stmt = oci_parse($conn, $sql);
 
             // Execute the query
@@ -18,7 +18,7 @@
             // Loop through the results
             while ($row = oci_fetch_assoc($stmt)) {
                 echo "<div class='shop'>";
-                echo "<a href='./shop.php?id=" . $row['SHOP_ID'] . "'>";
+                echo "<a href='./products.php?id=" . $row['SHOP_ID'] . "'>";
                 echo "<img src='./images/shop/" . $row['SHOP_IMAGE'] . "' alt=''>";
                 echo "<h5>" . $row['SHOP_NAME'] . "</h5>";
                 echo "</a>";

@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         // Prepare the SQL statement
-        $sql = "INSERT INTO \"USERS\" (FIRST_NAME, LAST_NAME, USER_NAME, EMAIL_ADDRESS, PASSWORD, ADDRESS, PHONE_NUMBER,IS_VERIFIED) 
+        $sql = "INSERT INTO USER_CLECK (FIRST_NAME, LAST_NAME, UUSER_NAME, EMAIL_ADDRESS, PASSWORD, ADDRESS, PHONE_NUMBER,IS_VERIFIED) 
                 VALUES (:firstname, :lastname, :username, :email, :password, :address, :contact,0)";
 
         $stmt = oci_parse($conn, $sql);

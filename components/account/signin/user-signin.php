@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Prepare the SQL statement
-    $sql = "SELECT * FROM USERS WHERE USER_NAME = :USERNAME";
+    $sql = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = :USERNAME";
 
     $stmt = oci_parse($conn, $sql);
 
