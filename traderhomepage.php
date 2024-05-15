@@ -3,17 +3,17 @@ session_start();
 include 'connection.php';
 
 // Check if the user is logged in
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['tusername'])) {
     // Redirect to the login page if not logged in
     header("Location: tradersignin.php");
     exit();
 }
 
 // Fetch user's data from the database
-$username = $_SESSION['username'];
-$sql = "SELECT * FROM TRADER WHERE TUSER_NAME = :username";
+$tusername = $_SESSION['tusername'];
+$sql = "SELECT * FROM TRADER WHERE TUSER_NAME = :tusername";
 $stmt = oci_parse($conn, $sql);
-oci_bind_by_name($stmt, ":username", $username);
+oci_bind_by_name($stmt, ":tusername", $tusername);
 
 if (oci_execute($stmt)) {
     // Fetch the user data
@@ -22,7 +22,7 @@ if (oci_execute($stmt)) {
     if ($userData) {
         // Display user's data
         $displayName = isset($userData['TUSER_NAME']) ? $userData['TUSER_NAME'] : '';
-        $fullName = isset($userData['TRADER_FIRST_NAME'], $userData['TRADER_LAST_NAME']) ? $userData['FIRST_NAME'] . ' ' . $userData['LAST_NAME'] : '';
+        $fullName = isset($userData['FIRST_NAME'], $userData['LAST_NAME']) ? $userData['FIRST_NAME'] . ' ' . $userData['LAST_NAME'] : '';
         $email = isset($userData['EMAIL_ADDRESS']) ? $userData['EMAIL_ADDRESS'] : '';
         $imagePath = isset($userData['TRADER_IMAGE']) ? $userData['TRADER_IMAGE'] : ''; // Corrected column name
 
@@ -75,10 +75,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
             // Image uploaded successfully, update image path in the database
             $imagePath = $targetFile;
             // Update the database with the new image path
-            $updateSql = "UPDATE TRADER SET TRADER_IMAGE = :IMAGE_PATH WHERE TUSER_NAME = :username";
+            $updateSql = "UPDATE TRADER SET TRADER_IMAGE = :IMAGE_PATH WHERE TUSER_NAME = :tusername";
             $updateStmt = oci_parse($conn, $updateSql);
             oci_bind_by_name($updateStmt, ":IMAGE_PATH", $imagePath);
-            oci_bind_by_name($updateStmt, ":username", $username);
+            oci_bind_by_name($updateStmt, ":tusername", $tusername);
             oci_execute($updateStmt);
             oci_free_statement($updateStmt);
             // Refresh the page to display the new image
@@ -215,7 +215,7 @@ if (isset($_POST['logout'])) {
 
         <!-- Image upload form -->
         <form method="post" enctype="multipart/form-data">
-            <input type="file" name="image" id="image">
+            <input type="file" name="image" id="image" required>
             <button type="submit" name="upload">Upload Image</button>
         </form>
 

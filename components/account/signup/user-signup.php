@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
-    $username = $_POST['username'];
+    $uusername = $_POST['uusername'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirmpassword'];
@@ -23,14 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Prepare the SQL statement
         $sql = "INSERT INTO USER_CLECK (FIRST_NAME, LAST_NAME, UUSER_NAME, EMAIL_ADDRESS, PASSWORD, ADDRESS, PHONE_NUMBER,IS_VERIFIED) 
-                VALUES (:firstname, :lastname, :username, :email, :password, :address, :contact,0)";
+                VALUES (:firstname, :lastname, :uusername, :email, :password, :address, :contact,0)";
 
         $stmt = oci_parse($conn, $sql);
 
         // Bind parameters
         oci_bind_by_name($stmt, ":firstname", $firstname);
         oci_bind_by_name($stmt, ":lastname", $lastname);
-        oci_bind_by_name($stmt, ":username", $username);
+        oci_bind_by_name($stmt, ":uusername", $uusername);
         oci_bind_by_name($stmt, ":email", $email);
         oci_bind_by_name($stmt, ":password", $hashed_password);
         oci_bind_by_name($stmt, ":address", $address);
@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <input type="text" name="firstname" placeholder="Firstname" required><br>
                     <input type="text" name="lastname" placeholder="Lastname" required><br>
-                    <input type="text" name="username" placeholder="Username" required><br>
+                    <input type="text" name="uusername" placeholder="Username" required><br>
                     <input type="email" name="email" placeholder="Email" required><br>
                     <input type="password" name="password" id="password" placeholder="Password" required><br>
                     <input type="password" name="confirmpassword" id="confirmPassword" placeholder="Confirm Password"

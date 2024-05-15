@@ -9,7 +9,7 @@ include 'connection.php';
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data and trim whitespace
-    $username = trim($_POST['username']);
+    $uusername = trim($_POST['uusername']);
     $password = $_POST['password'];
 
     // Prepare the SQL statement
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = oci_parse($conn, $sql);
 
     // Bind parameters
-    oci_bind_by_name($stmt, ":USERNAME", $username);
+    oci_bind_by_name($stmt, ":USERNAME", $uusername);
 
     // Execute the statement
     oci_execute($stmt);
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Check if user is verified
             if ($row['IS_VERIFIED'] == 1) {
                 // Store the username in session
-                $_SESSION['username'] = $username;
+                $_SESSION['uusername'] = $uusername;
 
                 // Redirect to dashboard or other page
                 header("Location: userhomepage.php");
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-container">
             <div class="user-form">
                 <form class="uform" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <input type="text" name="username" placeholder="Username" required><br>
+                    <input type="text" name="uusername" placeholder="Username" required><br>
                     <input type="password" name="password" id="password" placeholder="Password" required><br>
                     <label class="remember"><input type="checkbox" name="remember" value="remember">&nbsp Remember
                         Me</label><br>

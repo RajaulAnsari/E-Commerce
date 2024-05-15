@@ -9,21 +9,21 @@ include 'connection.php';
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data and trim whitespace
-    $username = trim($_POST['username']);
+    $tusername = trim($_POST['tusername']);
     $password = $_POST['password'];
 
     // Prepare the SQL statement
-    $sql = "SELECT * FROM TRADER WHERE TUSER_NAME = :USERNAME";
+    $sql = "SELECT * FROM TRADER WHERE TUSER_NAME = :tusername";
 
     $stmt = oci_parse($conn, $sql);
 
     // Bind parameters
-    oci_bind_by_name($stmt, ":USERNAME", $username);
+    oci_bind_by_name($stmt, ":tusername", $tusername);
 
     // Execute the statement
     oci_execute($stmt);
 
-    // Fetch the row associated with the username
+    // Fetch the row associated with the tusername
     $row = oci_fetch_assoc($stmt);
 
     // Check if $row contains a valid result
@@ -32,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $row['TRADER_PASSWORD'])) {
             // Check if user is verified
             if ($row['IS_VERIFIED'] == 1) {
-                // Store the username in session
-                $_SESSION['username'] = $username;
+                // Store the tusername in session
+                $_SESSION['tusername'] = $tusername;
 
                 // Redirect to dashboard or other page
                 header("Location: traderhomepage.php");
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Invalid password!";
         }
     } else {
-        echo "Username not found!";
+        echo "tusername not found!";
     }
 
     oci_free_statement($stmt);
@@ -70,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-container">
             <div class="user-form">
                 <form class="uform" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                    <input type="text" name="username" placeholder="Username" required><br>
+                    <input type="text" name="tusername" placeholder="Username" required><br>
                     <input type="password" name="password" id="password" placeholder="Password" required><br>
                     <label class="remember"><input type="checkbox" name="remember" value="remember">&nbsp Remember
                         Me</label><br>

@@ -17,9 +17,12 @@
                     <div class="close nav-toggle"><i class='bx bx-x'></i></div>
                     <div class="icons">
                         <div class="icon">
-                            <?php if (isset($_SESSION['username'])) {
-                                echo "<a href='./userhomepage.php'><i class='bx bx-user'></i>" . ucfirst($_SESSION['username']) . "</a>";
-                            }else{
+                            <?php if (isset($_SESSION['uusername'])) {
+                                echo "<a href='./userhomepage.php'><i class='bx bx-user'></i>" . ucfirst($_SESSION['uusername']) . "</a>";
+                            }elseif (isset($_SESSION['tusername'])) {
+                                echo "<a href='./traderhomepage.php'><i class='bx bx-user'></i>" . ucfirst($_SESSION['tusername']) . "</a>";
+                            }
+                            else{
                             echo "<a href='./account.php'><i class='bx bx-user'></i>Account</a>";
                             }
                             ?>
@@ -28,7 +31,7 @@
                             <a href="./cart.php">
                                 <i class='bx bx-cart'></i>Cart
                                 <?php
-        if (isset($_SESSION['username'])) {
+        if (isset($_SESSION['uusername'])) {
             $user_id = isset($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
             if ($user_id !== null) {
                 include('./connection.php');

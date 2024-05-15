@@ -3,17 +3,17 @@ session_start();
 include 'connection.php';
 
 // Check if the user is logged in
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['uusername'])) {
     // Redirect to the login page if not logged in
     header("Location: usersignin.php");
     exit();
 }
 
 // Fetch user's data from the database
-$username = $_SESSION['username'];
-$sql = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = :username";
+$uusername = $_SESSION['uusername'];
+$sql = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = :uusername";
 $stmt = oci_parse($conn, $sql);
-oci_bind_by_name($stmt, ":username", $username);
+oci_bind_by_name($stmt, ":uusername", $uusername);
 
 if (oci_execute($stmt)) {
     // Fetch the user data
@@ -49,36 +49,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
     if ($check !== false) {
         $uploadOk = 1;
     } else {
-        echo "File is not an image.";
+        echo "<script>alert ('File is not an image.')</script>";
         $uploadOk = 0;
     }
 
     // Check file size
-    if ($_FILES["image"]["size"] > 500000) {
-        echo "Sorry, your file is too large.";
+    if ($_FILES["image"]["size"] > 1000000) {
+        echo "<script>alert('Sorry, your file is too large. Please upload image size <=1MB')</script>";
         $uploadOk = 0;
     }
 
     // Allow only certain file formats
-    if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+    elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
         && $imageFileType != "gif") {
-        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        echo "<script> alert('Sorry, only JPG, JPEG, PNG & GIF files are allowed.')</script>";
         $uploadOk = 0;
     }
 
     // Check if $uploadOk is set to 0 by an error
-    if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
+    elseif ($uploadOk == 0) {
+        echo "<script>alert('Sorry, your file was not uploaded.')</script>";
     // if everything is ok, try to upload file
     } else {
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
             // Image uploaded successfully, update image path in the database
             $imagePath = $targetFile;
             // Update the database with the new image path
-            $updateSql = "UPDATE USER_CLECK SET USER_IMAGE = :IMAGE_PATH WHERE UUSER_NAME = :username";
+            $updateSql = "UPDATE USER_CLECK SET USER_IMAGE = :IMAGE_PATH WHERE UUSER_NAME = :uusername";
             $updateStmt = oci_parse($conn, $updateSql);
             oci_bind_by_name($updateStmt, ":IMAGE_PATH", $imagePath);
-            oci_bind_by_name($updateStmt, ":username", $username);
+            oci_bind_by_name($updateStmt, ":uusername", $uusername);
             oci_execute($updateStmt);
             oci_free_statement($updateStmt);
             // Refresh the page to display the new image
@@ -215,7 +215,7 @@ if (isset($_POST['logout'])) {
 
         <!-- Image upload form -->
         <form method="post" enctype="multipart/form-data">
-            <input type="file" name="image" id="image">
+            <input type="file" name="image" id="image" required>
             <button type="submit" name="upload">Upload Image</button>
         </form>
 
@@ -235,7 +235,6 @@ if (isset($_POST['logout'])) {
     <?PHP
     include "./components/footer/footer.php";
     ?>
-
 
     <script src="./js/main.js" async defer></script>
 </body>

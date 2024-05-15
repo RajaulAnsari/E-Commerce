@@ -5,8 +5,8 @@
                 <h4>cleckHub</h4>
                 <ul>
                     <li><a href="./about.php">about us</a></li>
-                    <li><a href="#">our services</a></li>
-                    <li><a href="#">privacy policy</a></li>
+                    <li><a href="./terms&conditions.php">Terms and Conditions</a></li>
+                    <li><a href="./privacy&policy.php">privacy policy</a></li>
 
                 </ul>
             </div>

@@ -1,6 +1,8 @@
 .shop img {
   width: 400px;
   border-radius: 32px;
+
+
 }
 
 h5 {
@@ -26,8 +28,9 @@ h5 {
   justify-content: center;
   align-items: center;
   padding: 5px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  border-radius: 32px;
+  /* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */
+  box-shadow: indigo 0px 0px 10px;
+  border-radius: 20px;
   cursor: pointer;
   text-align: center;
 }

@@ -5,9 +5,9 @@
 include "connection.php";
 
 // Check if the user is logged in
-if(isset($_SESSION['username'])) {
+if(isset($_SESSION['uusername'])) {
     // Retrieve user ID from the session
-    $user = $_SESSION['username'];
+    $user = $_SESSION['uusername'];
     $qry = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = '$user'";
     $res = oci_parse($conn, $qry);
     oci_execute($res);
@@ -21,7 +21,8 @@ if(isset($_SESSION['username'])) {
 
     // Insert the product into the cart table
     if(!empty($product_id) && !empty($product_name) && !empty($product_price)) {
-        $insert_query = "INSERT INTO CART (PRODUCT_ID, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY, USER_ID) VALUES (:product_id, :product_name, :product_price, 1, :user_id)";
+        $insert_query="INSERT INTO CART c, CART_PRODUCT cp, PRODUCT p WHERE c.CART_ID = cp.CART_ID AND cp.PRODUCT_ID = p.PRODUCT_ID AND c.USER_ID = :user_id AND cp.PRODUCT_ID = :product_id AND c.CART_ITEMS = 1";
+        //$insert_query = "INSERT INTO CART (PRODUCT_ID, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY, USER_ID) VALUES (:product_id, :product_name, :product_price, 1, :user_id)";
         $stmt = oci_parse($conn, $insert_query);
         oci_bind_by_name($stmt, ":product_id", $product_id);
         oci_bind_by_name($stmt, ":product_name", $product_name);
