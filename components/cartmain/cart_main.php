@@ -1,11 +1,8 @@
 <?php
-// Debugging
-//var_dump($_POST);
-
 include "connection.php";
 
 // Check if the user is logged in
-if(isset($_SESSION['uusername'])) {
+if (isset($_SESSION['uusername'])) {
     // Retrieve user ID from the session
     $user = $_SESSION['uusername'];
     $qry = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = '$user'";
@@ -14,22 +11,45 @@ if(isset($_SESSION['uusername'])) {
     $row = oci_fetch_assoc($res);
     $user_id = $row['USER_ID'];
 
-    // Retrieve product details sent via AJAX
+    // Retrieve product ID sent via AJAX
     $product_id = isset($_POST['product_id']) ? $_POST['product_id'] : '';
-    $product_name = isset($_POST['product_name']) ? $_POST['product_name'] : '';
-    $product_price = isset($_POST['product_price']) ? $_POST['product_price'] : '';
 
     // Insert the product into the cart table
-    if(!empty($product_id) && !empty($product_name) && !empty($product_price)) {
-        $insert_query="INSERT INTO CART c, CART_PRODUCT cp, PRODUCT p WHERE c.CART_ID = cp.CART_ID AND cp.PRODUCT_ID = p.PRODUCT_ID AND c.USER_ID = :user_id AND cp.PRODUCT_ID = :product_id AND c.CART_ITEMS = 1";
-        //$insert_query = "INSERT INTO CART (PRODUCT_ID, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY, USER_ID) VALUES (:product_id, :product_name, :product_price, 1, :user_id)";
+    if (!empty($product_id)) {
+        $insert_query = "DECLARE
+        cart_id NUMBER;
+    BEGIN
+        INSERT INTO CART (CART_ITEMS, USER_ID) VALUES (1, :user_id) RETURNING CART_ID INTO cart_id;
+        
+        INSERT INTO CART_PRODUCT (PRODUCT_ID, CART_ID) VALUES (:product_id, cart_id);
+        
+        COMMIT;
+    END;";
+        
         $stmt = oci_parse($conn, $insert_query);
         oci_bind_by_name($stmt, ":product_id", $product_id);
-        oci_bind_by_name($stmt, ":product_name", $product_name);
-        oci_bind_by_name($stmt, ":product_price", $product_price);
         oci_bind_by_name($stmt, ":user_id", $user_id);
+        oci_bind_by_name($stmt, ":cart_id", $cart_id, 32); // Assuming CART_ID is of NUMBER(32)
+        
+        // Execute the statement
+        $success = oci_execute($stmt);
+
+        if ($success) {
+            // Commit the transaction
+            oci_commit($conn);
+            echo "success"; // Send success response to AJAX
+        } else {
+            // Handle errors
+            $error = oci_error($stmt);
+            echo "Error: " . $error['message'];
+        }
+
+        oci_free_statement($stmt);
+        oci_close($conn);
+    } else {
+        //echo "error: Product ID not provided"; // Send error response to AJAX
     }
-} else{
+} else {
     echo"
     <script>
         alert('Please login to view your cart');
@@ -37,9 +57,9 @@ if(isset($_SESSION['uusername'])) {
     </script>
     ";
 }
-
 include "cart_js.php";
 ?>
+
 
 
 
@@ -64,7 +84,21 @@ include "cart_js.php";
                 <th>Remove</th>
             </tr>
             <?php
-            $qry = "SELECT CART.*, PRODUCT.PRODUCT_NAME, PRODUCT.PRODUCT_PRICE, PRODUCT.PRODUCT_IMAGE FROM CART INNER JOIN PRODUCT ON CART.PRODUCT_ID = PRODUCT.PRODUCT_ID WHERE USER_ID = '$user_id'";
+            $qry = "
+        SELECT 
+            p.PRODUCT_ID,
+            p.PRODUCT_NAME,
+            p.PRODUCT_PRICE,
+            p.PRODUCT_IMAGE,
+            c.CART_ITEMS,
+            cp.CART_ID
+        FROM 
+            PRODUCT p
+        JOIN 
+            CART_PRODUCT cp ON p.PRODUCT_ID = cp.PRODUCT_ID
+        JOIN 
+            CART c ON cp.CART_ID = c.CART_ID
+        ";
 
             $res = oci_parse($conn, $qry);
             oci_execute($res);
@@ -72,7 +106,7 @@ include "cart_js.php";
             while($row = oci_fetch_assoc($res))
             {
                 $pid = $row['PRODUCT_ID'];
-                $qty = $row['PRODUCT_QUANTITY'];
+                $qty = $row['CART_ITEMS'];
                 $pname = $row['PRODUCT_NAME'];
                 $pprice = $row['PRODUCT_PRICE'];
                 $ptotal = $pprice * $qty;
@@ -86,7 +120,7 @@ include "cart_js.php";
                 </td>
                 <td><?php echo $pprice; ?></td>
                 <td>
-                    <form action="updatecart.php" method="post">
+                    <form action="cart.php" method="post">
                         <input type="number" name="quantity" value="<?php echo $qty; ?>" min="1" max="10">
                         <input type="hidden" name="pid" value="<?php echo $pid; ?>">
                         <input type="submit" value="Update">
@@ -102,7 +136,12 @@ include "cart_js.php";
     </div>
 
     <div class="cart-total">
-        <h3>Total: <?php $qry = "SELECT SUM(PRODUCT_PRICE * PRODUCT_QUANTITY) AS TOTAL FROM CART WHERE USER_ID = '$user_id'";
+        <h3>Total: <?php $qry = "
+        SELECT SUM(p.PRODUCT_PRICE * c.CART_ITEMS) AS TOTAL 
+        FROM CART c 
+        JOIN CART_PRODUCT cp ON c.CART_ID = cp.CART_ID
+        JOIN PRODUCT p ON cp.PRODUCT_ID = p.PRODUCT_ID
+        WHERE c.USER_ID = '$user_id'";
         
         $res = oci_parse($conn, $qry);
         oci_execute($res);

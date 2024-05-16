@@ -96,7 +96,7 @@
                         Price : $" . oci_result($stmt, 'PRODUCT_PRICE') . "
                     </div>
                     <div class='buy-now'>
-                        <button class='add-to-cart' data-product-id='" . oci_result($stmt, 'PRODUCT_ID') . "' data-product-name='" . oci_result($stmt, 'PRODUCT_NAME') . "' data-product-price='" . oci_result($stmt, 'PRODUCT_PRICE') . "'>Add To Cart</button>
+                        <button class='add-to-cart' data-product-id='" . oci_result($stmt, 'PRODUCT_ID') ."'>Add To Cart</button>
                     </div>
                 </div>
             </div>
@@ -128,13 +128,8 @@ document.querySelectorAll('.add-to-cart').forEach(item => {
 
 function addToCart() {
     const productId = this.getAttribute('data-product-id');
-    const productName = this.getAttribute('data-product-name');
-    const productPrice = this.getAttribute('data-product-price');
-
     // Debugging statements
     console.log('Product ID:', productId);
-    console.log('Product Name:', productName);
-    console.log('Product Price:', productPrice);
 
     // Send AJAX request to add the product to the cart
     const xhr = new XMLHttpRequest();
@@ -148,6 +143,6 @@ function addToCart() {
             console.error('Error adding product to cart');
         }
     };
-    xhr.send(`product_id=${productId}&product_name=${encodeURIComponent(productName)}&product_price=${productPrice}`);
+    xhr.send(`product_id=${productId}`);
 }
 </script>
