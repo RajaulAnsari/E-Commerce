@@ -1,28 +1,43 @@
 <?php
+session_start();
 include "connection.php";
 
-if(isset($_POST['quantity']) && isset($_POST['pid'])) {
+// Check if the user is logged in
+if (isset($_SESSION['uusername'])) {
+    // Retrieve user ID from the session
+    $user = $_SESSION['uusername'];
+    $qry = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = '$user'";
+    $res = oci_parse($conn, $qry);
+    oci_execute($res);
+    $row = oci_fetch_assoc($res);
+    $user_id = $row['USER_ID'];
+
+    // Retrieve product ID and quantity sent via POST
+    $product_id = $_POST['product_id'];
     $quantity = $_POST['quantity'];
-    $pid = $_POST['pid'];
 
-    // Update the quantity in the cart table
-    $update_query = "UPDATE CART SET PRODUCT_QUANTITY = :quantity WHERE PRODUCT_ID = :pid";
-    $stmt = oci_parse($conn, $update_query);
-    oci_bind_by_name($stmt, ":quantity", $quantity);
-    oci_bind_by_name($stmt, ":pid", $pid);
+    // Update the cart quantity in the database
+    $update_query = "UPDATE CART_PRODUCT SET CART_ITEMS = :quantity WHERE PRODUCT_ID = :product_id AND CART_ID IN (SELECT CART_ID FROM CART WHERE USER_ID = :user_id)";
+    $update_stmt = oci_parse($conn, $update_query);
+    oci_bind_by_name($update_stmt, ":quantity", $quantity);
+    oci_bind_by_name($update_stmt, ":product_id", $product_id);
+    oci_bind_by_name($update_stmt, ":user_id", $user_id);
+    $success = oci_execute($update_stmt);
 
-    if (oci_execute($stmt)) {
-        // Quantity updated successfully
-        echo "echo '<script>alert(`Quantity updated successfully`); window.location.href = 'cart.php';</script>'";
+    if ($success) {
+        oci_commit($conn);
+        
+        // Update session variable with new cart quantity
+        $_SESSION['cart'][$product_id] = $quantity;
 
+        echo "success";
     } else {
-        // Failed to update quantity
-        echo "echo '<script>alert(`Failed to update quantity`); window.location.href = 'cart.php';</script>'";
-
+        echo "Error updating quantity";
     }
-} else {
-    // Missing parameters
-    echo "echo '<script>alert(`Missing parameters`); window.location.href = 'cart.php';</script>'";
 
+    oci_free_statement($update_stmt);
+    oci_close($conn);
+} else {
+    echo "User not logged in";
 }
 ?>

@@ -13,7 +13,12 @@ if (isset($_GET['email'])) {
     oci_free_statement($stmt);
     oci_close($conn);
 
-    echo "Email address verified successfully. You can now login.";
+    echo"
+    <script>
+        alert('Email address verified successfully. You can now login.');
+        window.location.href = 'tradersignin.php';
+    </script>
+    ";
 } else {
     echo "Invalid verification link.";
 }

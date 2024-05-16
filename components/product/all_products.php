@@ -138,7 +138,7 @@ function addToCart() {
     xhr.onload = function() {
         if (xhr.status === 200) {
             // Optionally, you can show a message or update the UI to indicate that the product was added to the cart
-            console.log('Product added to cart successfully');
+            alert('Product added to cart successfully');
         } else {
             console.error('Error adding product to cart');
         }

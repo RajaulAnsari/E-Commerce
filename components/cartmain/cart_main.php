@@ -10,16 +10,27 @@ if (isset($_SESSION['uusername'])) {
     oci_execute($res);
     $row = oci_fetch_assoc($res);
     $user_id = $row['USER_ID'];
+    
 
     // Retrieve product ID sent via AJAX
     $product_id = isset($_POST['product_id']) ? $_POST['product_id'] : '';
 
+    // Check if the product is already in the cart
+    $check_query = "SELECT COUNT(*) AS num_products FROM CART_PRODUCT WHERE PRODUCT_ID = :product_id AND CART_ID IN (SELECT CART_ID FROM CART WHERE USER_ID = :user_id)";
+    $check_stmt = oci_parse($conn, $check_query);
+    oci_bind_by_name($check_stmt, ":product_id", $product_id);
+    oci_bind_by_name($check_stmt, ":user_id", $user_id);
+    oci_execute($check_stmt);
+    $check_row = oci_fetch_assoc($check_stmt);
+    $num_products = $check_row['NUM_PRODUCTS'];
+    oci_free_statement($check_stmt);
+
     // Insert the product into the cart table
-    if (!empty($product_id)) {
+    if (!empty($product_id)&& $num_products == 0) {
         $insert_query = "DECLARE
         cart_id NUMBER;
     BEGIN
-        INSERT INTO CART (CART_ITEMS, USER_ID) VALUES (1, :user_id) RETURNING CART_ID INTO cart_id;
+        INSERT INTO CART (CART_ITEMS, USER_ID, CART_CREATED,CART_UPDATED) VALUES (1, :user_id, SYSDATE,SYSDATE) RETURNING CART_ID INTO cart_id;
         
         INSERT INTO CART_PRODUCT (PRODUCT_ID, CART_ID) VALUES (:product_id, cart_id);
         
@@ -45,10 +56,8 @@ if (isset($_SESSION['uusername'])) {
         }
 
         oci_free_statement($stmt);
-        oci_close($conn);
-    } else {
-        //echo "error: Product ID not provided"; // Send error response to AJAX
     }
+    oci_close($conn);
 } else {
     echo"
     <script>
@@ -57,11 +66,8 @@ if (isset($_SESSION['uusername'])) {
     </script>
     ";
 }
-include "cart_js.php";
+// include "cart_js.php";
 ?>
-
-
-
 
 
 
@@ -98,6 +104,8 @@ include "cart_js.php";
             CART_PRODUCT cp ON p.PRODUCT_ID = cp.PRODUCT_ID
         JOIN 
             CART c ON cp.CART_ID = c.CART_ID
+        WHERE
+            c.USER_ID = '$user_id'
         ";
 
             $res = oci_parse($conn, $qry);
@@ -120,9 +128,9 @@ include "cart_js.php";
                 </td>
                 <td><?php echo $pprice; ?></td>
                 <td>
-                    <form action="cart.php" method="post">
-                        <input type="number" name="quantity" value="<?php echo $qty; ?>" min="1" max="10">
-                        <input type="hidden" name="pid" value="<?php echo $pid; ?>">
+                    <form onsubmit="updateCartQuantity(<?php echo $pid; ?>); return false;">
+                        <input id="quantity_<?php echo $pid; ?>" type="number" name="quantity"
+                            value="<?php echo $qty; ?>" min="1" max="10">
                         <input type="submit" value="Update">
                     </form>
                 </td>
@@ -161,3 +169,35 @@ include "cart_js.php";
 </div>
 
 </br>
+</br>
+
+
+
+<script>
+function updateCartQuantity(pid) {
+    const quantity = document.getElementById('quantity_' + pid).value;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'updatecart.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const response = xhr.responseText;
+            if (response === 'success') {
+                // Quantity updated successfully, optionally update UI
+            } else {
+                // Handle error
+                console.error('Failed to update quantity');
+            }
+        } else {
+            // Handle network error
+            console.error('Error updating quantity');
+        }
+    };
+    xhr.onerror = function() {
+        // Handle network error
+        console.error('Network error occurred');
+    };
+    xhr.send('product_id=' + pid + '&quantity=' + quantity);
+}
+</script>

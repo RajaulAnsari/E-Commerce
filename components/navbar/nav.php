@@ -31,30 +31,45 @@
                             <a href="./cart.php">
                                 <i class='bx bx-cart'></i>Cart
                                 <?php
-        if (isset($_SESSION['uusername'])) {
-            $user_id = isset($_SESSION['USER_ID']) ? $_SESSION['USER_ID'] : null;
-            if ($user_id !== null) {
-                include('./connection.php');
-                $sql_query = "SELECT COUNT(PRODUCT_ID) AS NUMBER_OF_ROWS FROM CART WHERE USER_ID = '$user_id'";
+                                    if (isset($_SESSION['uusername'])) {
+                                        include('./connection.php');
+                                        $username = $_SESSION['uusername'];
+                                        
+                                        // Query USER_CLECK table to get USER_ID based on username
+                                        $user_query = "SELECT USER_ID FROM USER_CLECK WHERE UUSER_NAME = '$username'";
+                                        $user_stmt = oci_parse($conn, $user_query);
+                                        oci_execute($user_stmt);
+                                        $user_row = oci_fetch_assoc($user_stmt);
+                                        $user_id = $user_row ? $user_row['USER_ID'] : null;
+                                        oci_free_statement($user_stmt);
+                                        
+                                        if ($user_id !== null) {
+                                            // Query to count items in the user's cart based on USER_ID
+                                            $cart_query = "SELECT COUNT(cp.PRODUCT_ID) AS NUMBER_OF_ROWS 
+                                                        FROM CART_PRODUCT cp 
+                                                        JOIN CART c ON cp.CART_ID = c.CART_ID 
+                                                        WHERE c.USER_ID = '$user_id'";
+                                            
+                                            $stmt = oci_parse($conn, $cart_query);
+                                            oci_define_by_name($stmt, 'NUMBER_OF_ROWS', $number_of_rows);
+                                            oci_execute($stmt);
+                                            oci_fetch($stmt);
+                                            
+                                            echo "<span>" . $number_of_rows . "</span>";
+                                        } else {
+                                            echo "<span>0</span>";
+                                        }
+                                    } else {
+                                        if (isset($_SESSION['cart'])) {
+                                            $count = count($_SESSION['cart']);
+                                            echo "<span>$count</span>";
+                                        } else {
+                                            echo "<span>0</span>";
+                                        }
+                                    }
+                                    ?>
 
-                $stmt = oci_parse($conn, $sql_query);
-                oci_define_by_name($stmt, 'NUMBER_OF_ROWS', $number_of_rows);
-                oci_execute($stmt);
-                oci_fetch($stmt);
 
-                echo "<span>" . $number_of_rows . "</span>";
-            } else {
-                echo "<span>0</span>";
-            }
-        } else {
-            if (isset($_SESSION['cart'])) {
-                $count = count($_SESSION['cart']);
-                echo "<span>$count</span>";
-            } else {
-                echo "<span>0</span>";
-            }
-        }
-        ?>
                             </a>
                         </div>
 

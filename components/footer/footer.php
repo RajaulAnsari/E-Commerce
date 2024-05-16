@@ -14,8 +14,8 @@
                 <h4>get help</h4>
                 <ul>
                     <li><a href="#">FAQ</a></li>
-                    <li><a href="#">order status</a></li>
-                    <li><a href="#">payment options</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Payment Options</a></li>
                 </ul>
             </div>
             <div class="footer-col">
