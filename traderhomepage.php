@@ -106,7 +106,7 @@ if (isset($_POST['logout'])) {
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>CleckHub | User-Homepage</title>
+    <title>CleckHub | Trader-Homepage</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="icon" href="./images/icons/SVG/SvgIcoLogo.svg">

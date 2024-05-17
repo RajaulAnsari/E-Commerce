@@ -1,5 +1,7 @@
 <?PHP
 session_start();
+$paypalURL = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+$paypalID = 'sb-iggrw30554138@business.example.com'; //Business Email
 ?>
 
 <!DOCTYPE html>

@@ -1,43 +1,55 @@
 <?php
-session_start();
 include "connection.php";
+session_start();
 
-// Check if the user is logged in
-if (isset($_SESSION['uusername'])) {
-    // Retrieve user ID from the session
+if (isset($_SESSION['uusername']) && isset($_POST['quantity']) && isset($_POST['pid'])) {
+    $quantity = $_POST['quantity'];
+    $pid = $_POST['pid'];
     $user = $_SESSION['uusername'];
-    $qry = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = '$user'";
+    
+    // Retrieve user ID from the session
+    $qry = "SELECT USER_ID FROM USER_CLECK WHERE UUSER_NAME = :user_name";
+
     $res = oci_parse($conn, $qry);
+    oci_bind_by_name($res, ":user_name", $user);
     oci_execute($res);
     $row = oci_fetch_assoc($res);
-    $user_id = $row['USER_ID'];
-
-    // Retrieve product ID and quantity sent via POST
-    $product_id = $_POST['product_id'];
-    $quantity = $_POST['quantity'];
-
-    // Update the cart quantity in the database
-    $update_query = "UPDATE CART_PRODUCT SET CART_ITEMS = :quantity WHERE PRODUCT_ID = :product_id AND CART_ID IN (SELECT CART_ID FROM CART WHERE USER_ID = :user_id)";
-    $update_stmt = oci_parse($conn, $update_query);
-    oci_bind_by_name($update_stmt, ":quantity", $quantity);
-    oci_bind_by_name($update_stmt, ":product_id", $product_id);
-    oci_bind_by_name($update_stmt, ":user_id", $user_id);
-    $success = oci_execute($update_stmt);
-
-    if ($success) {
-        oci_commit($conn);
+    $uid = $row['USER_ID'];
+    
+    // Update the quantity in the cart table
+    if (!empty($quantity) && !empty($pid)) {
+        $update_query = "
+        UPDATE CART c
+        SET c.CART_ITEMS = :cart_items
+        WHERE c.USER_ID = :user_id
+        AND EXISTS (
+            SELECT 1
+            FROM CART_PRODUCT cp
+            WHERE cp.CART_ID = c.CART_ID
+            AND cp.PRODUCT_ID = :product_id
+        )";
+        $stmt = oci_parse($conn, $update_query);
+        oci_bind_by_name($stmt, ":cart_items", $quantity);
+        oci_bind_by_name($stmt, ":user_id", $uid);
+        oci_bind_by_name($stmt, ":product_id", $pid);
+        $success = oci_execute($stmt);
         
-        // Update session variable with new cart quantity
-        $_SESSION['cart'][$product_id] = $quantity;
+        // Execute the update query
+        if ($success) {
+            // Commit the transaction
+            oci_commit($conn);
+            echo "<script>alert('Quantity updated successfully'); window.location.href='cart.php';</script>";
+        } else {
+            // Handle errors
+            $error = oci_error($stmt);
+            echo "Error: " . $error['message'];
+        }
 
-        echo "success";
-    } else {
-        echo "Error updating quantity";
+        oci_free_statement($stmt);
     }
-
-    oci_free_statement($update_stmt);
     oci_close($conn);
 } else {
-    echo "User not logged in";
+    // Missing parameters or user not logged in
+    echo '<script>alert("Missing parameters or user not logged in"); window.location.href = "cart.php";</script>';
 }
 ?>

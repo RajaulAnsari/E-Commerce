@@ -25,8 +25,17 @@ if (isset($_SESSION['uusername'])) {
     $num_products = $check_row['NUM_PRODUCTS'];
     oci_free_statement($check_stmt);
 
+    // Check if adding this product will exceed the limit of 20 products
+    $cart_items_query = "SELECT SUM(CART_ITEMS) AS total_items FROM CART WHERE USER_ID = :user_id";
+    $cart_items_stmt = oci_parse($conn, $cart_items_query);
+    oci_bind_by_name($cart_items_stmt, ":user_id", $user_id);
+    oci_execute($cart_items_stmt);
+    $cart_items_row = oci_fetch_assoc($cart_items_stmt);
+    $total_items = $cart_items_row['TOTAL_ITEMS'];
+    oci_free_statement($cart_items_stmt);
+
     // Insert the product into the cart table
-    if (!empty($product_id)&& $num_products == 0) {
+    if (!empty($product_id)&& $num_products == 0 && $total_items <20) {
         $insert_query = "DECLARE
         cart_id NUMBER;
     BEGIN
@@ -66,7 +75,6 @@ if (isset($_SESSION['uusername'])) {
     </script>
     ";
 }
-// include "cart_js.php";
 ?>
 
 
@@ -128,14 +136,24 @@ if (isset($_SESSION['uusername'])) {
                 </td>
                 <td><?php echo $pprice; ?></td>
                 <td>
-                    <form onsubmit="updateCartQuantity(<?php echo $pid; ?>); return false;">
-                        <input id="quantity_<?php echo $pid; ?>" type="number" name="quantity"
-                            value="<?php echo $qty; ?>" min="1" max="10">
-                        <input type="submit" value="Update">
+                    <form action="updatecart.php" method="post">
+                        <input style="padding:2px; border:2px solid; border-radius:10px; font-size:15px;" type="number"
+                            name="quantity" value="<?php echo $qty; ?>" min="1" max="10">
+                        <input type="hidden" name="pid" value="<?php echo $pid; ?>">
+                        <input
+                            style="background-color: green; color: white; border: none; padding: 5px 10px; cursor: pointer;border-radius:5px;"
+                            type="submit" value="Update">
                     </form>
                 </td>
                 <td><?php echo $ptotal; ?></td>
-                <td><a href="removecart.php?pid=<?php echo $pid; ?>">Remove</a></td>
+                <td>
+                    <form action="removecart.php" method="post">
+                        <input type="hidden" name="pid" value="<?php echo $pid; ?>">
+                        <button type="submit"
+                            style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;border-radius:5px;"
+                            onclick="return confirm('Are you sure you want to remove this item?')">Remove</button>
+                    </form>
+                </td>
             </tr>
             <?php
             }
@@ -170,34 +188,3 @@ if (isset($_SESSION['uusername'])) {
 
 </br>
 </br>
-
-
-
-<script>
-function updateCartQuantity(pid) {
-    const quantity = document.getElementById('quantity_' + pid).value;
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'updatecart.php', true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const response = xhr.responseText;
-            if (response === 'success') {
-                // Quantity updated successfully, optionally update UI
-            } else {
-                // Handle error
-                console.error('Failed to update quantity');
-            }
-        } else {
-            // Handle network error
-            console.error('Error updating quantity');
-        }
-    };
-    xhr.onerror = function() {
-        // Handle network error
-        console.error('Network error occurred');
-    };
-    xhr.send('product_id=' + pid + '&quantity=' + quantity);
-}
-</script>

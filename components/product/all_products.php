@@ -9,9 +9,6 @@
     $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
 
     // Construct base SQL query
-    // $sql = "SELECT * FROM product WHERE 1=1";
-    // $sql1 = "SELECT * FROM review WHERE PRODUCT_ID = :product_id";
-    // $sql ="select * from review r join product p on r.product_id = p.product_id where 1=1";
     $sql ="SELECT * FROM product p LEFT JOIN review r ON p.product_id=r.product_id WHERE 1=1";
 
     // Add category filter if selected
@@ -139,6 +136,7 @@ function addToCart() {
         if (xhr.status === 200) {
             // Optionally, you can show a message or update the UI to indicate that the product was added to the cart
             alert('Product added to cart successfully');
+            window.location.reload();
         } else {
             console.error('Error adding product to cart');
         }
