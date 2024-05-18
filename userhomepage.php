@@ -98,6 +98,12 @@ if (isset($_POST['logout'])) {
     header("Location: index.php");
     exit();
 }
+
+if (isset($_POST['wishlist'])) {
+    // Redirect to the wishlist page
+    header("Location: wishlist.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -124,7 +130,7 @@ if (isset($_POST['logout'])) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 60vh;
+        height: 100vh;
         text-align: center;
     }
 
@@ -194,7 +200,7 @@ if (isset($_POST['logout'])) {
     ?>
 
     <div class="userprofile-container">
-        <section></section>
+        <!-- <section></section> -->
         <div class="user-dashboard">
             <h2>User Dashboard</h2>
         </div>
@@ -212,17 +218,23 @@ if (isset($_POST['logout'])) {
             }
             ?>
         </div>
-
+        </br>
         <!-- Image upload form -->
         <form method="post" enctype="multipart/form-data">
             <input type="file" name="image" id="image" required>
+
             <button type="submit" name="upload">Upload Image</button>
         </form>
-
+        </br>
         <!-- Display user's data including the image -->
         <h1>Welcome, <?php echo ucfirst($userData['UUSER_NAME']); ?>😊</h1>
         <p>Name: <?php echo $userData['FIRST_NAME'] . " " . $userData['LAST_NAME']; ?></p>
         <p>Email: <?php echo $userData['EMAIL_ADDRESS']; ?></p>
+        </br>
+        <form method="post">
+            <button type="submit" name="wishlist">My Wishlist</button>
+        </form>
+        </br>
 
         <!-- Logout form -->
         <form method="post">

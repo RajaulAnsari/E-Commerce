@@ -19,12 +19,13 @@
 .best-p1 {
   border: 1px solid #ccc;
   padding: 10px;
-  box-shadow: indigo 0px 0px 10px;
+  box-shadow: rgb(9, 212, 9) 0px 0px 10px;
 }
 
 .best-p1 img {
-  width: 100%;
+  width: 80%;
   height: auto;
+  /* border-radius: 5px; */
 }
 
 .best-p1-txt {
@@ -45,12 +46,23 @@
 }
 
 .rating {
-  color: rgb(255, 208, 0);
+  color: rgb(255, 187, 0);
 }
 
 .price {
   font-weight: bold;
   margin-top: 5px;
+}
+
+.buy-now{
+  display: grid;
+  grid-gap: 1rem;
+}
+.buy-now button i{
+  font-size: 1.5em;
+  color: #ffffff;
+  background-color: green;
+
 }
 
 .buy-now button {
@@ -66,6 +78,9 @@
 .buy-now button a {
   text-decoration: none;
   color: #fff;
+}
+.buy-now button:hover {
+  background-color: #59c288;
 }
 
 

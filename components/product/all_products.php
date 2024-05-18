@@ -93,8 +93,10 @@
                         Price : $" . oci_result($stmt, 'PRODUCT_PRICE') . "
                     </div>
                     <div class='buy-now'>
-                        <button class='add-to-cart' data-product-id='" . oci_result($stmt, 'PRODUCT_ID') ."'>Add To Cart</button>
+                        <button class='add-to-cart' data-product-id='" . oci_result($stmt, 'PRODUCT_ID') ."'><i class='bx bxs-cart bx-border-circle bx-tada-hover'></i></button>
+                        <button class='add-to-wishlist' data-product-id1='" . oci_result($stmt, 'PRODUCT_ID') ."'><i class='bx bxs-heart bx-border-circle bx-tada-hover'></i></button>
                     </div>
+                    
                 </div>
             </div>
             ";
@@ -139,6 +141,31 @@ function addToCart() {
             window.location.reload();
         } else {
             console.error('Error adding product to cart');
+        }
+    };
+    xhr.send(`product_id=${productId}`);
+}
+
+document.querySelectorAll('.add-to-wishlist').forEach(item => {
+    item.addEventListener('click', addToWishlist);
+});
+
+function addToWishlist() {
+    const productId = this.getAttribute('data-product-id1');
+    // Debugging statements
+    console.log('Product ID:', productId);
+
+    // Send AJAX request to add the product to the cart
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'wishlist.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // Optionally, you can show a message or update the UI to indicate that the product was added to the cart
+            alert('Product added to wishlist successfully');
+            window.location.reload();
+        } else {
+            console.error('Error adding product to wishlist');
         }
     };
     xhr.send(`product_id=${productId}`);

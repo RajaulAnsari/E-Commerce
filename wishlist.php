@@ -1,5 +1,7 @@
 <?PHP
 session_start();
+$paypalURL = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+$paypalID = 'sb-iggrw30554138@business.example.com'; //Business Email
 ?>
 
 <!DOCTYPE html>
@@ -8,16 +10,18 @@ session_start();
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>CleckHub | Products</title>
+    <title>CleckHub | Cart</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="icon" href="./images/icons/SVG/SvgIcoLogo.svg">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" type="text/css"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./components/wishlist/wishlistmain.css">
     <link rel="stylesheet" href="./components/searchbox/searchbox.css">
-    <link rel="stylesheet" href="./components/product/all_products.css">
+
 
 
 
@@ -34,7 +38,7 @@ session_start();
     ?>
 
     <?PHP
-    include "./components/product/all_products.php";
+    include "./components/wishlist/wishlistmain.php";
     ?>
 
     <?PHP
@@ -43,7 +47,6 @@ session_start();
 
 
     <script src="./js/main.js" async defer></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 
 </html>
