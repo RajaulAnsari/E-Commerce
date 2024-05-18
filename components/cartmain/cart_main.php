@@ -26,7 +26,7 @@ if (isset($_SESSION['uusername'])) {
     oci_free_statement($check_stmt);
 
     // Check if adding this product will exceed the limit of 20 products
-    $cart_items_query = "SELECT SUM(CART_ITEMS) AS total_items FROM CART WHERE USER_ID = :user_id";
+    $cart_items_query = "SELECT COUNT(CART_PRODUCT_ID) AS total_items FROM CART_PRODUCT WHERE CART_ID IN (SELECT CART_ID FROM CART WHERE USER_ID = :user_id)";
     $cart_items_stmt = oci_parse($conn, $cart_items_query);
     oci_bind_by_name($cart_items_stmt, ":user_id", $user_id);
     oci_execute($cart_items_stmt);
@@ -181,10 +181,35 @@ if (isset($_SESSION['uusername'])) {
 ?>
     </div>
 
-    <div class="cart-checkout">
-        <a href="checkout.php">Checkout</a>
-    </div>
-</div>
+    <?php
+$paypalURL = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+$paypalID = 'sb-iggrw30554138@business.example.com'; //Business Email
 
-</br>
-</br>
+?>
+    <div class="cart-checkout">
+        <form action="<?php echo $paypalURL; ?>" method="post">
+
+            <input type="hidden" name="business" value="<?php echo $paypalID;?>">
+
+            <!-- Specify a Buy Now button. -->
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="item_name" value=".">
+            <input type="hidden" name="item_number" value=".">
+            <input type="hidden" name="amount" value="<?php echo $total;?>">
+            <input type="hidden" name="currency_code" value="USD">
+            <input type="hidden" name="quantity" value="<?php echo $total_items;?>">
+
+            <!-- Specify URLs -->
+            <input type='hidden' name='cancel_return' value='http://localhost/E-Commerce/cart.php'>
+            <input type='hidden' name='return' value='http://localhost/E-Commerce/success.php'>
+
+            <!-- Display the payment button. -->
+            <input type="image" name="submit" border="0"
+                src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_LG.gif"
+                alt="PayPal - The safer, easier way to pay online">
+            <!-- <img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"> -->
+        </form>
+    </div>
+
+    </br>
+    </br>
