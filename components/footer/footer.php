@@ -13,7 +13,7 @@
             <div class="footer-col">
                 <h4>get help</h4>
                 <ul>
-                    <li><a href="#">FAQ</a></li>
+                    <li><a href="FAQ.php">FAQ</a></li>
                     <li><a href="contactus.php">Contact Us</a></li>
                     <li><a href="#">Payment Options</a></li>
                 </ul>
