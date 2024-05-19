@@ -25,14 +25,6 @@ if (isset($_SESSION['uusername'])) {
     $num_products = $check_row['NUM_PRODUCTS'];
     oci_free_statement($check_stmt);
 
-    // // Check if adding this product will exceed the limit of 20 products
-    // $wishlist_items_query = "SELECT COUNT(*) AS total_items FROM PRODUCT_WISHLIST WHERE WISHLIST_ID IN (SELECT WISHLIST_ID FROM WISHLIST WHERE USER_ID = :user_id)";
-    // $wishlist_items_stmt = oci_parse($conn, $wishlist_items_query);
-    // oci_bind_by_name($wishlist_items_stmt, ":user_id", $user_id);
-    // oci_execute($wishlist_items_stmt);
-    // $wishlist_items_row = oci_fetch_assoc($wishlist_items_stmt);
-    // $total_items = $wishlist_items_row['TOTAL_ITEMS'];
-    // oci_free_statement($wishlist_items_stmt);
 
     // Insert the product into the wishlist table
     if (!empty($product_id) && $num_products == 0) {
@@ -90,24 +82,31 @@ if (isset($_SESSION['uusername'])) {
                 <th>Product</th>
                 <th>Price</th>
                 <th>Remove</th>
+                <th>Add to Cart</th>
             </tr>
             <?php
             $qry = "
-                SELECT 
-                    p.PRODUCT_ID,
-                    p.PRODUCT_NAME,
-                    p.PRODUCT_PRICE,
-                    p.PRODUCT_IMAGE,
-                    wp.WISHLIST_ID
-                FROM 
-                    PRODUCT p
-                JOIN 
-                PRODUCT_WISHLIST wp ON p.PRODUCT_ID = wp.PRODUCT_ID
-                JOIN 
-                    WISHLIST w ON wp.WISHLIST_ID = w.WISHLIST_ID
-                WHERE
-                    w.USER_ID = '$user_id'
-            ";
+            SELECT 
+            p.PRODUCT_ID,
+            p.PRODUCT_NAME,
+            p.PRODUCT_PRICE,
+            CASE 
+                WHEN d.DISCOUNT_AMOUNT IS NOT NULL THEN p.PRODUCT_PRICE - d.DISCOUNT_AMOUNT
+                ELSE p.PRODUCT_PRICE
+            END AS DISCOUNTED_PRICE,
+            p.PRODUCT_IMAGE,
+            wp.WISHLIST_ID
+        FROM 
+            PRODUCT p
+        JOIN 
+            PRODUCT_WISHLIST wp ON p.PRODUCT_ID = wp.PRODUCT_ID
+        JOIN 
+            WISHLIST w ON wp.WISHLIST_ID = w.WISHLIST_ID
+        LEFT JOIN 
+            DISCOUNT d ON p.PRODUCT_ID = d.PRODUCT_ID
+        WHERE
+            w.USER_ID = '$user_id'
+    ";
 
             $res = oci_parse($conn, $qry);
             oci_execute($res);
@@ -115,7 +114,7 @@ if (isset($_SESSION['uusername'])) {
             while($row = oci_fetch_assoc($res)) {
                 $pid = $row['PRODUCT_ID'];
                 $pname = $row['PRODUCT_NAME'];
-                $pprice = $row['PRODUCT_PRICE'];
+                $pprice = $row['DISCOUNTED_PRICE'];
                 $pimage = $row['PRODUCT_IMAGE'];
             ?>
             <tr>
@@ -131,6 +130,14 @@ if (isset($_SESSION['uusername'])) {
                         <button type="submit"
                             style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px;"
                             onclick="return confirm('Are you sure you want to remove this item?')">Remove</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="cart.php" method="post">
+                        <input type="hidden" name="product_id" value="<?php echo $pid; ?>">
+                        <button type="submit"
+                            style="background-color: green; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px;">Add
+                            to Cart</button>
                     </form>
                 </td>
             </tr>

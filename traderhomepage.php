@@ -117,13 +117,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_profile"])) {
 
     // Update password
     // Ensure to hash the new password before updating it in the database
-    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-    $updatePasswordSql = "UPDATE TRADER SET TRADER_PASSWORD = :new_password WHERE TUSER_NAME = :tusername";
-    $updatePasswordStmt = oci_parse($conn, $updatePasswordSql);
-    oci_bind_by_name($updatePasswordStmt, ":new_password", $hashedPassword);
-    oci_bind_by_name($updatePasswordStmt, ":tusername", $tusername);
-    oci_execute($updatePasswordStmt);
-    oci_free_statement($updatePasswordStmt);
+    // $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    // $updatePasswordSql = "UPDATE TRADER SET TRADER_PASSWORD = :new_password WHERE TUSER_NAME = :tusername";
+    // $updatePasswordStmt = oci_parse($conn, $updatePasswordSql);
+    // oci_bind_by_name($updatePasswordStmt, ":new_password", $hashedPassword);
+    // oci_bind_by_name($updatePasswordStmt, ":tusername", $tusername);
+    // oci_execute($updatePasswordStmt);
+    // oci_free_statement($updatePasswordStmt);
 
     // Redirect to refresh the page and display updated information
     header("Location: ".$_SERVER['PHP_SELF']);
@@ -279,8 +279,8 @@ if (isset($_POST['tCRUD'])) {
             <input type="text" id="new_phone" name="new_phone" value="<?php echo $phone; ?>"><br><br>
             <label for="new_address">New Address:</label>
             <input type="text" id="new_address" name="new_address" value="<?php echo $address; ?>"><br><br>
-            <label for="new_password">New Password:</label>
-            <input type="password" id="new_password" name="new_password"><br><br>
+            <!-- <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password"><br><br> -->
             <button type="submit" name="update_profile">Update Profile</button>
         </form>
         </br>

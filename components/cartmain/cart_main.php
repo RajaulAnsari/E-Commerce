@@ -18,7 +18,7 @@ if (isset($_SESSION['uusername'])) {
     // Check if the product is already in the cart
     $check_query = "SELECT COUNT(*) AS num_products FROM CART_PRODUCT WHERE PRODUCT_ID = :product_id AND CART_ID IN (SELECT CART_ID FROM CART WHERE USER_ID = :user_id)";
     $check_stmt = oci_parse($conn, $check_query);
-    oci_bind_by_name($check_stmt, ":product_id", $product_id);
+    oci_bind_by_name($check_stmt, ":product_id", $product_id, SQLT_INT); // Assuming PRODUCT_ID is of type INT
     oci_bind_by_name($check_stmt, ":user_id", $user_id);
     oci_execute($check_stmt);
     $check_row = oci_fetch_assoc($check_stmt);
@@ -35,38 +35,44 @@ if (isset($_SESSION['uusername'])) {
     oci_free_statement($cart_items_stmt);
 
     // Insert the product into the cart table
-    if (!empty($product_id)&& $num_products == 0 && $total_items <20) {
-        $insert_query = "DECLARE
-        cart_id NUMBER;
-    BEGIN
-        INSERT INTO CART (CART_ITEMS, USER_ID, CART_CREATED,CART_UPDATED) VALUES (1, :user_id, SYSDATE,SYSDATE) RETURNING CART_ID INTO cart_id;
-        
-        INSERT INTO CART_PRODUCT (PRODUCT_ID, CART_ID) VALUES (:product_id, cart_id);
-        
-        COMMIT;
-    END;";
-        
-        $stmt = oci_parse($conn, $insert_query);
-        oci_bind_by_name($stmt, ":product_id", $product_id);
-        oci_bind_by_name($stmt, ":user_id", $user_id);
-        oci_bind_by_name($stmt, ":cart_id", $cart_id, 32); // Assuming CART_ID is of NUMBER(32)
-        
-        // Execute the statement
-        $success = oci_execute($stmt);
+if (!empty($product_id) && $num_products == 0 && $total_items < 20) {
+    $insert_query = "
+        DECLARE
+            cart_id NUMBER;
+        BEGIN
+            INSERT INTO CART (CART_ITEMS, USER_ID, CART_CREATED, CART_UPDATED) VALUES (1, :user_id, SYSDATE, SYSDATE) RETURNING CART_ID INTO :cart_id;
+            
+            INSERT INTO CART_PRODUCT (PRODUCT_ID, CART_ID) VALUES (:product_id, :cart_id);
+            
+            COMMIT;
+        END;";
+    
+    $stmt = oci_parse($conn, $insert_query);
+    oci_bind_by_name($stmt, ":product_id", $product_id);
+    oci_bind_by_name($stmt, ":user_id", $user_id);
+    oci_bind_by_name($stmt, ":cart_id", $cart_id, 32); // Assuming CART_ID is of NUMBER(32), used for returning the generated CART_ID
+    
+    // Execute the statement
+    $success = oci_execute($stmt);
 
-        if ($success) {
-            // Commit the transaction
-            oci_commit($conn);
-            echo "success"; // Send success response to AJAX
-        } else {
-            // Handle errors
-            $error = oci_error($stmt);
-            echo "Error: " . $error['message'];
-        }
-
-        oci_free_statement($stmt);
+    if ($success) {
+        // Commit the transaction
+        oci_commit($conn);
+        // echo "success"; // Send success response to AJAX
+        // oci_commit($conn);
+        echo "<script>
+        alert('Product added to cart');
+        window.location.href = 'wishlist.php';</script>";
+    } else {
+        // Handle errors
+        $error = oci_error($stmt);
+        echo "Error: " . $error['message'];
     }
-    oci_close($conn);
+
+    oci_free_statement($stmt);
+}
+oci_close($conn);
+
 } else {
     echo"
     <script>
@@ -99,22 +105,29 @@ if (isset($_SESSION['uusername'])) {
             </tr>
             <?php
             $qry = "
-        SELECT 
-            p.PRODUCT_ID,
-            p.PRODUCT_NAME,
-            p.PRODUCT_PRICE,
-            p.PRODUCT_IMAGE,
-            c.CART_ITEMS,
-            cp.CART_ID
-        FROM 
-            PRODUCT p
-        JOIN 
-            CART_PRODUCT cp ON p.PRODUCT_ID = cp.PRODUCT_ID
-        JOIN 
-            CART c ON cp.CART_ID = c.CART_ID
-        WHERE
-            c.USER_ID = '$user_id'
-        ";
+            SELECT 
+                p.PRODUCT_ID,
+                p.PRODUCT_NAME,
+                p.PRODUCT_PRICE,
+                CASE 
+                    WHEN d.DISCOUNT_AMOUNT IS NOT NULL THEN p.PRODUCT_PRICE - d.DISCOUNT_AMOUNT
+                    ELSE p.PRODUCT_PRICE
+                END AS DISCOUNTED_PRICE,
+                p.PRODUCT_IMAGE,
+                c.CART_ITEMS,
+                cp.CART_ID
+            FROM 
+                PRODUCT p
+            JOIN 
+                CART_PRODUCT cp ON p.PRODUCT_ID = cp.PRODUCT_ID
+            JOIN 
+                CART c ON cp.CART_ID = c.CART_ID
+            LEFT JOIN 
+                DISCOUNT d ON p.PRODUCT_ID = d.PRODUCT_ID
+            WHERE
+                c.USER_ID = '$user_id'
+            ";
+            
 
             $res = oci_parse($conn, $qry);
             oci_execute($res);
@@ -124,7 +137,7 @@ if (isset($_SESSION['uusername'])) {
                 $pid = $row['PRODUCT_ID'];
                 $qty = $row['CART_ITEMS'];
                 $pname = $row['PRODUCT_NAME'];
-                $pprice = $row['PRODUCT_PRICE'];
+                $pprice = $row['DISCOUNTED_PRICE'];
                 $ptotal = $pprice * $qty;
                 $pimage = $row['PRODUCT_IMAGE'];
             ?>
@@ -163,11 +176,18 @@ if (isset($_SESSION['uusername'])) {
 
     <div class="cart-total">
         <h3>Total: <?php $qry = "
-        SELECT SUM(p.PRODUCT_PRICE * c.CART_ITEMS) AS TOTAL 
+        SELECT SUM(
+            CASE 
+                WHEN d.DISCOUNT_AMOUNT IS NOT NULL THEN (p.PRODUCT_PRICE - d.DISCOUNT_AMOUNT) * c.CART_ITEMS
+                ELSE p.PRODUCT_PRICE * c.CART_ITEMS
+            END
+        ) AS TOTAL 
         FROM CART c 
         JOIN CART_PRODUCT cp ON c.CART_ID = cp.CART_ID
         JOIN PRODUCT p ON cp.PRODUCT_ID = p.PRODUCT_ID
-        WHERE c.USER_ID = '$user_id'";
+        LEFT JOIN DISCOUNT d ON p.PRODUCT_ID = d.PRODUCT_ID
+        WHERE c.USER_ID = '$user_id'
+    ";
         
         $res = oci_parse($conn, $qry);
         oci_execute($res);

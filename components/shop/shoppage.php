@@ -3,6 +3,7 @@
         <div class="shop-page-title">
             <h2>Shops</h2>
         </div>
+        </br>
         <div class="shops">
             <?php
             include 'connection.php';
@@ -28,5 +29,6 @@
             oci_close($conn);
             ?>
         </div>
+        </br>
     </div>
 </section>
