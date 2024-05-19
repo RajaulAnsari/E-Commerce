@@ -15,7 +15,6 @@
                 <ul>
                     <li><a href="FAQ.php">FAQ</a></li>
                     <li><a href="contactus.php">Contact Us</a></li>
-                    <li><a href="#">Payment Options</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -23,17 +22,17 @@
                 <ul>
                     <li><a href="#">Fish</a></li>
                     <li><a href="#">Bakery</a></li>
-                    <li><a href="#">Fruits</a></li>
-                    <li><a href="#">Vegetables</a></li>
+                    <li><a href="#">Meat</a></li>
+                    <li><a href="#">Fruits & Vegetables</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>follow us</h4>
                 <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.x.com/"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
         </div>

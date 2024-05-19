@@ -1,11 +1,6 @@
 <?php
 include 'connection.php';
 
-// Check if user is not logged in
-// if (!isset($_SESSION['uusername'])) {
-//     header('Location: usersignin.php');
-//     exit; // Stop further execution
-// }
 
 $shop_id = isset($_GET['shop_id']) ? $_GET['shop_id'] : null;
 $categoryFilter = isset($_GET['category']) ? $_GET['category'] : 'all';
@@ -102,7 +97,9 @@ while ($row = oci_fetch_assoc($stmt)) {
     $hasResults = true;
     echo "
     <div class='best-p1'>
+    <a href='productdetails.php?product_id=" . htmlspecialchars($row['PRODUCT_ID']) . "'>
         <img src='./images/Vegetables-Fruits/" . htmlspecialchars($row['PRODUCT_IMAGE']) . "' alt='Product Photo'>
+    </a>
         <div class='best-p1-txt'>
             <div class='name-of-p'>
                 <p>" . htmlspecialchars($row['PRODUCT_NAME']) . "</p>
