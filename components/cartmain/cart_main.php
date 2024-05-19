@@ -210,6 +210,6 @@ $paypalID = 'sb-iggrw30554138@business.example.com'; //Business Email
             <!-- <img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"> -->
         </form>
     </div>
-
-    </br>
-    </br>
+</div>
+</br>
+</br>

@@ -27,7 +27,7 @@ if (isset($_SESSION['uusername']) && isset($_POST['pid'])) {
     if ($success) {
         // Commit the transaction
         oci_commit($conn);
-        header("Location: cart.php"); // Redirect back to the cart page
+        header("Location: wishlist.php"); // Redirect back to the cart page
     } else {
         // Handle errors
         $error = oci_error($stmt);
