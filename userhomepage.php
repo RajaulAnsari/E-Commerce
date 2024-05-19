@@ -24,7 +24,10 @@ if (oci_execute($stmt)) {
         $displayName = isset($userData['UUSER_NAME']) ? $userData['UUSER_NAME'] : '';
         $fullName = isset($userData['FIRST_NAME'], $userData['LAST_NAME']) ? $userData['FIRST_NAME'] . ' ' . $userData['LAST_NAME'] : '';
         $email = isset($userData['EMAIL_ADDRESS']) ? $userData['EMAIL_ADDRESS'] : '';
-        $imagePath = isset($userData['USER_IMAGE']) ? $userData['USER_IMAGE'] : ''; // Corrected column name
+        $imagePath = isset($userData['USER_IMAGE']) ? $userData['USER_IMAGE'] : '';
+        $phone = isset($userData['PHONE_NUMBER']) ? $userData['PHONE_NUMBER'] : '';
+        $address = isset($userData['ADDRESS']) ? $userData['ADDRESS'] : '';
+
 
         // Close the statement
         oci_free_statement($stmt);
@@ -89,6 +92,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
         }
     }
 }
+
+
+// Handle phone number, address, and password updates
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_profile"])) {
+    $newPhone = $_POST["new_phone"];
+    $newAddress = $_POST["new_address"];
+    $newPassword = $_POST["new_password"];
+
+    // Update phone number
+    $updatePhoneSql = "UPDATE USER_CLECK SET PHONE_NUMBER = :new_phone WHERE UUSER_NAME = :uusername";
+    $updatePhoneStmt = oci_parse($conn, $updatePhoneSql);
+    oci_bind_by_name($updatePhoneStmt, ":new_phone", $newPhone);
+    oci_bind_by_name($updatePhoneStmt, ":uusername", $uusername);
+    oci_execute($updatePhoneStmt);
+    oci_free_statement($updatePhoneStmt);
+
+    // Update address
+    $updateAddressSql = "UPDATE USER_CLECK SET ADDRESS = :new_address WHERE UUSER_NAME = :uusername";
+    $updateAddressStmt = oci_parse($conn, $updateAddressSql);
+    oci_bind_by_name($updateAddressStmt, ":new_address", $newAddress);
+    oci_bind_by_name($updateAddressStmt, ":uusername", $uusername);
+    oci_execute($updateAddressStmt);
+    oci_free_statement($updateAddressStmt);
+
+    // Update password
+    // Ensure to hash the new password before updating it in the database
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    $updatePasswordSql = "UPDATE USER_CLECK SET PASSWORD = :new_password WHERE UUSER_NAME = :uusername";
+    $updatePasswordStmt = oci_parse($conn, $updatePasswordSql);
+    oci_bind_by_name($updatePasswordStmt, ":new_password", $hashedPassword);
+    oci_bind_by_name($updatePasswordStmt, ":uusername", $uusername);
+    oci_execute($updatePasswordStmt);
+    oci_free_statement($updatePasswordStmt);
+
+    // Redirect to refresh the page and display updated information
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit();
+}
+
 
 
 if (isset($_POST['logout'])) {
@@ -228,9 +270,21 @@ if (isset($_POST['wishlist'])) {
         </br>
         <!-- Display user's data including the image -->
         <h1>Welcome, <?php echo ucfirst($userData['UUSER_NAME']); ?>😊</h1>
-        <p>Name: <?php echo $userData['FIRST_NAME'] . " " . $userData['LAST_NAME']; ?></p>
-        <p>Email: <?php echo $userData['EMAIL_ADDRESS']; ?></p>
+        <p>Name: <?php echo $fullName; ?></p>
+        <p>Email: <?php echo $email; ?></p>
         </br>
+        <!-- Add fields to update phone number, address, and password -->
+        <form method="post">
+            <label for="new_phone">New Phone Number:</label>
+            <input type="text" id="new_phone" name="new_phone" value="<?php echo $phone; ?>"><br><br>
+            <label for="new_address">New Address:</label>
+            <input type="text" id="new_address" name="new_address" value="<?php echo $address; ?>"><br><br>
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password"><br><br>
+            <button type="submit" name="update_profile">Update Profile</button>
+        </form>
+        </br>
+
         <form method="post">
             <button type="submit" name="wishlist">My Wishlist</button>
         </form>

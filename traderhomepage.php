@@ -22,14 +22,17 @@ if (oci_execute($stmt)) {
     if ($userData) {
         // Display user's data
         $displayName = isset($userData['TUSER_NAME']) ? $userData['TUSER_NAME'] : '';
-        $fullName = isset($userData['FIRST_NAME'], $userData['LAST_NAME']) ? $userData['FIRST_NAME'] . ' ' . $userData['LAST_NAME'] : '';
+        $fullName = isset($userData['TRADER_FIRST_NAME'], $userData['TRADER_LAST_NAME']) ? $userData['TRADER_FIRST_NAME'] . ' ' . $userData['TRADER_LAST_NAME'] : '';
         $email = isset($userData['EMAIL_ADDRESS']) ? $userData['EMAIL_ADDRESS'] : '';
-        $imagePath = isset($userData['TRADER_IMAGE']) ? $userData['TRADER_IMAGE'] : ''; // Corrected column name
+        $imagePath = isset($userData['TRADER_IMAGE']) ? $userData['TRADER_IMAGE'] : ''; 
+        $phone = isset($userData['CONTACT_NO']) ? $userData['CONTACT_NO'] : '';
+        $address = isset($userData['TRADER_ADDRESS']) ? $userData['TRADER_ADDRESS'] : '';
+
 
         // Close the statement
         oci_free_statement($stmt);
     } else {
-        echo "User data not found.";
+        echo "Trader data not found.";
         exit();
     }
 } else {
@@ -90,6 +93,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
     }
 }
 
+// Handle phone number, address, and password updates
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_profile"])) {
+    $newPhone = $_POST["new_phone"];
+    $newAddress = $_POST["new_address"];
+    $newPassword = $_POST["new_password"];
+
+    // Update phone number
+    $updatePhoneSql = "UPDATE TRADER SET CONTACT_NO = :new_phone WHERE TUSER_NAME = :tusername";
+    $updatePhoneStmt = oci_parse($conn, $updatePhoneSql);
+    oci_bind_by_name($updatePhoneStmt, ":new_phone", $newPhone);
+    oci_bind_by_name($updatePhoneStmt, ":tusername", $tusername);
+    oci_execute($updatePhoneStmt);
+    oci_free_statement($updatePhoneStmt);
+
+    // Update address
+    $updateAddressSql = "UPDATE TRADER SET TRADER_ADDRESS = :new_address WHERE TUSER_NAME = :tusername";
+    $updateAddressStmt = oci_parse($conn, $updateAddressSql);
+    oci_bind_by_name($updateAddressStmt, ":new_address", $newAddress);
+    oci_bind_by_name($updateAddressStmt, ":tusername", $tusername);
+    oci_execute($updateAddressStmt);
+    oci_free_statement($updateAddressStmt);
+
+    // Update password
+    // Ensure to hash the new password before updating it in the database
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    $updatePasswordSql = "UPDATE TRADER SET TRADER_PASSWORD = :new_password WHERE TUSER_NAME = :tusername";
+    $updatePasswordStmt = oci_parse($conn, $updatePasswordSql);
+    oci_bind_by_name($updatePasswordStmt, ":new_password", $hashedPassword);
+    oci_bind_by_name($updatePasswordStmt, ":tusername", $tusername);
+    oci_execute($updatePasswordStmt);
+    oci_free_statement($updatePasswordStmt);
+
+    // Redirect to refresh the page and display updated information
+    header("Location: ".$_SERVER['PHP_SELF']);
+    exit();
+}
+
 
 if (isset($_POST['logout'])) {
     // Destroy the session
@@ -98,6 +138,13 @@ if (isset($_POST['logout'])) {
     header("Location: index.php");
     exit();
 }
+
+if (isset($_POST['tCRUD'])) {
+    // Redirect to the wishlist page
+    header("Location: traderCRUD.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -124,7 +171,7 @@ if (isset($_POST['logout'])) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 60vh;
+        height: 100vh;
         text-align: center;
     }
 
@@ -212,18 +259,35 @@ if (isset($_POST['logout'])) {
             }
             ?>
         </div>
+        </br>
+
 
         <!-- Image upload form -->
         <form method="post" enctype="multipart/form-data">
             <input type="file" name="image" id="image" required>
             <button type="submit" name="upload">Upload Image</button>
         </form>
+        </br>
 
         <!-- Display user's data including the image -->
         <h1>Welcome, <?php echo ucfirst($userData['TUSER_NAME']); ?>😊</h1>
-        <p>Name: <?php echo $userData['TRADER_FIRST_NAME'] . " " . $userData['TRADER_LAST_NAME']; ?></p>
-        <p>Email: <?php echo $userData['EMAIL_ADDRESS']; ?></p>
-
+        <p>Name: <?php echo $fullName; ?></p>
+        <p>Email: <?php echo $email; ?></p>
+        <!-- Add fields to update phone number, address, and password -->
+        <form method="post">
+            <label for="new_phone">New Phone Number:</label>
+            <input type="text" id="new_phone" name="new_phone" value="<?php echo $phone; ?>"><br><br>
+            <label for="new_address">New Address:</label>
+            <input type="text" id="new_address" name="new_address" value="<?php echo $address; ?>"><br><br>
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password"><br><br>
+            <button type="submit" name="update_profile">Update Profile</button>
+        </form>
+        </br>
+        <form method="post">
+            <button type="submit" name="tCRUD">CRUD</button>
+        </form>
+        </br>
         <!-- Logout form -->
         <form method="post">
             <button type="submit" name="logout">Logout</button>
