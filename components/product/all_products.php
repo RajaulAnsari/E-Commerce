@@ -49,6 +49,10 @@ if ($sort === 'price_asc') {
     $sql .= " ORDER BY avg_review.avg_review_score ASC";
 } elseif ($sort === 'rating_desc') {
     $sql .= " ORDER BY avg_review.avg_review_score DESC";
+} elseif ($sort === 'discount_price_asc') {
+    $sql .= " ORDER BY discounted_price ASC";
+} elseif ($sort === 'discount_price_desc') {
+    $sql .= " ORDER BY discounted_price DESC";
 }
 
 $stmt = oci_parse($conn, $sql);
@@ -86,10 +90,12 @@ echo "</select>";
 echo "<label value='none'>&nbspSort by Price or Rating : </label>";
 echo "<select name='sort' id='sort' onchange='this.form.submit()'>";
 echo "<option value='none' " . ($sort === 'none' ? 'selected' : '') . ">None</option>";
-echo "<option value='price_asc' " . ($sort === 'price_asc' ? 'selected' : '') . ">Price: Low to High</option>";
-echo "<option value='price_desc' " . ($sort === 'price_desc' ? 'selected' : '') . ">Price: High to Low</option>";
+// echo "<option value='price_asc' " . ($sort === 'price_asc' ? 'selected' : '') . ">Price: Low to High</option>";
+// echo "<option value='price_desc' " . ($sort === 'price_desc' ? 'selected' : '') . ">Price: High to Low</option>";
 echo "<option value='rating_asc' " . ($sort === 'rating_asc' ? 'selected' : '') . ">Rating: Low to High</option>";
 echo "<option value='rating_desc' " . ($sort === 'rating_desc' ? 'selected' : '') . ">Rating: High to Low</option>";
+echo "<option value='discount_price_asc' " . ($sort === 'discount_price_asc' ? 'selected' : '') . ">Price: Low to High</option>";
+echo "<option value='discount_price_desc' " . ($sort === 'discount_price_desc' ? 'selected' : '') . ">Price: High to Low</option>";
 echo "</select>";
 
 echo "</form>";

@@ -37,6 +37,14 @@
   margin-top: 25%;
 }
 
+.uform > select{
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+
+}
+
 .uform > input,
 .uform > button,
 .remember {

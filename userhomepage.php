@@ -218,6 +218,24 @@ if (isset($_POST['wishlist'])) {
         color: black;
         /* width: 800px; */
     }
+
+    .edit input {
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .edit button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
     </style>
 </head>
 
@@ -264,13 +282,14 @@ if (isset($_POST['wishlist'])) {
         <p>Email: <?php echo $email; ?></p>
         </br>
         <!-- Add fields to update phone number, address, and password -->
-        <form method="post">
-            <label for="new_phone">New Phone Number:</label>
-            <input type="text" id="new_phone" name="new_phone" value="<?php echo $phone; ?>"><br><br>
-            <label for="new_address">New Address:</label>
-            <input type="text" id="new_address" name="new_address" value="<?php echo $address; ?>"><br><br>
-            <!-- <label for="new_password">New Password:</label>
-            <input type="password" id="new_password" name="new_password"><br><br> -->
+
+        <form method="post" class="edit">
+            <label for="new_phone">Phone Number:</label>
+            <input type="text" id="new_phone" name="new_phone" value="<?php echo $phone; ?>" readonly>
+            <button type="button" onclick="toggleEditable('new_phone')">Edit</button><br><br>
+            <label for="new_address">Address:</label>
+            <input type="text" id="new_address" name="new_address" value="<?php echo $address; ?>" readonly>
+            <button type="button" onclick="toggleEditable('new_address')">Edit</button><br><br>
             <button type="submit" name="update_profile">Update Profile</button>
         </form>
         </br>
@@ -293,6 +312,12 @@ if (isset($_POST['wishlist'])) {
     ?>
 
     <script src="./js/main.js" async defer></script>
+    <script>
+    function toggleEditable(fieldId) {
+        var field = document.getElementById(fieldId);
+        field.readOnly = !field.readOnly;
+    }
+    </script>
 </body>
 
 </html>

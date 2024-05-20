@@ -153,7 +153,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div id="passwordError" style="color: red; display: none;">Passwords do not match</div>
                     <input type="text" name="address" placeholder="Address" required><br>
                     <input type="tel" name="contact" placeholder="Contact" required><br>
-                    <input type="text" name="productcategories" placeholder="Product Categories" required><br>
+
+                    <select name="productcategories" required>
+                        <option value="" disabled selected>Select Product Category</option>
+                        <option value="Fruits">Fruits</option>
+                        <option value="Vegetables">Vegetables</option>
+                        <option value="Meat">Meat</option>
+                    </select><br>
+
                     <input type="text" name="shopname" placeholder="Shop Name" required><br>
                     <input type="text" name="shopaddress" placeholder="Shop Address" required><br>
                     <input type="text" name="shopdescription" placeholder="Shop Description" required><br>
