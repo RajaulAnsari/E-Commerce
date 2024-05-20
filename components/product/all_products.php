@@ -1,21 +1,25 @@
 <?php
 include 'connection.php';
 
-
 $shop_id = isset($_GET['shop_id']) ? $_GET['shop_id'] : null;
 $categoryFilter = isset($_GET['category']) ? $_GET['category'] : 'all';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'none';
 $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Construct base SQL query
-$sql = "SELECT p.*, r.REVIEW_SCORE, 
+$sql = "SELECT p.*, 
+        COALESCE(avg_review.avg_review_score, 0) AS average_review_score,
         CASE 
             WHEN d.DISCOUNT_AMOUNT IS NULL THEN p.product_price
             ELSE p.product_price - d.DISCOUNT_AMOUNT
         END AS discounted_price
         FROM product p 
-        LEFT JOIN review r ON p.product_id = r.product_id 
-        LEFT JOIN discount d ON p.product_id = d.product_id ";
+        LEFT JOIN (
+            SELECT product_id, AVG(REVIEW_SCORE) AS avg_review_score
+            FROM review
+            GROUP BY product_id
+        ) avg_review ON p.product_id = avg_review.product_id
+        LEFT JOIN discount d ON p.product_id = d.product_id";
 
 // Filter by shop ID
 if ($shop_id) {
@@ -24,12 +28,14 @@ if ($shop_id) {
 
 // Add category filter if selected
 if ($categoryFilter !== 'all') {
-    $sql .= " AND LOWER(p.category_name) = LOWER(:categoryFilter)";
+    $sql .= $shop_id ? " AND" : " WHERE";
+    $sql .= " LOWER(p.category_name) = LOWER(:categoryFilter)";
 }
 
 // Add search filter if provided
 if (!empty($searchQuery)) {
-    $sql .= " AND (LOWER(p.product_name) LIKE LOWER(:searchQuery) 
+    $sql .= ($shop_id || $categoryFilter !== 'all') ? " AND" : " WHERE";
+    $sql .= " (LOWER(p.product_name) LIKE LOWER(:searchQuery) 
             OR LOWER(p.product_description) LIKE LOWER(:searchQuery) 
             OR LOWER(p.category_name) LIKE LOWER(:searchQuery))";
 }
@@ -40,9 +46,9 @@ if ($sort === 'price_asc') {
 } elseif ($sort === 'price_desc') {
     $sql .= " ORDER BY discounted_price DESC";
 } elseif ($sort === 'rating_asc') {
-    $sql .= " ORDER BY r.REVIEW_SCORE ASC";
+    $sql .= " ORDER BY avg_review.avg_review_score ASC";
 } elseif ($sort === 'rating_desc') {
-    $sql .= " ORDER BY r.REVIEW_SCORE DESC";
+    $sql .= " ORDER BY avg_review.avg_review_score DESC";
 }
 
 $stmt = oci_parse($conn, $sql);
@@ -108,7 +114,7 @@ while ($row = oci_fetch_assoc($stmt)) {
                 <p> Shop ID : " . htmlspecialchars($row['SHOP_ID']) . "</p>
             </div>
             <div class='rating'>
-                " . generateStars($row['REVIEW_SCORE']) . "
+                " . generateStars($row['AVERAGE_REVIEW_SCORE']) . "
             </div>
             <div class='price' style=' font-size:20px;'>
                 Price: <span style='text-decoration: line-through;'> $" . htmlspecialchars($row['PRODUCT_PRICE']) . "</span>
@@ -148,7 +154,7 @@ echo "</div>";
 function generateStars($rating) {
     $stars = '';
     for ($i = 1; $i <= 5; $i++) {
-        $stars .= ($i <= $rating) ? '<i class="bx bxs-star"></i>' : '<i class="bx bx-star"></i>';
+        $stars .= ($i <= round($rating)) ? '<i class="bx bxs-star"></i>' : '<i class="bx bx-star"></i>';
     }
     return $stars;
 }
@@ -200,9 +206,6 @@ function addToWishlist() {
     };
     xhr.send(`product_id=${productId}`);
 }
-
-
-
 
 document.querySelectorAll('.addToCartButton').forEach(item => {
     item.addEventListener('click', function() {

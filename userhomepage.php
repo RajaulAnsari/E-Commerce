@@ -116,16 +116,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_profile"])) {
     oci_execute($updateAddressStmt);
     oci_free_statement($updateAddressStmt);
 
-    // Update password
-    // Ensure to hash the new password before updating it in the database
-    // $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-    // $updatePasswordSql = "UPDATE USER_CLECK SET PASSWORD = :new_password WHERE UUSER_NAME = :uusername";
-    // $updatePasswordStmt = oci_parse($conn, $updatePasswordSql);
-    // oci_bind_by_name($updatePasswordStmt, ":new_password", $hashedPassword);
-    // oci_bind_by_name($updatePasswordStmt, ":uusername", $uusername);
-    // oci_execute($updatePasswordStmt);
-    // oci_free_statement($updatePasswordStmt);
-
     // Redirect to refresh the page and display updated information
     header("Location: ".$_SERVER['PHP_SELF']);
     exit();

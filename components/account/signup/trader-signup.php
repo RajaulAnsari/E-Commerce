@@ -15,7 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contact = $_POST['contact'];
     $productcategories = $_POST['productcategories'];
     $shopname = $_POST['shopname'];
-    
+    $shopaddress = $_POST['shopaddress'];
+    $shopdescription = $_POST['shopdescription'];
+    $shopimage = $_FILES['shopimage']['name'];
 
     // Check if passwords match
     if ($password !== $confirm_password) {
@@ -24,56 +26,105 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Hash the password for security
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Prepare the SQL statement
-        $sql = "INSERT INTO \"TRADER\" (TRADER_FIRST_NAME, TRADER_LAST_NAME, EMAIL_ADDRESS, TRADER_PASSWORD, TRADER_ADDRESS, CONTACT_NO,IS_VERIFIED,PRODUCT_CATEGORY,SHOP_NAME,TUSER_NAME) 
-                VALUES (:firstname, :lastname, :email, :password, :address, :contact,0,:productcategories,:shopname,:username)";
+        // Prepare the SQL statement for TRADER
+        $sql_trader = "INSERT INTO \"TRADER\" 
+                       (TRADER_ID, TRADER_FIRST_NAME, TRADER_LAST_NAME, EMAIL_ADDRESS, TRADER_PASSWORD, TRADER_ADDRESS, CONTACT_NO, IS_VERIFIED, PRODUCT_CATEGORY, SHOP_NAME, TUSER_NAME) 
+                       VALUES (TRADER_ID_SEQ.NEXTVAL, :firstname, :lastname, :email, :password, :address, :contact, 0, :productcategories, :shopname, :username)
+                       RETURNING TRADER_ID INTO :trader_id";
 
-        $stmt = oci_parse($conn, $sql);
+        $stmt_trader = oci_parse($conn, $sql_trader);
 
         // Bind parameters
-        oci_bind_by_name($stmt, ":firstname", $firstname);
-        oci_bind_by_name($stmt, ":lastname", $lastname);
-        oci_bind_by_name($stmt, ":username", $username);
-        oci_bind_by_name($stmt, ":email", $email);
-        oci_bind_by_name($stmt, ":password", $hashed_password);
-        oci_bind_by_name($stmt, ":address", $address);
-        oci_bind_by_name($stmt, ":contact", $contact);
-        oci_bind_by_name($stmt, ":productcategories", $contact);
-        oci_bind_by_name($stmt, ":shopname", $contact);
+        oci_bind_by_name($stmt_trader, ":firstname", $firstname);
+        oci_bind_by_name($stmt_trader, ":lastname", $lastname);
+        oci_bind_by_name($stmt_trader, ":username", $username);
+        oci_bind_by_name($stmt_trader, ":email", $email);
+        oci_bind_by_name($stmt_trader, ":password", $hashed_password);
+        oci_bind_by_name($stmt_trader, ":address", $address);
+        oci_bind_by_name($stmt_trader, ":contact", $contact);
+        oci_bind_by_name($stmt_trader, ":productcategories", $productcategories);
+        oci_bind_by_name($stmt_trader, ":shopname", $shopname);
 
+        // Bind the TRADER_ID output parameter
+        oci_bind_by_name($stmt_trader, ":trader_id", $trader_id, -1, OCI_B_INT);
 
         // Execute the statement
-        $result = oci_execute($stmt);
+        $result_trader = oci_execute($stmt_trader);
 
-        if ($result) {
-            // Define email subject and body
-            $subject = "Verify Your Email Address";
-            $html = "
-            <div style='font-family: Arial, sans-serif; border: 2px solid #007bff; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
-        <h2 style='color: green; margin-bottom: 20px;'>Welcome to CleckHub!</h2>
-        <p>Hello $firstname,</p>
-        <p>Thank you for registering with CleckHub. To complete your registration, please click the button below to verify your email address:</p>
-        <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/traderverify.php?email=" . urlencode($email) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Email Address</a>
-        <p style='margin-top: 20px; font-size: 14px; color: #777;'>If you did not register for CleckHub, please ignore this email.</p>
-    </div>
-";
-            
-                        
-            // Send verification email
-            sendVerificationEmail($email, $subject, $html);
+        if ($result_trader) {
+            // Upload shop image
+            if (!empty($shopimage)) {
+                $target_dir = "./images/shop/";
+                $target_file = $target_dir . basename($shopimage);
+                move_uploaded_file($_FILES["shopimage"]["tmp_name"], $target_file);
 
-            echo "<script>alert('Registration successful! Verification Required.');</script>";
-            echo "<script>window.location = './tradersignin.php'</script>";
+                // Store only the basename of the uploaded file
+                $shopimage_name = basename($shopimage);
+            } else {
+                $shopimage_name = null;
+            }
+
+            // Prepare the SQL statement for SHOP
+            $sql_shop = "INSERT INTO \"SHOP\" 
+                         (SHOP_ID, SHOP_NAME, SHOP_ADDRESS, PHONE_NUMBER, SHOP_DESCRIPTION, USER_ID, SHOP_IMAGE) 
+                         VALUES (SHOP_ID_SEQ.NEXTVAL, :shopname, :shopaddress, :contact, :shopdescription, :userid, :shopimage)
+                         RETURNING SHOP_ID INTO :shop_id";
+
+            $stmt_shop = oci_parse($conn, $sql_shop);
+
+            // Bind parameters
+            oci_bind_by_name($stmt_shop, ":shopname", $shopname);
+            oci_bind_by_name($stmt_shop, ":shopaddress", $shopaddress);
+            oci_bind_by_name($stmt_shop, ":contact", $contact);
+            oci_bind_by_name($stmt_shop, ":shopdescription", $shopdescription);
+            oci_bind_by_name($stmt_shop, ":userid", $trader_id);
+            oci_bind_by_name($stmt_shop, ":shopimage", $shopimage_name);
+
+            // Bind the SHOP_ID output parameter
+            oci_bind_by_name($stmt_shop, ":shop_id", $shop_id, -1, OCI_B_INT);
+
+            // Execute the statement
+            $result_shop = oci_execute($stmt_shop);
+
+            if ($result_shop) {
+                // Update the TRADER table with the SHOP_ID
+                $sql_update_trader = "UPDATE \"TRADER\" SET SHOP_ID = :shop_id WHERE TRADER_ID = :trader_id";
+                $stmt_update_trader = oci_parse($conn, $sql_update_trader);
+                oci_bind_by_name($stmt_update_trader, ":shop_id", $shop_id);
+                oci_bind_by_name($stmt_update_trader, ":trader_id", $trader_id);
+                oci_execute($stmt_update_trader);
+
+                // Define email subject and body
+                $subject = "Verify Your Email Address";
+                $html = "
+                <div style='font-family: Arial, sans-serif; border: 2px solid #007bff; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
+                    <h2 style='color: green; margin-bottom: 20px;'>Welcome to CleckHub!</h2>
+                    <p>Hello $firstname,</p>
+                    <p>Thank you for registering with CleckHub. To complete your registration, please click the button below to verify your email address:</p>
+                    <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/traderverify.php?email=" . urlencode($email) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Email Address</a>
+                    <p style='margin-top: 20px; font-size: 14px; color: #777;'>If you did not register for CleckHub, please ignore this email.</p>
+                </div>
+                ";
+
+                // Send verification email
+                sendVerificationEmail($email, $subject, $html);
+
+                echo "<script>alert('Registration successful! Verification Required.');</script>";
+                echo "<script>window.location = './tradersignin.php'</script>";
+            } else {
+                echo "Error: Unable to register shop. Please try again later.";
+            }
         } else {
-            echo "Error: Unable to register. Please try again later.";
+            echo "Error: Unable to register trader. Please try again later.";
         }
 
-        oci_free_statement($stmt);
+        oci_free_statement($stmt_trader);
+        oci_free_statement($stmt_shop);
+        oci_free_statement($stmt_update_trader);
         oci_close($conn);
     }
 }
 ?>
-
 
 <div class="container">
     <div class="user-div">
@@ -90,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div style="width: 30px;"></div>
         <div class="form-container">
             <div class="user-form">
-                <form class="uform" id="registrationForm" method="post"
+                <form class="uform" id="registrationForm" method="post" enctype="multipart/form-data"
                     action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                     <input type="text" name="firstname" placeholder="Firstname" required><br>
                     <input type="text" name="lastname" placeholder="Lastname" required><br>
@@ -104,7 +155,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="tel" name="contact" placeholder="Contact" required><br>
                     <input type="text" name="productcategories" placeholder="Product Categories" required><br>
                     <input type="text" name="shopname" placeholder="Shop Name" required><br>
-                    <label class="remember"><input type="checkbox" name="remember" value="remember">&nbsp I agree the
+                    <input type="text" name="shopaddress" placeholder="Shop Address" required><br>
+                    <input type="text" name="shopdescription" placeholder="Shop Description" required><br>
+                    <input type="file" name="shopimage" placeholder="Shop Image"><br>
+                    <label class="remember"><input type="checkbox" name="remember" value="remember">&nbsp I agree to the
                         terms and conditions</label><br>
                     <button type="submit" id="submitButton">Register</button>
                 </form>
