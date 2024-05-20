@@ -96,7 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div id="passwordError" style="color: red; display: none;">Passwords do not match</div>
                     <input type="text" name="address" placeholder="Address" required><br>
                     <input type="number" name="contact" placeholder="Contact" required><br>
-                    <label class="remember"><input type="checkbox" name="remember" value="remember">&nbsp I agree the
+                    <label class="remember"><input type="checkbox" name="remember" value="remember" required>&nbsp I
+                        agree the
                         terms and conditions</label><br>
                     <button type="submit" id="submitButton">Register</button>
                 </form>

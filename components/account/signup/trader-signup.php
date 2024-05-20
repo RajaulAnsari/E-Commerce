@@ -159,13 +159,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="Fruits">Fruits</option>
                         <option value="Vegetables">Vegetables</option>
                         <option value="Meat">Meat</option>
+                        <option value="Meat">Bakery</option>
+                        <option value="Meat">Fish</option>
                     </select><br>
 
                     <input type="text" name="shopname" placeholder="Shop Name" required><br>
                     <input type="text" name="shopaddress" placeholder="Shop Address" required><br>
                     <input type="text" name="shopdescription" placeholder="Shop Description" required><br>
-                    <input type="file" name="shopimage" placeholder="Shop Image"><br>
-                    <label class="remember"><input type="checkbox" name="remember" value="remember">&nbsp I agree to the
+                    <label for="shopimage" style="font-weight: 5px bold;">Shop Image:</label>
+                    <div style="margin-top: 5px;">
+                        <input type="file" name="shopimage" id="shopimage" accept="image/*"
+                            style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; width: 90%;">
+                    </div>
+
+                    <label class="remember"><input type="checkbox" name="remember" value="remember" required>&nbsp I
+                        agree to the
                         terms and conditions</label><br>
                     <button type="submit" id="submitButton">Register</button>
                 </form>

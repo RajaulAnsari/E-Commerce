@@ -85,6 +85,10 @@ echo "<select name='category' id='category' onchange='this.form.submit()'>";
 echo "<option value='all' " . ($categoryFilter === 'all' ? 'selected' : '') . ">All</option>";
 echo "<option value='Fruits' " . ($categoryFilter === 'Fruits' ? 'selected' : '') . ">Fruits</option>";
 echo "<option value='Vegetables' " . ($categoryFilter === 'Vegetables' ? 'selected' : '') . ">Vegetables</option>";
+echo "<option value='Fish' " . ($categoryFilter === 'Fish' ? 'selected' : '') . ">Fish</option>";
+echo "<option value='Bakery' " . ($categoryFilter === 'Bakery' ? 'selected' : '') . ">Bakery</option>";
+echo "<option value='Meat' " . ($categoryFilter === 'Meat' ? 'selected' : '') . ">Meat</option>";
+
 echo "</select>";
 
 echo "<label value='none'>&nbspSort by Price or Rating : </label>";

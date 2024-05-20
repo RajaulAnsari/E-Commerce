@@ -162,7 +162,7 @@ if (isset($_POST['wishlist'])) {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100vh;
+        height: auto;
         text-align: center;
     }
 
@@ -251,6 +251,7 @@ if (isset($_POST['wishlist'])) {
 
     <div class="userprofile-container">
         <!-- <section></section> -->
+        <section></section>
         <div class="user-dashboard">
             <h2>User Dashboard</h2>
         </div>

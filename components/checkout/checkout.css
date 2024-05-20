@@ -1,0 +1,66 @@
+
+/* Checkout step */
+.checkout-step {
+    margin-bottom: 20px;
+}
+
+/* Checkout step heading */
+.checkout-step-heading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Checkout step description */
+.checkout-step-desc {
+    margin-bottom: 20px;
+}
+
+/* Checkout step subtitle */
+.checkout-subtitle {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Checkout select */
+.checkout-select {
+    margin-top: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* Checkout sub body */
+.checkout-sub-body {
+    margin-bottom: 10px;
+}
+
+/* Checkout time card */
+.checkout-time-card {
+    margin-bottom: 10px;
+}
+
+/* Checkout buttons */
+.checkout-buttons {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Button styles */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.primary-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.clear-btn {
+    background-color: #f0f0
+}

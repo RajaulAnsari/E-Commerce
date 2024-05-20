@@ -88,7 +88,7 @@ while ($row = oci_fetch_assoc($stmt)) {
     echo "<span>Name: " . htmlspecialchars($row['FIRST_NAME']) . "</span>";
     echo "</div>";
     echo "<div class='review-date'>" . htmlspecialchars($row['REVIEW_DATE']) . "</div>";
-    echo "<div class='review-score'>Rating: " . htmlspecialchars($row['REVIEW_SCORE']) . "</div>";
+    echo "<div class='review-score'>Rating: " . generateStars($row['REVIEW_SCORE']) . "</div>"; // Using the function here
     echo "<div class='review-comment'>Comment: " . htmlspecialchars($row['REVIEW_COMMENT']) . "</div>";
     echo "</div>"; // .review-item
 }
@@ -183,6 +183,20 @@ if ($uusername) {
     // uusername not set in the session
     echo "uusername not set.";
 }
+
+
+function generateStars($rating) {
+    $stars = '';
+    for ($i = 1; $i <= 5; $i++) {
+        if ($i <= round($rating)) {
+            $stars .= '<i class="bx bxs-star"></i>'; // Filled star
+        } else {
+            $stars .= '<i class="bx bx-star"></i>'; // Empty star
+        }
+    }
+    return $stars;
+}
+
 ?>
 
 

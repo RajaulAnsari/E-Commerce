@@ -4,7 +4,7 @@
   border-radius: 10px;
   padding: 20px;
   margin-top: 20px;
-  max-height: 100%;
+  max-height: auto;
 }
 
 .register > p > a {
@@ -35,6 +35,7 @@
 .form-container {
   width: 100%;
   margin-top: 25%;
+  max-height: auto;
 }
 
 .uform > select{
@@ -67,6 +68,17 @@
 @media (max-width: 880px) {
   .form-container {
     margin-top: 42%;
+  }
+}
+
+@media (max-width:470px){
+  .register{
+    margin-top: 55px;
+    /* margin-left: 200px; */
+  }
+  image-container{
+    margin-top: 20%;
+  
   }
 }
 
