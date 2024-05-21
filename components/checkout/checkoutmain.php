@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['uusername'])) {
@@ -21,7 +21,7 @@ $now = strtotime("now");
 $end_date = strtotime("+2 weeks");
 
 while (date("Y-m-d", $now) != date("Y-m-d", $end_date)) {
-    $day_index = date("w", $now);
+    $day_index = date("w", $now);  // Get the day of the week index (0 = Sunday, 6 = Saturday)
     if ($day_index == 3 || $day_index == 4 || $day_index == 5) {
         $timeDiff = abs(strtotime(date("Y-m-d", $now))) - abs(strtotime("+1 day")); 
         array_push($collectionDates, [date("F j, l", $now) => $timeDiff]);
@@ -84,13 +84,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmPayment'])) {
             <!-- Time selection radio buttons -->
             <div class="checkout-step-sub">
                 <label>
-                    <input type="radio" name="collectionTime" value="morning" required>10:00 AM - 1:00 PM
+                    <input type="radio" name="collectionTime" value="10-13" required>10:00 AM - 1:00 PM
                 </label>
                 <label>
-                    <input type="radio" name="collectionTime" value="afternoon" required> 1:00 PM - 4:00 PM
+                    <input type="radio" name="collectionTime" value="13-16" required> 1:00 PM - 4:00 PM
                 </label>
                 <label>
-                    <input type="radio" name="collectionTime" value="evening" required> 4:00 PM - 7:00 PM
+                    <input type="radio" name="collectionTime" value="16-19" required> 4:00 PM - 7:00 PM
                 </label>
                 <!-- Error message for time selection -->
                 <?php if(isset($selectedTimeError)): ?>

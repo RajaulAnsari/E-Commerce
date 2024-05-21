@@ -145,27 +145,42 @@ if ($uusername) {
             // Process form submission to add review
             $review_score = isset($_POST['review_score']) ? $_POST['review_score'] : null;
             $review_comment = isset($_POST['review_comment']) ? $_POST['review_comment'] : null;
+            $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : null;
 
             if ($user_id && $product_id && $review_score && $review_comment) {
-                // Perform database insertion
-                $sql = "INSERT INTO REVIEW (REVIEW_ID, REVIEW_DATE, REVIEW_SCORE, REVIEW_COMMENT, USER_ID, PRODUCT_ID) 
-                        VALUES (REVIEW_ID_SEQ.NEXTVAL, SYSDATE, :review_score, :review_comment, :user_id, :product_id)";
+                // Check if the user has access to review this product
+                $accessQuery = "SELECT * FROM REVIEW_ACCESS WHERE USER_ID = :user_id AND PRODUCT_ID = :product_id";
+                $accessStmt = oci_parse($conn, $accessQuery);
+                oci_bind_by_name($accessStmt, ":user_id", $user_id);
+                oci_bind_by_name($accessStmt, ":product_id", $product_id);
+                oci_execute($accessStmt);
 
-                $stmt = oci_parse($conn, $sql);
-                oci_bind_by_name($stmt, ":review_score", $review_score);
-                oci_bind_by_name($stmt, ":review_comment", $review_comment);
-                oci_bind_by_name($stmt, ":user_id", $user_id);
-                oci_bind_by_name($stmt, ":product_id", $product_id);
+                $hasAccess = oci_fetch_assoc($accessStmt);
 
-                if (oci_execute($stmt)) {
-                    echo "<script>alert('Review added successfully');</script>";
-                    // Redirect the user to a different page
-                    echo "<script>window.location.href = 'productdetails.php?product_id=$product_id';</script>";
+                if ($hasAccess) {
+                    // User has access to review this product
+                    // Perform database insertion
+                    $sql = "INSERT INTO REVIEW (REVIEW_ID, REVIEW_DATE, REVIEW_SCORE, REVIEW_COMMENT, USER_ID, PRODUCT_ID) 
+                            VALUES (REVIEW_ID_SEQ.NEXTVAL, SYSDATE, :review_score, :review_comment, :user_id, :product_id)";
+
+                    $stmt = oci_parse($conn, $sql);
+                    oci_bind_by_name($stmt, ":review_score", $review_score);
+                    oci_bind_by_name($stmt, ":review_comment", $review_comment);
+                    oci_bind_by_name($stmt, ":user_id", $user_id);
+                    oci_bind_by_name($stmt, ":product_id", $product_id);
+
+                    if (oci_execute($stmt)) {
+                        echo "<script>alert('Review added successfully');</script>";
+                        // Redirect the user to a different page
+                        echo "<script>window.location.href = 'productdetails.php?product_id=$product_id';</script>";
+                    } else {
+                        echo "<script>alert('Error adding review');</script>";
+                    }
                 } else {
-                    echo "<script>alert('Error adding review');</script>";
+                    // User doesn't have access to review this product
+                    echo "<script>alert('You do not have access to review this product');</script>";
                 }
                 
-
                 oci_free_statement($stmt);
             } else {
                 echo "<script>alert('Please fill out all fields');</script>";
@@ -173,7 +188,19 @@ if ($uusername) {
         }
 
         // Free statement and close connection
-        oci_free_statement($stmt);
+        $stmt = oci_parse($conn, $userQuery);
+if (!$stmt) {
+    $e = oci_error($conn);  // For oci_parse errors pass the connection handle
+    trigger_error(htmlentities($e['message']), E_USER_ERROR);
+}
+
+oci_bind_by_name($stmt, ":uusername", $uusername);
+oci_execute($stmt);
+if (!$stmt) {
+    $e = oci_error($stmt);  // For oci_execute errors pass the statement handle
+    trigger_error(htmlentities($e['message']), E_USER_ERROR);
+}
+
         oci_close($conn);
     } else {
         // No user found with the provided uusername
@@ -183,6 +210,8 @@ if ($uusername) {
     // uusername not set in the session
     echo "uusername not set.";
 }
+
+
 
 
 function generateStars($rating) {

@@ -11,26 +11,34 @@ if (!isset($_SESSION['uusername'])) {
     exit();
 }
 
+
 // Retrieve the user ID from the USER_CLECK table based on the uusername
 $user = $_SESSION['uusername'];
-$qry = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = :username";
+$qry = "SELECT USER_ID FROM USER_CLECK WHERE UUSER_NAME = :username";
 $res = oci_parse($conn, $qry);
 oci_bind_by_name($res, ":username", $user);
 oci_execute($res);
+$row = oci_fetch_assoc($res);
+$user_id = $row['USER_ID'];
 
-// Check for errors in executing the query
-if (!$res) {
-    $e = oci_error($conn);
-    echo "<script>alert('Error: Unable to execute query. " . $e['message'] . "');</script>";
-    exit(); // Terminate script execution if query fails
-}
+
+// getting cart id
+$sqlcartid="SELECT CART_ID FROM CART WHERE USER_ID=:user_id";
+$stmtcartid=oci_parse($conn,$sqlcartid);
+oci_bind_by_name($stmtcartid,":user_id",$user_id);
+oci_execute($stmtcartid);
+$rowcartid=oci_fetch_assoc($stmtcartid);
+$cart_id=$rowcartid['CART_ID'];
+
+
+
 
 // Fetch the user data
 $row = oci_fetch_assoc($res);
 
 // Check if user exists and retrieve the user ID
-if ($row) {
-    $user_id = $row['USER_ID'];
+if ($user_id) {
+    // $user_id = $row['USER_ID'];
 
     // Check if payment was successful (this part depends on how you verify PayPal payment success)
     $paymentSuccess = true; // This is a placeholder. Replace it with actual payment verification logic.
@@ -39,32 +47,63 @@ if ($row) {
     if ($paymentSuccess && isset($_SESSION['collectionDate']) && isset($_SESSION['collectionTime'])) {
         $collectionDate = $_SESSION['collectionDate'];
         $collectionTime = $_SESSION['collectionTime'];
+
+
+        // Convert collectionDate to 'YYYYMMDD' format
+        $date = DateTime::createFromFormat('F j, l', $collectionDate);
+        if ($date) {
+            $formattedDate = $date->format('Y-m-d');
+        } else {
+            echo "<script>alert('Error: Invalid date format.');</script>";
+            exit();
+        }
+
+
+        $total_items = $_SESSION['cart_total_items']; // Assuming you have the total items in session
         $totalAmount = $_SESSION['cart_total']; // Assuming you have the total amount in session
-        $product_id = $_SESSION['product_id'];
+        // $product_id = $_SESSION['product_id'];
 
-        // Start a transaction
-        // oci_begin($conn);
+        //review access
+        $sqlReviewAccess="INSERT INTO REVIEW_ACCESS (PRODUCT_ID,USER_ID,ACCESS_ID)
+        SELECT DISTINCT PRODUCT_ID, :user_id, ACCESS_ID_SEQ.NEXTVAL
+        FROM CART_PRODUCT";
+        $stmtReviewAccess=oci_parse($conn,$sqlReviewAccess);
+        oci_bind_by_name($stmtReviewAccess,":user_id",$user_id);
+        oci_execute($stmtReviewAccess);
 
+        
+        
         // Proceed with payment and order insertion logic
         // Fetch the cart ID based on the product ID
-        $sqlCartId = "SELECT CART_ID FROM CART_PRODUCT WHERE PRODUCT_ID = :product_id";
+        $sqlCartId = "SELECT PRODUCT_ID FROM CART_PRODUCT WHERE PRODUCT_ID = :product_id";
         $stmtCartId = oci_parse($conn, $sqlCartId);
         oci_bind_by_name($stmtCartId, ":product_id", $product_id);
         oci_execute($stmtCartId);
+        $rowCartId = oci_fetch_assoc($stmtCartId);
         
         // Fetch the cart ID into a variable
-        $cartId = null;
-        while ($rowCartId = oci_fetch_assoc($stmtCartId)) {
-            $cartId = $rowCartId['CART_ID'];
-        }
 
+        $sqlCollectionSlot="INSERT INTO COLLECTION_SLOT (COLLECTION_SLOT_ID, COLLECTION_DATE, COLLECTION_TIME,IS_COLLECTED) 
+                            VALUES (COLLECTION_SLOT_ID_SEQ.NEXTVAL,TO_DATE( :collectionDate,'YYYY-MM-DD'), :collectionTime,0)
+                            RETURNING COLLECTION_SLOT_ID INTO :collection_slot_id";
+        $stmtCollectionSlot = oci_parse($conn, $sqlCollectionSlot);
+        oci_bind_by_name($stmtCollectionSlot, ":collectionDate", $formattedDate);
+        oci_bind_by_name($stmtCollectionSlot, ":collectionTime", $collectionTime);
+        oci_bind_by_name($stmtCollectionSlot, ":collection_slot_id", $collection_slot_id, -1,SQLT_INT); // Assuming COLLECTION_SLOT_ID is of NUMBER(32), used for returning the generated COLLECTION_SLOT_ID
+        // var_dump($collection_slot_id);
+
+
+        if (oci_execute($stmtCollectionSlot)) {
+            
         // Insert order data into ORDERS table
         $sqlOrder = "INSERT INTO ORDERS (ORDER_ID, ORDER_QUANTITY, ORDER_DATE, TOTAL_AMOUNT, INVOICE_NO, COLLECTION_SLOT_ID, CART_ID)
-                     VALUES (ORDER_ID_SEQ.NEXTVAL, :orderQuantity, SYSDATE, :totalAmount, 1, 1, 2)";
+                     VALUES (ORDER_ID_SEQ.NEXTVAL, :orderQuantity, SYSDATE, :totalAmount, 1,  :collection_slot_id,:cart_id)";
         $stmtOrder = oci_parse($conn, $sqlOrder);
         oci_bind_by_name($stmtOrder, ":orderQuantity", $total_items); // Assuming you have the total quantity in session
         oci_bind_by_name($stmtOrder, ":totalAmount", $totalAmount);
-        // oci_bind_by_name($stmtOrder, ":cartId", $cartId); // Assuming cart ID is not provided at this point
+        oci_bind_by_name($stmtOrder, ":cart_id", $cart_id); // Assuming cart ID is not provided at this point
+        oci_bind_by_name($stmtOrder, ":collection_slot_id", $collection_slot_id);
+
 
         // Execute the order insertion query
         if (oci_execute($stmtOrder)) {
@@ -110,9 +149,14 @@ if ($row) {
             $e = oci_error($stmtOrder);
             echo "<script>alert('Error: Unable to insert order data. " . $e['message'] . "');</script>";
         }
-
         oci_free_statement($stmtOrder);
-
+    }else{
+        // Rollback the transaction
+        oci_rollback($conn);
+        $e = oci_error($stmtCollectionSlot);
+        echo "<script>alert('Error: Unable to insert collection slot data. " . $e['message'] . "');</script>";
+    }
+    oci_free_statement($stmtCollectionSlot);
     } else {
         echo "<script>alert('Error: Collection date or time not found or payment unsuccessful');</script>";
     }
@@ -151,13 +195,13 @@ if ($row) {
 }
 </style>
 
-<div class="container">
+<!-- <div class="container">
     <div class="success">
         <h1>Payment Successful!</h1>
         <p>Thank you for your purchase. Your payment has been successfully processed.</p>
         <a href="index.php">Return to Home</a>
     </div>
-</div>
+</div> -->
 
 
 </br></br></br>

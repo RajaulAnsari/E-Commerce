@@ -28,6 +28,18 @@ if (isset($_SESSION['uusername'])) {
     $num_products = $check_row['NUM_PRODUCTS'];
     oci_free_statement($check_stmt);
 
+    //product id
+    // $pid = "SELECT PRODUCT_ID FROM CART_PRODUCT WHERE PRODUCT_ID = (SELECT PRODUCT_ID FROM CART WHERE CART_ID = :cart_id)";
+    // $pid_stmt = oci_parse($conn, $pid);
+    // oci_bind_by_name($pid_stmt, ":product_id", $product_id);
+    // oci_execute($pid_stmt);
+    // $pid_row = oci_fetch_assoc($pid_stmt);
+    // $pid = $pid_row['PRODUCT_ID'];
+    // oci_free_statement($pid_stmt);
+
+    // var_dump($pid);
+
+
     // Check if adding this product will exceed the limit of 20 products
     $cart_items_query = "SELECT COUNT(CART_PRODUCT_ID) AS total_items FROM CART_PRODUCT WHERE CART_ID IN (SELECT CART_ID FROM CART WHERE USER_ID = :user_id)";
     $cart_items_stmt = oci_parse($conn, $cart_items_query);
@@ -41,6 +53,15 @@ if (isset($_SESSION['uusername'])) {
     if (!empty($product_id) && $num_products == 0 && $total_items < 20) {
         // Start a transaction
         // oci_begin($conn);
+
+        // Get CART_ID from CART_PRODUCT table based on PRODUCT_ID
+        $get_cart_id_query = "SELECT CART_ID FROM CART_PRODUCT WHERE PRODUCT_ID = :product_id";
+        $get_cart_id_stmt = oci_parse($conn, $get_cart_id_query);
+        oci_bind_by_name($get_cart_id_stmt, ":product_id", $product_id);
+        oci_execute($get_cart_id_stmt);
+        $cart_id_row = oci_fetch_assoc($get_cart_id_stmt);
+        $cart_id = $cart_id_row['CART_ID'];
+        oci_free_statement($get_cart_id_stmt);
 
         $insert_query = "BEGIN 
             INSERT INTO CART (CART_ITEMS, USER_ID, CART_CREATED, CART_UPDATED) VALUES (1, :user_id, SYSDATE, SYSDATE) RETURNING CART_ID INTO :cart_id;
@@ -80,6 +101,7 @@ if (isset($_SESSION['uusername'])) {
     </script>";
 }
 ?>
+
 
 
 
@@ -202,6 +224,7 @@ if (isset($_SESSION['uusername'])) {
         $_SESSION['cart_total'] = $total;
         $_SESSION['cart_total_items'] = $total_items;
         $_SESSION['product_id'] = $product_id;
+        // $_SESSION['cart_id'] = $cart_id;
 
 ?>
     </div>

@@ -1,4 +1,5 @@
 <?php
+include 'connection.php';
 session_start();
 
 // Check if the user is logged in
@@ -17,6 +18,7 @@ if (!isset($_SESSION['collectionDate']) || !isset($_SESSION['collectionTime'])) 
 $collectionDate = $_SESSION['collectionDate'];
 $collectionTime = $_SESSION['collectionTime'];
 
+
 // Define PayPal parameters
 $businessEmail = "sb-iggrw30554138@business.example.com"; // Your PayPal sandbox business email
 $currencyCode = "USD"; // Currency code
@@ -31,7 +33,7 @@ $paypalParams = array(
     'item_name' => 'Order from E-Commerce',
     'amount' => $_SESSION['cart_total'],
     'currency_code' => $currencyCode,
-    'quantity' => $_SESSION['cart_total_items'],
+    // 'quantity' => $_SESSION['cart_total_items'],
     'return' => $returnUrl,
     'cancel_return' => $cancelUrl
 );
@@ -39,7 +41,5 @@ $paypalParams = array(
 $paypalRedirectUrl = $paypalUrl . '?' . http_build_query($paypalParams);
 
 header("Location: $paypalRedirectUrl");
-
-// Note: Don't unset session variables related to the payment process here
 exit();
 ?>
