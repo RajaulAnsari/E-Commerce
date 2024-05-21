@@ -87,8 +87,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['product_image'])) {
             oci_free_statement($nextProductIdStmt);
 
             // Insert the new product with the generated product ID
-            $insertSql = "INSERT INTO PRODUCT (PRODUCT_ID, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY, ALLERGY_INFORMATION, PRODUCT_IMAGE, PRODUCT_STOCK, CATEGORY_NAME, PRODUCT_DESCRIPTION, SHOP_ID) 
-                          VALUES (:product_id, :product_name, :product_price, :product_quantity, :allergy_information, :product_image, :product_stock, :product_category, :product_description, :shop_id)";
+            $insertSql = "INSERT INTO PRODUCT (PRODUCT_ID, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_QUANTITY, ALLERGY_INFORMATION, PRODUCT_IMAGE, PRODUCT_STOCK, CATEGORY_NAME, PRODUCT_DESCRIPTION, SHOP_ID,PRODUCT_ADMIN_VERIFICATION) 
+                          VALUES (:product_id, :product_name, :product_price, :product_quantity, :allergy_information, :product_image, :product_stock, :product_category, :product_description, :shop_id,0)";
             $insertStmt = oci_parse($conn, $insertSql);
             oci_bind_by_name($insertStmt, ":product_id", $nextProductId);
             oci_bind_by_name($insertStmt, ":product_name", $productName);
@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['product_image'])) {
                 oci_free_statement($insertDiscountStmt);
             }
 
-            echo "<script>alert('Product added successfully.')</script>";
+            echo "<script>alert('Product added successfully, Needs ADMIN verification for display')</script>";
             echo "<script>window.location = 'traderCRUD.php';</script>";
 
         } elseif (isset($_POST['update'])) {
@@ -134,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['product_image'])) {
             $productDescription = $_POST['product_description'];
             $discountAmount = $_POST['discount_amount'];
 
-            $updatesql = "UPDATE PRODUCT SET PRODUCT_NAME = :product_name, PRODUCT_IMAGE = :product_image, PRODUCT_PRICE = :product_price, CATEGORY_NAME = :product_category, 
+            $updatesql = "UPDATE PRODUCT SET PRODUCT_NAME = :product_name,PRODUCT_ADMIN_VERIFICATION=0, PRODUCT_IMAGE = :product_image, PRODUCT_PRICE = :product_price, CATEGORY_NAME = :product_category, 
                           PRODUCT_DESCRIPTION = :product_description WHERE PRODUCT_ID = :product_id AND SHOP_ID = :shop_id";
             $updatestmt = oci_parse($conn, $updatesql);
             oci_bind_by_name($updatestmt, ":product_name", $productName);
@@ -165,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['product_image'])) {
                 oci_free_statement($updateDiscountStmt);
             }
 
-            echo "<script>alert('Product updated successfully.')</script>";
+            echo "<script>alert('Product updated successfully, Needs ADMIN verification for display')</script>";
             echo "<script>window.location = 'traderCRUD.php';</script>";
 
         }

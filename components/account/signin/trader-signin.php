@@ -32,12 +32,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $row['TRADER_PASSWORD'])) {
             // Check if user is verified
             if ($row['IS_VERIFIED'] == 1) {
+                if ($row['TRADER_ADMIN_VERIFICATION'] == 1){
                 // Store the tusername in session
                 $_SESSION['tusername'] = $tusername;
 
                 // Redirect to dashboard or other page
                 header("Location: traderhomepage.php");
                 exit();
+                } else {
+                    echo "Account not verified by admin. Please wait for admin verification.";
+                }
             } else {
                 echo "Account not verified. Please verify your email before logging in.";
             }

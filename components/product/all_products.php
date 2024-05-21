@@ -19,23 +19,22 @@ $sql = "SELECT p.*,
             FROM review
             GROUP BY product_id
         ) avg_review ON p.product_id = avg_review.product_id
-        LEFT JOIN discount d ON p.product_id = d.product_id";
+        LEFT JOIN discount d ON p.product_id = d.product_id
+        WHERE p.PRODUCT_ADMIN_VERIFICATION = 1";
 
 // Filter by shop ID
 if ($shop_id) {
-    $sql .= " WHERE p.SHOP_ID = :shop_id";
+    $sql .= " AND p.SHOP_ID = :shop_id";
 }
 
 // Add category filter if selected
 if ($categoryFilter !== 'all') {
-    $sql .= $shop_id ? " AND" : " WHERE";
-    $sql .= " LOWER(p.category_name) = LOWER(:categoryFilter)";
+    $sql .= " AND LOWER(p.category_name) = LOWER(:categoryFilter)";
 }
 
 // Add search filter if provided
 if (!empty($searchQuery)) {
-    $sql .= ($shop_id || $categoryFilter !== 'all') ? " AND" : " WHERE";
-    $sql .= " (LOWER(p.product_name) LIKE LOWER(:searchQuery) 
+    $sql .= " AND (LOWER(p.product_name) LIKE LOWER(:searchQuery) 
             OR LOWER(p.product_description) LIKE LOWER(:searchQuery) 
             OR LOWER(p.category_name) LIKE LOWER(:searchQuery))";
 }
@@ -62,6 +61,7 @@ if ($shop_id) {
     oci_bind_by_name($stmt, ":shop_id", $shop_id);
 }
 if ($categoryFilter !== 'all') {
+
     oci_bind_by_name($stmt, ":categoryFilter", $categoryFilter);
 }
 if (!empty($searchQuery)) {
@@ -70,17 +70,18 @@ if (!empty($searchQuery)) {
 }
 
 oci_execute($stmt);
-echo "</br>";
+
+echo "<br>";
 echo "<div class='container'>";
 echo "<div class='shop-page-title'>";
 echo "<h2>Products</h2>";
 echo "</div>";
-echo "</br>";
+echo "<br>";
 
 echo "<div class='category-filter'>";
 echo "<form method='GET'>";
 echo "<input type='hidden' name='shop_id' value='" . htmlspecialchars($shop_id) . "'>";
-echo "<label for='category'>Sort by Category : </label>";
+echo "<label for='category'>Sort by Category: </label>";
 echo "<select name='category' id='category' onchange='this.form.submit()'>";
 echo "<option value='all' " . ($categoryFilter === 'all' ? 'selected' : '') . ">All</option>";
 echo "<option value='Fruits' " . ($categoryFilter === 'Fruits' ? 'selected' : '') . ">Fruits</option>";
@@ -88,24 +89,19 @@ echo "<option value='Vegetables' " . ($categoryFilter === 'Vegetables' ? 'select
 echo "<option value='Fish' " . ($categoryFilter === 'Fish' ? 'selected' : '') . ">Fish</option>";
 echo "<option value='Bakery' " . ($categoryFilter === 'Bakery' ? 'selected' : '') . ">Bakery</option>";
 echo "<option value='Meat' " . ($categoryFilter === 'Meat' ? 'selected' : '') . ">Meat</option>";
-
 echo "</select>";
 
-echo "<label value='none'>&nbspSort by Price or Rating : </label>";
+echo "<label for='sort'>&nbspSort by Price or Rating: </label>";
 echo "<select name='sort' id='sort' onchange='this.form.submit()'>";
 echo "<option value='none' " . ($sort === 'none' ? 'selected' : '') . ">None</option>";
-// echo "<option value='price_asc' " . ($sort === 'price_asc' ? 'selected' : '') . ">Price: Low to High</option>";
-// echo "<option value='price_desc' " . ($sort === 'price_desc' ? 'selected' : '') . ">Price: High to Low</option>";
 echo "<option value='rating_asc' " . ($sort === 'rating_asc' ? 'selected' : '') . ">Rating: Low to High</option>";
 echo "<option value='rating_desc' " . ($sort === 'rating_desc' ? 'selected' : '') . ">Rating: High to Low</option>";
 echo "<option value='discount_price_asc' " . ($sort === 'discount_price_asc' ? 'selected' : '') . ">Price: Low to High</option>";
 echo "<option value='discount_price_desc' " . ($sort === 'discount_price_desc' ? 'selected' : '') . ">Price: High to Low</option>";
 echo "</select>";
-
 echo "</form>";
 echo "</div>";
-echo "</br>";
-echo "</br>";
+echo "<br><br>";
 
 echo "<div class='product-container'>";
 $hasResults = false;
@@ -121,41 +117,36 @@ while ($row = oci_fetch_assoc($stmt)) {
                 <p>" . htmlspecialchars($row['PRODUCT_NAME']) . "</p>
             </div>
             <div class='name-of-p'>
-                <p> Shop ID : " . htmlspecialchars($row['SHOP_ID']) . "</p>
+                <p> Shop ID: " . htmlspecialchars($row['SHOP_ID']) . "</p>
             </div>
             <div class='rating'>
                 " . generateStars($row['AVERAGE_REVIEW_SCORE']) . "
             </div>
-            <div class='price' style=' font-size:20px;'>
-                Price: <span style='text-decoration: line-through;'> $" . htmlspecialchars($row['PRODUCT_PRICE']) . "</span>
+            <div class='price' style='font-size:20px;'>
+                Price: <span style='text-decoration: line-through;'>$" . htmlspecialchars($row['PRODUCT_PRICE']) . "</span>
                 &nbsp&nbsp&nbsp $" . htmlspecialchars($row['DISCOUNTED_PRICE']) . "
             </div>";
             
-            // Check if user is logged in
-            if (isset($_SESSION['uusername'])) {
-                echo "<div class='buy-now'>
-                    <button class='add-to-cart' data-product-id='" . htmlspecialchars($row['PRODUCT_ID']) . "'><i class='bx bxs-cart bx-border-circle bx-tada-hover'></i></button>
-                    <button class='add-to-wishlist' data-product-id='" . htmlspecialchars($row['PRODUCT_ID']) . "'><i class='bx bxs-heart bx-border-circle bx-tada-hover'></i></button>
-                </div>";
+    // Check if user is logged in
+    if (isset($_SESSION['uusername'])) {
+        echo "<div class='buy-now'>
+            <button class='add-to-cart' data-product-id='" . htmlspecialchars($row['PRODUCT_ID']) . "'><i class='bx bxs-cart bx-border-circle bx-tada-hover'></i></button>
+            <button class='add-to-wishlist' data-product-id='" . htmlspecialchars($row['PRODUCT_ID']) . "'><i class='bx bxs-heart bx-border-circle bx-tada-hover'></i></button>
+        </div>";
+    } else {
+        echo "<div class='buy-now'>
+            <button class='addToCartButton'><i class='bx bxs-cart bx-border-circle bx-tada-hover'></i></button>
+            <button class='addToWishlistButton'><i class='bx bxs-heart bx-border-circle bx-tada-hover'></i></button>
+        </div>";
+    }
 
-            } else {
-                echo "<div class='buy-now'>
-                    <button class='addToCartButton'><i class='bx bxs-cart bx-border-circle bx-tada-hover'></i></button>
-                    <button class='addToWishlistButton'><i class='bx bxs-heart bx-border-circle bx-tada-hover'></i></button>
-                </div>";
-
-            }
-
-echo "</div>
+    echo "</div>
 </div>";
 }
 if (!$hasResults) {
     echo "<p>No products found.</p>";
 }
-echo "</div>
-
-</br></br>
-";
+echo "</div><br><br>";
 
 oci_free_statement($stmt);
 oci_close($conn);
@@ -169,7 +160,6 @@ function generateStars($rating) {
     return $stars;
 }
 ?>
-
 </section>
 
 <script>

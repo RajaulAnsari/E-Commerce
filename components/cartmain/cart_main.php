@@ -40,7 +40,7 @@ if (isset($_SESSION['uusername'])) {
     // Insert the product into the cart table
     if (!empty($product_id) && $num_products == 0 && $total_items < 20) {
         // Start a transaction
-        oci_begin($conn);
+        // oci_begin($conn);
 
         $insert_query = "BEGIN 
             INSERT INTO CART (CART_ITEMS, USER_ID, CART_CREATED, CART_UPDATED) VALUES (1, :user_id, SYSDATE, SYSDATE) RETURNING CART_ID INTO :cart_id;

@@ -3,7 +3,7 @@
         <div class="shop-page-title">
             <h2>Shops</h2>
         </div>
-        </br>
+        <br>
         <div class="shops">
             <?php
             include 'connection.php';
@@ -12,16 +12,21 @@
             $stmt = oci_parse($conn, $sql);
             oci_execute($stmt);
 
-            if (oci_fetch_all($stmt, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW) == 0) {
+            $result = [];
+            oci_fetch_all($stmt, $result, null, null, OCI_FETCHSTATEMENT_BY_ROW);
+
+            if (empty($result)) {
                 echo "No shops found!";
             } else {
                 foreach ($result as $row) {
-                    echo "<div class='shop'>";
-                    echo "<a href='./products.php?shop_id=" . $row['SHOP_ID'] . "'>";
-                    echo "<img src='./images/shop/" . $row['SHOP_IMAGE'] . "' alt=''>";
-                    echo "<h5>" . $row['SHOP_NAME'] . "</h5>";
-                    echo "</a>";
-                    echo "</div>";
+                    if ($row['SHOP_ADMIN_VERIFICATION'] == 1) {
+                        echo "<div class='shop'>";
+                        echo "<a href='./products.php?shop_id=" . $row['SHOP_ID'] . "'>";
+                        echo "<img src='./images/shop/" . $row['SHOP_IMAGE'] . "' alt=''>";
+                        echo "<h5>" . $row['SHOP_NAME'] . "</h5>";
+                        echo "</a>";
+                        echo "</div>";
+                    }
                 }
             }
 
@@ -29,6 +34,6 @@
             oci_close($conn);
             ?>
         </div>
-        </br>
+        <br>
     </div>
 </section>

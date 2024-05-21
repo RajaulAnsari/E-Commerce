@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Prepare the SQL statement for TRADER
         $sql_trader = "INSERT INTO \"TRADER\" 
-                       (TRADER_ID, TRADER_FIRST_NAME, TRADER_LAST_NAME, EMAIL_ADDRESS, TRADER_PASSWORD, TRADER_ADDRESS, CONTACT_NO, IS_VERIFIED, PRODUCT_CATEGORY, SHOP_NAME, TUSER_NAME) 
-                       VALUES (TRADER_ID_SEQ.NEXTVAL, :firstname, :lastname, :email, :password, :address, :contact, 0, :productcategories, :shopname, :username)
+                       (TRADER_ID, TRADER_FIRST_NAME, TRADER_LAST_NAME, EMAIL_ADDRESS, TRADER_PASSWORD, TRADER_ADDRESS, CONTACT_NO, IS_VERIFIED, TRADER_ADMIN_VERIFICATION, PRODUCT_CATEGORY, SHOP_NAME, TUSER_NAME) 
+                       VALUES (TRADER_ID_SEQ.NEXTVAL, :firstname, :lastname, :email, :password, :address, :contact, 0,0, :productcategories, :shopname, :username)
                        RETURNING TRADER_ID INTO :trader_id";
 
         $stmt_trader = oci_parse($conn, $sql_trader);
@@ -66,8 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Prepare the SQL statement for SHOP
             $sql_shop = "INSERT INTO \"SHOP\" 
-                         (SHOP_ID, SHOP_NAME, SHOP_ADDRESS, PHONE_NUMBER, SHOP_DESCRIPTION, USER_ID, SHOP_IMAGE) 
-                         VALUES (SHOP_ID_SEQ.NEXTVAL, :shopname, :shopaddress, :contact, :shopdescription, :userid, :shopimage)
+                         (SHOP_ID, SHOP_NAME, SHOP_ADDRESS, PHONE_NUMBER, SHOP_DESCRIPTION, USER_ID, SHOP_IMAGE, SHOP_ADMIN_VERIFICATION) 
+                         VALUES (SHOP_ID_SEQ.NEXTVAL, :shopname, :shopaddress, :contact, :shopdescription, :userid, :shopimage,0)
                          RETURNING SHOP_ID INTO :shop_id";
 
             $stmt_shop = oci_parse($conn, $sql_shop);
