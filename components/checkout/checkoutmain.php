@@ -1,5 +1,5 @@
 <?php
-// session_start();
+session_start();
 
 // Check if the user is logged in
 if (!isset($_SESSION['uusername'])) {
@@ -10,16 +10,10 @@ if (!isset($_SESSION['uusername'])) {
 // Include database connection
 include 'connection.php';
 
-// Check if the user session contains the user ID
-if (!isset($_SESSION['uusername'])) {
-    // Redirect to login page if user ID is not set
-    header("Location: usersignin.php");
-    exit();
-}
-
 // Check if session variables for cart total and total items are set
 $total = isset($_SESSION['cart_total']) ? $_SESSION['cart_total'] : 0;
 $total_items = isset($_SESSION['cart_total_items']) ? $_SESSION['cart_total_items'] : 0;
+$product_id = isset($_SESSION['product_id']) ? $_SESSION['product_id'] : 0;
 
 // Collection dates logic...
 $collectionDates = [];
@@ -56,10 +50,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmPayment'])) {
 }
 ?>
 
-
 <div class="container">
     <div class="checkout-step">
-        <form method="POST" id="checkoutForm" onsubmit="return handleFormSubmit(event)">
+        <form method="POST" id="checkoutForm" onsubmit="return handleFormSubmit(event);">
             <!-- Date selection step -->
             <div class="checkout-step-heading">Choose Collection Slot</div>
             <div class="checkout-step-desc">This is the field where you will be choosing collection slots.</div>
@@ -77,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmPayment'])) {
                                 echo "<option $isSelected $isDisabled value='".$day."'>".$day."</option>";
                             }
                         }
-                        ?>
+                    ?>
                 </select>
                 <!-- Error message for date selection -->
                 <?php if(isset($selectedDateError)): ?>
@@ -120,6 +113,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmPayment'])) {
             <!-- Include hidden input fields to pass total and total items -->
             <input type="hidden" name="total" value="<?php echo $total; ?>">
             <input type="hidden" name="total_items" value="<?php echo $total_items; ?>">
+            <!-- Include hidden input fields to store selected collection date and time -->
+            <input type="hidden" id="selectedCollectionDate" name="selectedCollectionDate" value="">
+            <input type="hidden" id="selectedCollectionTime" name="selectedCollectionTime" value="">
 
             <div class="checkout-buttons">
                 <!-- Payment form submission button -->
@@ -129,6 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmPayment'])) {
         </form>
     </div>
 </div>
+
 
 <script>
 function handleFormSubmit(event) {
@@ -147,14 +144,14 @@ function handleFormSubmit(event) {
             return false;
         }
 
-        // Store collection date and time in session
-        const form = event.target;
-        form.action = 'store_collection_slot.php';
-        form.method = 'POST';
-        form.submit();
-        return false; // Prevent the default form submission
+        // Set selected collection date and time in hidden input fields
+        document.getElementById('selectedCollectionDate').value = collectionDate;
+        document.getElementById('selectedCollectionTime').value = collectionTime.value;
+
+        return true; // Allow form submission for "confirmPayment"
     }
 
+    // If the "Cancel" button is clicked, no need to set collection date and time
     return true; // Allow form submission for "backToCart"
 }
 </script>

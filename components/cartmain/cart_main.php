@@ -1,16 +1,19 @@
 <?php
 include "connection.php";
 
+// Start the session
+// session_start();
+
 // Check if the user is logged in
 if (isset($_SESSION['uusername'])) {
     // Retrieve user ID from the session
     $user = $_SESSION['uusername'];
-    $qry = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = '$user'";
+    $qry = "SELECT * FROM USER_CLECK WHERE UUSER_NAME = :username";
     $res = oci_parse($conn, $qry);
+    oci_bind_by_name($res, ":username", $user);
     oci_execute($res);
     $row = oci_fetch_assoc($res);
     $user_id = $row['USER_ID'];
-    
 
     // Retrieve product ID sent via AJAX
     $product_id = isset($_POST['product_id']) ? $_POST['product_id'] : '';
@@ -35,53 +38,47 @@ if (isset($_SESSION['uusername'])) {
     oci_free_statement($cart_items_stmt);
 
     // Insert the product into the cart table
-if (!empty($product_id) && $num_products == 0 && $total_items < 20) {
-    $insert_query = "
-        DECLARE
-            cart_id NUMBER;
-        BEGIN
+    if (!empty($product_id) && $num_products == 0 && $total_items < 20) {
+        // Start a transaction
+        oci_begin($conn);
+
+        $insert_query = "BEGIN 
             INSERT INTO CART (CART_ITEMS, USER_ID, CART_CREATED, CART_UPDATED) VALUES (1, :user_id, SYSDATE, SYSDATE) RETURNING CART_ID INTO :cart_id;
-            
             INSERT INTO CART_PRODUCT (PRODUCT_ID, CART_ID) VALUES (:product_id, :cart_id);
-            
-            COMMIT;
         END;";
-    
-    $stmt = oci_parse($conn, $insert_query);
-    oci_bind_by_name($stmt, ":product_id", $product_id);
-    oci_bind_by_name($stmt, ":user_id", $user_id);
-    oci_bind_by_name($stmt, ":cart_id", $cart_id, 32); // Assuming CART_ID is of NUMBER(32), used for returning the generated CART_ID
-    
-    // Execute the statement
-    $success = oci_execute($stmt);
+        
+        $stmt = oci_parse($conn, $insert_query);
+        oci_bind_by_name($stmt, ":user_id", $user_id);
+        oci_bind_by_name($stmt, ":product_id", $product_id);
+        oci_bind_by_name($stmt, ":cart_id", $cart_id, 32); // Assuming CART_ID is of NUMBER(32), used for returning the generated CART_ID
+        
+        // Execute the statement
+        $success = oci_execute($stmt);
 
-    if ($success) {
-        // Commit the transaction
-        oci_commit($conn);
-        // echo "success"; // Send success response to AJAX
-        // oci_commit($conn);
-        echo "<script>
-        alert('Product added to cart');
-        window.location.href = 'wishlist.php';</script>";
-    } else {
-        // Handle errors
-        $error = oci_error($stmt);
-        echo "Error: " . $error['message'];
+        if ($success) {
+            // Commit the transaction
+            oci_commit($conn);
+            echo "<script>
+                alert('Product added to cart');
+                window.location.href = 'wishlist.php';
+            </script>";
+        } else {
+            // Rollback the transaction
+            oci_rollback($conn);
+            $error = oci_error($stmt);
+            echo "Error: " . $error['message'];
+        }
+
+        oci_free_statement($stmt);
     }
-
-    oci_free_statement($stmt);
-}
-oci_close($conn);
+    oci_close($conn);
 
 } else {
-    echo"
-    <script>
+    echo "<script>
         alert('Please login to view your cart');
         window.location.href = 'usersignin.php';
-    </script>
-    ";
+    </script>";
 }
-
 ?>
 
 
@@ -204,6 +201,7 @@ oci_close($conn);
         // Store total and total items in session variables
         $_SESSION['cart_total'] = $total;
         $_SESSION['cart_total_items'] = $total_items;
+        $_SESSION['product_id'] = $product_id;
 
 ?>
     </div>
