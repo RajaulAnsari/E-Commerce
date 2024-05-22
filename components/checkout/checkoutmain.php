@@ -7,6 +7,10 @@ if (!isset($_SESSION['uusername'])) {
     exit();
 }
 
+if (isset($_POST['backToCart'])) {
+    header("Location: cart.php");
+    exit();
+}
 // Include database connection
 include 'connection.php';
 
