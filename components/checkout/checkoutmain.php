@@ -51,10 +51,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmPayment'])) {
 ?>
 
 <div class="container">
+    </br>
+    </br>
+    <div class="collection-slot-title">
+        <h2>User Dashboard</h2>
+    </div>
+    </br>
+    </br>
     <div class="checkout-step">
         <form method="POST" id="checkoutForm" onsubmit="return handleFormSubmit(event);">
             <!-- Date selection step -->
-            <div class="checkout-step-heading">Choose Collection Slot</div>
+            <div class="checkout-step-heading">Choose Collection Date</div>
             <div class="checkout-step-desc">This is the field where you will be choosing collection slots.</div>
             <!-- Date selection dropdown -->
             <div class="checkout-step-sub">
@@ -125,6 +132,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmPayment'])) {
         </form>
     </div>
 </div>
+</br>
+
 
 
 <script>

@@ -1,66 +1,111 @@
+.collection-slot-title  h2{
 
-/* Checkout step */
+        font-family: "Times New Roman", Times, serif;
+        text-align: center;
+        text-transform: uppercase;
+        background-color: #7c7777;
+        padding: 10px;
+        margin: 0 auto;
+        border-radius: 12px 12px 12px 12px;
+        font-size: 35px;
+        color: black;
+}
+
 .checkout-step {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
-/* Checkout step heading */
 .checkout-step-heading {
-    font-size: 24px;
+    font-size: 1.8em;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    color: #007bff;
 }
 
-/* Checkout step description */
 .checkout-step-desc {
     margin-bottom: 20px;
+    color: #6c757d;
 }
 
-/* Checkout step subtitle */
-.checkout-subtitle {
+.checkout-step-sub {
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
     font-weight: bold;
-    margin-bottom: 5px;
+    color: #555;
 }
 
-/* Checkout select */
-.checkout-select {
-    margin-top: 5px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+select, input[type="radio"], input[type="submit"] {
+    margin-bottom: 15px;
+}
+
+select {
     width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    font-size: 1em;
+    color: #495057;
+    transition: border-color 0.3s ease;
 }
 
-/* Checkout sub body */
-.checkout-sub-body {
-    margin-bottom: 10px;
+select:focus {
+    border-color: #007bff;
+    outline: none;
 }
 
-/* Checkout time card */
-.checkout-time-card {
-    margin-bottom: 10px;
+input[type="radio"] {
+    margin-right: 10px;
 }
 
-/* Checkout buttons */
-.checkout-buttons {
-    margin-top: 20px;
-    text-align: center;
-}
-
-/* Button styles */
-.btn {
-    padding: 10px 20px;
+input[type="submit"] {
+    padding: 12px 20px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.primary-btn {
     background-color: #007bff;
     color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.clear-btn {
-    background-color: #f0f0
+input[type="submit"].primary-btn {
+    background-color: #007bff;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.input-error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: -10px;
+}
+
+.checkout-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.checkout-buttons input[type="submit"] {
+    width: 48%;
+}
+
+.checkout-step-sub label input {
+    margin-right: 8px;
+}
+
+input[type="submit"].primary-btn {
+    background-color: #28a745;
+}
+
+input[type="submit"].primary-btn:hover {
+    background-color: #218838;
 }
