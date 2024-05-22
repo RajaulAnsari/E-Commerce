@@ -86,6 +86,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Execute the statement
             $result_shop = oci_execute($stmt_shop);
 
+            // Check if the SHOP was successfully registered
+            $subject = "Verify Shop Registration";
+            $html = "
+
+            <div style='font-family: Arial, sans-serif; border: 2px solid #007bff; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
+                <h2 style='color: green; margin-bottom: 20px;'>Shop Registration</h2>
+                <p>Hello Admin,</p>
+                <p>A new shop has been registered with CleckHub. Please verify the shop details.</p>
+                <p>Shop Details:</p>
+                <ul>
+                    <li>Shop Name: $shopname</li>
+                    <li>Shop Address: $shopaddress</li>
+                    <li>Shop Description: $shopdescription</li>
+                </ul>            
+            <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/shopVerificationByAdmin.php?shopid=" . urlencode($shop_id) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Email Address</a>
+            ";
+
+            // Send verification email
+            sendVerificationEmail('cleckhub2@gmail.com', $subject, $html);
+
+
             if ($result_shop) {
                 // Update the TRADER table with the SHOP_ID
                 $sql_update_trader = "UPDATE \"TRADER\" SET SHOP_ID = :shop_id WHERE TRADER_ID = :trader_id";
@@ -108,6 +129,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Send verification email
                 sendVerificationEmail($email, $subject, $html);
+
+                //Define email subject and body
+                $subject = "Trader Registration";
+                $html = "
+                <div style='font-family: Arial, sans-serif; border: 2px solid #007bff; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
+                    <h2 style='color: green; margin-bottom: 20px;'>Trader Registration</h2>
+                    <p>Hello Admin,</p>
+                    <p>A new trader has registered with CleckHub. Please verify the trader's details and shop.</p>
+                    <p>Trader Details:</p>
+                    <ul>
+                        <li>Firstname: $firstname</li>
+                        <li>Lastname: $lastname</li>
+                        <li>Username: $username</li>
+                        <li>Email: $email</li>
+                        <li>Address: $address</li>
+                        <li>Contact: $contact</li>
+                        <li>Product Category: $productcategories</li>
+                    </ul>
+                    <p>Shop Details:</p>
+                    <ul>
+                        <li>Shop Name: $shopname</li>
+                        <li>Shop Address: $shopaddress</li>
+                        <li>Shop Description: $shopdescription</li>
+                    </ul>
+
+                    <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/traderVerificationByAdmin.php?email=" . urlencode($email) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Trader</a>
+                ";
+
+                // Send email to admin
+                sendVerificationEmail('cleckhub2@gmail.com', $subject, $html);
+                
 
                 echo "<script>alert('Registration successful! Verification Required.');</script>";
                 echo "<script>window.location = './tradersignin.php'</script>";

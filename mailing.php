@@ -24,7 +24,7 @@ function sendVerificationEmail($email, $subject, $html) {
         $mail->Port       = 587;                // TCP port to connect to
 
         // Sender info
-        $mail->setFrom('cleckhub2@gmail.com', 'CLECKHUB');
+        $mail->setFrom('no-reply@gmail.com', 'CLECKHUB');
 
         // Receiver info
         $mail->addAddress($email);

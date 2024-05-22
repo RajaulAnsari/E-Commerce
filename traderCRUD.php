@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'connection.php';
+include './mailing.php';
 
 // Check if the user is logged in
 if (!isset($_SESSION['tusername'])) {
@@ -122,6 +123,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['product_image'])) {
                 oci_free_statement($insertDiscountStmt);
             }
 
+            $subject = "Product Verification";
+            $html = "
+            <h1>Product Verification</h1>
+            <p>Product with ID: $nextProductId has been added by a trader and needs verification.</p>
+
+            <p>Click the button below to verify the product.</p>
+
+            <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/productVerificationByAdmin.php?productid=" . urlencode($nextProductId) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Product</a>
+            ";
+
+            // Send email to admin
+            sendVerificationEmail('cleckhub2@gmail.com', $subject, $html);
+
+
             echo "<script>alert('Product added successfully, Needs ADMIN verification for display')</script>";
             echo "<script>window.location = 'traderCRUD.php';</script>";
 
@@ -164,6 +179,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['product_image'])) {
                 oci_execute($updateDiscountStmt);
                 oci_free_statement($updateDiscountStmt);
             }
+
+            $subject = "Product Update Verification";
+                $html = "
+                <h1>Product Update Verification</h1>
+                <p>Product with ID: $productId has been updated by a trader and needs verification.</p>
+                
+                <p>Click the button below to verify the product.</p>
+
+                <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/updateProductVerificationByAdmin.php?&productid=" . urlencode($productId) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Product</a>
+                ";
+
+                // Send email to admin
+                sendVerificationEmail('cleckhub2@gmail.com', $subject, $html);
+                
 
             echo "<script>alert('Product updated successfully, Needs ADMIN verification for display')</script>";
             echo "<script>window.location = 'traderCRUD.php';</script>";
