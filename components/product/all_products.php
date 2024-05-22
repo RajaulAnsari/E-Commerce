@@ -32,6 +32,14 @@ if ($categoryFilter !== 'all') {
     $sql .= " AND LOWER(p.category_name) = LOWER(:categoryFilter)";
 }
 
+$stmt = oci_parse($conn, $sql);
+
+if ($categoryFilter !== 'all') {
+    oci_bind_by_name($stmt, ":categoryFilter", $categoryFilter);
+}
+
+// oci_ececute($stmt);
+
 // Add search filter if provided
 if (!empty($searchQuery)) {
     $sql .= " AND (LOWER(p.product_name) LIKE LOWER(:searchQuery) 

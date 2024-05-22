@@ -1,4 +1,18 @@
 <!-- Main page banner  -->
+<?php
+include 'connection.php';
+
+$sql = "SELECT DISTINCT CATEGORY_NAME FROM PRODUCT";
+$stmt = oci_parse($conn, $sql);
+oci_execute($stmt);
+$product_category = array();
+while ($row = oci_fetch_assoc($stmt)) {
+    $product_categories[] = $row['CATEGORY_NAME'];
+}
+oci_free_statement($stmt);
+oci_close($conn);
+?>
+
 <div class="container">
     <section>
         <div class="slideshow-container">
@@ -30,46 +44,24 @@
     </section>
 
     <!-- collection -->
-    <section id="collection">
-        <h1>Product Categories</h1>
-        <div class="collections container">
-            <div class="content">
-                <img src="./images/Vegetables-Fruits/FRAISE.jpg" alt="img" />
-                <div class="img-content">
-                    <p>Clothing Collections</p>
-                    <button><a href="#sellers">SHOP NOW</a></button>
-                </div>
+    <div class="container">
+        <section id="collection">
+            <h1>Product Categories</h1>
+            </br>
+            <div class="category-container">
+                <?php
+            // Assuming $product_categories is already populated with unique category names
+            foreach ($product_categories as $category) {
+                echo "<div class='category-item'>
+                        <div class='buy-now'>
+                            <button class='category-button' data-category='$category'>$category</button>
+                        </div>
+                      </div>";
+            }
+            ?>
             </div>
-            <div class="content">
-                <img src="./images/Vegetables-Fruits/MELON.jpg" alt="img" />
-                <div class="img-content">
-                    <p>Shoes Spring</p>
-                    <button><a href="#sellers">SHOP NOW</a></button>
-                </div>
-            </div>
-            <div class="content">
-                <img src="./images/Vegetables-Fruits/ORANGE.jpg" alt="img" />
-                <div class="img-content">
-                    <p>Accessories</p>
-                    <button><a href="#sellers">SHOP NOW</a></button>
-                </div>
-            </div>
-            <div class="content">
-                <img src="./images/Vegetables-Fruits/PASTEQUE.jpg" alt="img" />
-                <div class="img-content">
-                    <p>Watch</p>
-                    <button><a href="#sellers">SHOP NOW</a></button>
-                </div>
-            </div>
-            <div class="content">
-                <img src="./images/Vegetables-Fruits/PECHE.jpg" alt="img" />
-                <div class="img-content">
-                    <p>Bag</p>
-                    <button><a href="#sellers">SHOP NOW</a></button>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
 
     <!-- Top sells -->
@@ -200,3 +192,19 @@
     </section>
 
 </div>
+
+
+
+<script>
+// JavaScript code to handle category button clicks
+document.addEventListener('DOMContentLoaded', function() {
+    const categoryButtons = document.querySelectorAll('.category-button');
+
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const category = this.getAttribute('data-category');
+            window.location.href = `products.php?category=${encodeURIComponent(category)}`;
+        });
+    });
+});
+</script>

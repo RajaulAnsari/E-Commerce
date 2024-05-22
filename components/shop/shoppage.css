@@ -10,7 +10,7 @@ h5 {
 }
 #shop-page {
   /* margin-top: 50px; */
-  max-height: 100vh;
+  max-height: auto;
 }
 
 .shops {
@@ -21,7 +21,7 @@ h5 {
   
 }
 
-.shop {
+.shop{
   display: flex;
   flex-direction: column;
   justify-content: center;
