@@ -1,18 +1,24 @@
 <?php
 include 'connection.php';
+// session_start(); // Initialize session handling
 
 $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : null;
+
+if (!$product_id) {
+    echo "<p>Product ID not specified.</p>";
+    exit;
+}
 
 // Fetch product details
 $sql = "SELECT p.*, 
             COALESCE(d.DISCOUNT_AMOUNT, 0) AS DISCOUNT_AMOUNT,
             NVL(r.REVIEW_SCORE, 0) AS REVIEW_SCORE,
-            NVL2(r.REVIEW_SCORE, p.product_price - d.DISCOUNT_AMOUNT, p.product_price) AS discounted_price
-        FROM product p 
-        LEFT JOIN discount d ON p.product_id = d.product_id 
-        LEFT JOIN (SELECT product_id, AVG(review_score) AS REVIEW_SCORE FROM review GROUP BY product_id) r
-            ON p.product_id = r.product_id 
-        WHERE p.product_id = :product_id";
+            NVL2(r.REVIEW_SCORE, p.PRODUCT_PRICE - d.DISCOUNT_AMOUNT, p.PRODUCT_PRICE) AS DISCOUNTED_PRICE
+        FROM PRODUCT p 
+        LEFT JOIN DISCOUNT d ON p.PRODUCT_ID = d.PRODUCT_ID 
+        LEFT JOIN (SELECT PRODUCT_ID, AVG(REVIEW_SCORE) AS REVIEW_SCORE FROM REVIEW GROUP BY PRODUCT_ID) r
+            ON p.PRODUCT_ID = r.PRODUCT_ID 
+        WHERE p.PRODUCT_ID = :product_id";
 
 $stmt = oci_parse($conn, $sql);
 oci_bind_by_name($stmt, ":product_id", $product_id);
@@ -103,8 +109,6 @@ oci_free_statement($stmt);
 oci_close($conn);
 ?>
 
-
-
 <br>
 
 <div class="add-review">
@@ -146,14 +150,18 @@ if ($uusername) {
             $review_score = isset($_POST['review_score']) ? $_POST['review_score'] : null;
             $review_comment = isset($_POST['review_comment']) ? $_POST['review_comment'] : null;
             $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : null;
+            $isCollected=isset($_POST['isCollected']) ? $_POST['isCollected'] : null;
 
             if ($user_id && $product_id && $review_score && $review_comment) {
                 // Check if the user has access to review this product
-                $accessQuery = "SELECT * FROM REVIEW_ACCESS WHERE USER_ID = :user_id AND PRODUCT_ID = :product_id";
+                $accessQuery = "SELECT * FROM REVIEW_ACCESS WHERE USER_ID = :user_id AND PRODUCT_ID = :product_id AND IS_COLLECTED = 1";
                 $accessStmt = oci_parse($conn, $accessQuery);
                 oci_bind_by_name($accessStmt, ":user_id", $user_id);
                 oci_bind_by_name($accessStmt, ":product_id", $product_id);
+                // oci_bind_by_name($accessStmt, ":isCollected", $isCollected);
                 oci_execute($accessStmt);
+
+                // $sqlCollectionSlot = "SELECT * FROM COLLECTION_SLOT WHERE USER_ID = :user_id AND PRODUCT_ID = :product_id";
 
                 $hasAccess = oci_fetch_assoc($accessStmt);
 
@@ -176,7 +184,10 @@ if ($uusername) {
                     } else {
                         echo "<script>alert('Error adding review');</script>";
                     }
-                } else {
+                } elseif($isCollected==0)
+                {
+                    echo "<script>alert('You need to collect the product first to give review');</script>";
+                }else{
                     // User doesn't have access to review this product
                     echo "<script>alert('You do not have access to review this product');</script>";
                 }
@@ -189,17 +200,17 @@ if ($uusername) {
 
         // Free statement and close connection
         $stmt = oci_parse($conn, $userQuery);
-if (!$stmt) {
-    $e = oci_error($conn);  // For oci_parse errors pass the connection handle
-    trigger_error(htmlentities($e['message']), E_USER_ERROR);
-}
+        if (!$stmt) {
+            $e = oci_error($conn);  // For oci_parse errors pass the connection handle
+            trigger_error(htmlentities($e['message']), E_USER_ERROR);
+        }
 
-oci_bind_by_name($stmt, ":uusername", $uusername);
-oci_execute($stmt);
-if (!$stmt) {
-    $e = oci_error($stmt);  // For oci_execute errors pass the statement handle
-    trigger_error(htmlentities($e['message']), E_USER_ERROR);
-}
+        oci_bind_by_name($stmt, ":uusername", $uusername);
+        oci_execute($stmt);
+        if (!$stmt) {
+            $e = oci_error($stmt);  // For oci_execute errors pass the statement handle
+            trigger_error(htmlentities($e['message']), E_USER_ERROR);
+        }
 
         oci_close($conn);
     } else {
@@ -210,9 +221,6 @@ if (!$stmt) {
     // uusername not set in the session
     echo "uusername not set.";
 }
-
-
-
 
 function generateStars($rating) {
     $stars = '';
@@ -225,13 +233,7 @@ function generateStars($rating) {
     }
     return $stars;
 }
-
 ?>
-
-
-
-</div>
-</br>
 
 <script>
 document.querySelectorAll('.add-to-cart').forEach(item => {
@@ -252,7 +254,6 @@ function addToCart() {
     xhr.onload = function() {
         if (xhr.status === 200) {
             alert('Product added to cart successfully');
-            // window.location.href = 'productdetails.php';
         } else {
             console.error('Error adding product to cart');
         }
@@ -280,7 +281,6 @@ function addToWishlist() {
 
 document.querySelectorAll('.addToCartButton').forEach(item => {
     item.addEventListener('click', function() {
-        // Redirect to usersignin.php
         alert('Please sign in to add product to cart');
         window.location.href = 'usersignin.php';
     });
@@ -288,7 +288,6 @@ document.querySelectorAll('.addToCartButton').forEach(item => {
 
 document.querySelectorAll('.addToWishlistButton').forEach(item => {
     item.addEventListener('click', function() {
-        // Redirect to usersignin.php
         alert('Please sign in to add product to wishlist');
         window.location.href = 'usersignin.php';
     });

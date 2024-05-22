@@ -64,8 +64,8 @@ if ($user_id) {
         // $product_id = $_SESSION['product_id'];
 
         //review access
-        $sqlReviewAccess="INSERT INTO REVIEW_ACCESS (PRODUCT_ID,USER_ID,ACCESS_ID)
-        SELECT DISTINCT PRODUCT_ID, :user_id, ACCESS_ID_SEQ.NEXTVAL
+        $sqlReviewAccess="INSERT INTO REVIEW_ACCESS (PRODUCT_ID,USER_ID,IS_COLLECTED)
+        SELECT DISTINCT PRODUCT_ID, :user_id,0
         FROM CART_PRODUCT";
         $stmtReviewAccess=oci_parse($conn,$sqlReviewAccess);
         oci_bind_by_name($stmtReviewAccess,":user_id",$user_id);
@@ -83,8 +83,8 @@ if ($user_id) {
         
         // Fetch the cart ID into a variable
 
-        $sqlCollectionSlot="INSERT INTO COLLECTION_SLOT (COLLECTION_SLOT_ID, COLLECTION_DATE, COLLECTION_TIME,IS_COLLECTED) 
-                            VALUES (COLLECTION_SLOT_ID_SEQ.NEXTVAL,TO_DATE( :collectionDate,'YYYY-MM-DD'), :collectionTime,0)
+        $sqlCollectionSlot="INSERT INTO COLLECTION_SLOT (COLLECTION_SLOT_ID, COLLECTION_DATE, COLLECTION_TIME) 
+                            VALUES (COLLECTION_SLOT_ID_SEQ.NEXTVAL,TO_DATE( :collectionDate,'YYYY-MM-DD'), :collectionTime)
                             RETURNING COLLECTION_SLOT_ID INTO :collection_slot_id";
         $stmtCollectionSlot = oci_parse($conn, $sqlCollectionSlot);
         oci_bind_by_name($stmtCollectionSlot, ":collectionDate", $formattedDate);
