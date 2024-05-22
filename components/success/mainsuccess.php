@@ -1,6 +1,7 @@
 <?php
 // Include database connection
 include 'connection.php';
+include 'mailing.php';
 
 // Start the session
 // session_start();
@@ -14,12 +15,13 @@ if (!isset($_SESSION['uusername'])) {
 
 // Retrieve the user ID from the USER_CLECK table based on the uusername
 $user = $_SESSION['uusername'];
-$qry = "SELECT USER_ID FROM USER_CLECK WHERE UUSER_NAME = :username";
+$qry = "SELECT USER_ID,EMAIL_ADDRESS FROM USER_CLECK WHERE UUSER_NAME = :username";
 $res = oci_parse($conn, $qry);
 oci_bind_by_name($res, ":username", $user);
 oci_execute($res);
 $row = oci_fetch_assoc($res);
 $user_id = $row['USER_ID'];
+$email = $row['EMAIL_ADDRESS'];
 
 
 // getting cart id
@@ -129,6 +131,17 @@ if ($user_id) {
                 echo "<a href='index.php'>Return to Home</a>";
                 echo "</div>";
                 echo "</div>";
+
+                $subject = "Order Confirmation";
+                $html = "<p>Dear Customer,</p>
+
+                <p>Thank you for your purchase. Your order has been successfully placed.</p>
+                
+                ";
+
+                // Send email confirmation
+                sendVerificationEmail($email, $subject, $html);
+
             } else {
                 // Rollback the transaction
                 oci_rollback($conn);
