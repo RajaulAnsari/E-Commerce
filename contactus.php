@@ -74,6 +74,9 @@ session_start();
             <h1>Contact Us</h1>
             <form action="https://api.web3forms.com/submit" method="POST">
                 <input type="hidden" name="access_key" value="1ee057a5-3f8e-4cf4-b4ff-3fdb1258dc62">
+                <input type="hidden" name="subject" value="New Contact from E-Commerce Website">
+                <input type="hidden" name="redirect" value="http://localhost/E-Commerce/thanksForContactingUs.php">
+
                 <label for="name">Name:</label>
                 <input type="text" name="name" required></br>
                 <label for="email">Email:</label>

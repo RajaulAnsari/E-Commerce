@@ -195,13 +195,6 @@ if ($user_id) {
 }
 </style>
 
-<!-- <div class="container">
-    <div class="success">
-        <h1>Payment Successful!</h1>
-        <p>Thank you for your purchase. Your payment has been successfully processed.</p>
-        <a href="index.php">Return to Home</a>
-    </div>
-</div> -->
 
 
 </br></br></br>
