@@ -44,7 +44,7 @@
                 <button>Subscribe</button>
             </li>
             <li>
-                <p>Copyright &copy; 2024 myshop.com.np</p>
+                <p>Copyright &copy; 2024 cleckhub.com.np</p>
             </li>
         </ul>
     </div>

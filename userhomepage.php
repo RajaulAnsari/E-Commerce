@@ -161,9 +161,15 @@ if (isset($_POST['wishlist'])) {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        height: auto;
         text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        margin: 50px auto;
+        max-width: 500px;
     }
 
     .user-image {
@@ -172,7 +178,7 @@ if (isset($_POST['wishlist'])) {
         border-radius: 50%;
         overflow: hidden;
         margin-bottom: 20px;
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .user-image img {
@@ -184,84 +190,127 @@ if (isset($_POST['wishlist'])) {
     .userprofile-container h1 {
         font-size: 28px;
         margin-bottom: 10px;
+        color: black;
     }
 
     .userprofile-container p {
         font-size: 18px;
         margin-bottom: 10px;
+        color: black;
     }
 
-    .userprofile-container button {
+    .userprofile-container button,
+    .edit button {
         padding: 10px 20px;
         font-size: 16px;
-        border-radius: 5px;
+        border-radius: 25px;
         border: none;
         cursor: pointer;
-        background-color: #4CAF50;
-        color: white;
-        transition: background-color 0.3s;
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: black;
+        transition: background 0.3s, transform 0.3s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
     }
 
-    .userprofile-container button:hover {
-        background-color: #45a049;
+    .userprofile-container button:hover,
+    .edit button:hover {
+        background: linear-gradient(135deg, #38f9d7 0%, #43e97b 100%);
+        transform: translateY(-2px);
     }
 
     .user-dashboard h2 {
         font-family: "Times New Roman", Times, serif;
         text-align: center;
         text-transform: uppercase;
-        background-color: #7c7777;
+        background-color: #38f9d7;
         padding: 10px;
-        margin: 0 auto;
-        border-radius: 12px 12px 12px 12px;
+        border-radius: 12px;
         font-size: 35px;
+        color: white;
+        width: 100%;
+        margin-bottom: 20px;
         color: black;
-        /* width: 800px; */
     }
 
     .edit input {
-        width: 100%;
-        padding: 5px;
+        width: calc(100% - 30px);
+        padding: 10px;
         margin-bottom: 10px;
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 25px;
+        background-color: #f1f1f1;
+        transition: background-color 0.3s, box-shadow 0.3s;
     }
 
-    .edit button {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-        transition: background-color 0.3s;
+    .edit input:focus {
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .edit label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: black;
+    }
+
+    .edit {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .edit .field-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .edit button.edit-btn {
+        width: 80px;
+        padding: 10px 0;
+    }
+
+    form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    form input[type="file"] {
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        padding: 10px;
+        background-color: #f1f1f1;
+        width: 100%;
+    }
+
+    form button {
+        width: 100%;
+        margin-top: 10px;
     }
     </style>
 </head>
 
 <body>
 
-    <?PHP
-    include "./components/navbar/nav.php";
-    ?>
-
-    <?PHP
-    include "./components/searchbox/searchbox.php";
-    ?>
+    <?PHP include "./components/navbar/nav.php"; ?>
+    <?PHP include "./components/searchbox/searchbox.php"; ?>
 
     <div class="userprofile-container">
         <!-- <section></section> -->
-        <section></section>
         <div class="user-dashboard">
             <h2>User Dashboard</h2>
         </div>
-        <section></section>
-
-        <!-- Display user's image -->
+        <!-- <section></section> -->
         <div class="user-image">
             <?php
-
-            // Check if image path is not empty and file exists
             if (!empty($imagePath) && file_exists($imagePath)) {
                 echo "<img src='$imagePath' alt='User Image'>";
             } else {
@@ -269,54 +318,51 @@ if (isset($_POST['wishlist'])) {
             }
             ?>
         </div>
-        </br>
-        <!-- Image upload form -->
+        <!-- </br> -->
         <form method="post" enctype="multipart/form-data">
             <input type="file" name="image" id="image" required>
-
             <button type="submit" name="upload">Upload Image</button>
         </form>
-        </br>
-        <!-- Display user's data including the image -->
+
         <h1>Welcome, <?php echo ucfirst($userData['UUSER_NAME']); ?>😊</h1>
         <p>Name: <?php echo $fullName; ?></p>
         <p>Email: <?php echo $email; ?></p>
-        </br>
-        <!-- Add fields to update phone number, address, and password -->
 
         <form method="post" class="edit">
+            <!-- <div class="field-container"> -->
             <label for="new_phone">Phone Number:</label>
             <input type="text" id="new_phone" name="new_phone" value="<?php echo $phone; ?>" readonly>
             <button type="button" onclick="toggleEditable('new_phone')">Edit</button><br><br>
-            <label for="new_address">Address:</label>
+            <!-- </div>
+            <div class="field-container"> -->
+            <label for="new_address">Address: </label>&nbsp
             <input type="text" id="new_address" name="new_address" value="<?php echo $address; ?>" readonly>
             <button type="button" onclick="toggleEditable('new_address')">Edit</button><br><br>
+            <!-- </div> -->
             <button type="submit" name="update_profile">Update Profile</button>
         </form>
-        </br>
-
+        <br>
         <form method="post">
             <button type="submit" name="wishlist">My Wishlist</button>
         </form>
-        </br>
 
-        <!-- Logout form -->
         <form method="post">
             <button type="submit" name="logout">Logout</button>
         </form>
     </div>
-    </br>
 
-
-    <?PHP
-    include "./components/footer/footer.php";
-    ?>
+    <div class="footer">
+        <?PHP include "./components/footer/footer.php"; ?>
+    </div>
 
     <script src="./js/main.js" async defer></script>
     <script>
     function toggleEditable(fieldId) {
         var field = document.getElementById(fieldId);
         field.readOnly = !field.readOnly;
+        if (!field.readOnly) {
+            field.focus();
+        }
     }
     </script>
 </body>

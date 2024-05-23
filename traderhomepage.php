@@ -170,9 +170,15 @@ if (isset($_POST['tCRUD'])) {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        height: auto;
         text-align: center;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        margin: 50px auto;
+        max-width: 500px;
     }
 
     .user-image {
@@ -181,7 +187,7 @@ if (isset($_POST['tCRUD'])) {
         border-radius: 50%;
         overflow: hidden;
         margin-bottom: 20px;
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .user-image img {
@@ -193,57 +199,110 @@ if (isset($_POST['tCRUD'])) {
     .userprofile-container h1 {
         font-size: 28px;
         margin-bottom: 10px;
+        color: black;
     }
 
     .userprofile-container p {
         font-size: 18px;
         margin-bottom: 10px;
+        color: black;
     }
 
-    .userprofile-container button {
+    .userprofile-container button,
+    .edit button {
         padding: 10px 20px;
         font-size: 16px;
-        border-radius: 5px;
+        border-radius: 25px;
         border: none;
         cursor: pointer;
-        background-color: #4CAF50;
-        color: white;
-        transition: background-color 0.3s;
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: black;
+        transition: background 0.3s, transform 0.3s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
     }
 
-    .userprofile-container button:hover {
-        background-color: #45a049;
+    .userprofile-container button:hover,
+    .edit button:hover {
+        background: linear-gradient(135deg, #38f9d7 0%, #43e97b 100%);
+        transform: translateY(-2px);
     }
 
     .user-dashboard h2 {
         font-family: "Times New Roman", Times, serif;
         text-align: center;
         text-transform: uppercase;
-        background-color: #7c7777;
+        background-color: #38f9d7;
         padding: 10px;
-        margin: 0 auto;
-        border-radius: 12px 12px 12px 12px;
+        border-radius: 12px;
         font-size: 35px;
+        color: white;
+        width: 100%;
+        margin-bottom: 20px;
         color: black;
-        /* width: 800px; */
     }
 
     .edit input {
-        width: 100%;
-        padding: 5px;
+        width: calc(100% - 30px);
+        padding: 10px;
         margin-bottom: 10px;
         border: 1px solid #ccc;
-        border-radius: 5px;
+        border-radius: 25px;
+        background-color: #f1f1f1;
+        transition: background-color 0.3s, box-shadow 0.3s;
     }
 
-    .edit button {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 5px 10px;
-        cursor: pointer;
-        transition: background-color 0.3s;
+    .edit input:focus {
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .edit label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: black;
+    }
+
+    .edit {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .edit .field-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .edit button.edit-btn {
+        width: 80px;
+        padding: 10px 0;
+    }
+
+    form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    form input[type="file"] {
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        padding: 10px;
+        background-color: #f1f1f1;
+        width: 100%;
+    }
+
+    form button {
+        width: 100%;
+        margin-top: 10px;
     }
     </style>
 </head>
@@ -259,11 +318,11 @@ if (isset($_POST['tCRUD'])) {
     ?>
 
     <div class="userprofile-container">
-        <section></section>
+        <!-- <section></section> -->
         <div class="user-dashboard">
             <h2>Trader Dashboard</h2>
         </div>
-        <section></section>
+        <!-- <section></section> -->
 
         <!-- Display user's image -->
         <div class="user-image">
@@ -277,7 +336,7 @@ if (isset($_POST['tCRUD'])) {
             }
             ?>
         </div>
-        </br>
+        <!-- </br> -->
 
 
         <!-- Image upload form -->

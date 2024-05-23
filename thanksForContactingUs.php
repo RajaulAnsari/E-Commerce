@@ -60,13 +60,14 @@
             </div>
             </br></br>
             </br></br>
+        </div>
 
 
-            <?PHP
+        <?PHP
     include "./components/footer/footer.php"; ?>
 
 
-            <script src="./js/main.js" async defer></script>
+        <script src="./js/main.js" async defer></script>
     </body>
 
     </html>
