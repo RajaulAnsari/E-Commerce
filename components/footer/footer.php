@@ -18,12 +18,13 @@
                 </ul>
             </div>
             <div class="footer-col">
-                <h4>online shop</h4>
+                <h4>Product Categories</h4>
                 <ul>
-                    <li><a href="#">Fish</a></li>
-                    <li><a href="#">Bakery</a></li>
-                    <li><a href="#">Meat</a></li>
-                    <li><a href="#">Fruits & Vegetables</a></li>
+                    <li><a href="./products.php?category=Fish">Fish</a></li>
+                    <li><a href="./products.php?category=Bakery">Bakery</a></li>
+                    <li><a href="./products.php?category=Meat">Meat</a></li>
+                    <li><a href="./products.php?category=Fruits">Fruits</a></li>
+                    <li><a href="./products.php?category=Vegetables">Vegetables</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -44,7 +45,7 @@
                 <button>Subscribe</button>
             </li>
             <li>
-                <p>Copyright &copy; 2024 cleckhub.com.np</p>
+                <p>Copyright &copy; 2024 cleckhub.com.uk</p>
             </li>
         </ul>
     </div>

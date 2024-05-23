@@ -223,7 +223,7 @@ if (isset($_POST['wishlist'])) {
         font-family: "Times New Roman", Times, serif;
         text-align: center;
         text-transform: uppercase;
-        background-color: #38f9d7;
+        background-color: #00ADB5;
         padding: 10px;
         border-radius: 12px;
         font-size: 35px;

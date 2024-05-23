@@ -57,12 +57,16 @@ img {
 }
 
 .category-item {
-  background-color: orange;
+  background-color: #00ADB5;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 10px;
   text-align: center;
 }
+
+/* #collection h1{
+  color: #fff;
+} */
 
 #collection .buy-now a {
   text-decoration: none;

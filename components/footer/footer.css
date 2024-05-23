@@ -20,7 +20,7 @@ ul{
 	list-style: none;
 }
 .footer{
-	background-color: #ffffff;
+	background-color: #EEEEEE;
     padding: 0 0;
 }
 .footer-col{
@@ -94,7 +94,7 @@ ul{
 .footer-bottom{
     padding: 10px 0;
     flex-direction: column;
-    background-color: #808080;
+    background-color: #222831;
     color: #ffffff;
     text-align: center;
     position: relative;

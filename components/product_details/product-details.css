@@ -16,6 +16,10 @@
     margin-bottom: 20px;
 }
 
+.shop-page-title h2{
+    background-color: #00ADB5;
+}
+
 /* Product image */
 .product-image {
     flex: 1;
