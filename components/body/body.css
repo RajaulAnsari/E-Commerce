@@ -64,9 +64,12 @@ img {
   text-align: center;
 }
 
-/* #collection h1{
-  color: #fff;
-} */
+.category-item:hover{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+      rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+      rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    transition: 0.4s;
+}
 
 #collection .buy-now a {
   text-decoration: none;
@@ -102,6 +105,31 @@ img {
 #collection .buy-now button:hover a{
   color: #f05e8a;
 }
+
+#sellers {
+  display: flex;
+  justify-content: space-between; /* Distribute items evenly along the main axis */
+}
+
+.seller-item {
+  background-color: #00ADB5;
+  margin: 10px; /* Add margin for spacing */
+  text-align: center; /* Center the content horizontally */
+  border-radius: 10px;
+  border: 1px solid black;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.seller-item:hover{
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+      rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+      rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+
 
 
 /* .collections {
@@ -219,7 +247,7 @@ img {
 
 /* .............Top sells ..............*/
 
-.best-seller {
+/* .best-seller {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -274,7 +302,6 @@ img {
 .seller .best-p1 {
   width: 250px;
   height: 370px;
-  /* border: 2px solid black; */
 }
 
 .seller .best-p1 img {
@@ -334,4 +361,4 @@ img {
     flex-direction: column;
     align-items: center;
   }
-}
+} */

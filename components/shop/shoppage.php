@@ -23,6 +23,7 @@
                         echo "<div class='shop'>";
                         echo "<a href='./products.php?shop_id=" . $row['SHOP_ID'] . "'>";
                         echo "<img src='./images/shop/" . $row['SHOP_IMAGE'] . "' alt=''>";
+                        echo "<hr style='border-width: 2px; color:green;'>";
                         echo "<h5>" . $row['SHOP_NAME'] . "</h5>";
                         echo "</a>";
                         echo "</div>";

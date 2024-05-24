@@ -38,7 +38,7 @@ if ($row = oci_fetch_assoc($stmt)) {
     
     // Product image
     echo "<div class='product-image'>";
-    echo "<img src='./images/Vegetables-Fruits/" . htmlspecialchars($row['PRODUCT_IMAGE']) . "' alt='Product Photo'>";
+    echo "<img src='./images/products/" . htmlspecialchars($row['PRODUCT_IMAGE']) . "' alt='Product Photo'>";
     echo "</div>";
     
     // Product details

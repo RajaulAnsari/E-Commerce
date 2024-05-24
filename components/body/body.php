@@ -10,7 +10,31 @@ while ($row = oci_fetch_assoc($stmt)) {
     $product_categories[] = $row['CATEGORY_NAME'];
 }
 oci_free_statement($stmt);
-oci_close($conn);
+
+
+$sqlr = "
+SELECT * FROM (
+    SELECT p.PRODUCT_ID, p.PRODUCT_NAME, p.PRODUCT_IMAGE, COUNT(DISTINCT ra.PRODUCT_ID) AS product_count
+    FROM REVIEW_ACCESS ra
+    LEFT JOIN PRODUCT p ON ra.PRODUCT_ID = p.PRODUCT_ID
+    WHERE ra.IS_COLLECTED = 1
+    GROUP BY p.PRODUCT_ID, p.PRODUCT_NAME, p.PRODUCT_IMAGE
+    ORDER BY product_count DESC
+) WHERE ROWNUM <= 4
+";
+$stmtr = oci_parse($conn, $sqlr);
+oci_execute($stmtr);
+$best_seller = array();
+while ($row = oci_fetch_assoc($stmtr)) {
+    $best_seller[] =array(
+        'PRODUCT_NAME' => $row['PRODUCT_NAME'],
+        'PRODUCT_IMAGE' => $row['PRODUCT_IMAGE'],
+        'PRODUCT_ID' => $row['PRODUCT_ID']
+    );
+}
+oci_free_statement($stmtr);
+
+
 ?>
 
 <div class="container">
@@ -62,15 +86,32 @@ oci_close($conn);
 
 
     <!-- Top sells -->
-
     <section id="sellers">
         <div class="seller container">
             <h2>Most Selling Products</h2>
             <div class="best-seller">
+                <?php
+            // Assuming $best_seller is already populated with the top 4 most selling products
+            foreach ($best_seller as $product) {
+                // Concatenate the image directory path with the filename
+                $image_path = './images/products/' . $product['PRODUCT_IMAGE'];
 
+                echo "<div class='seller-item' data-category='" . $product['PRODUCT_ID'] . "'>
+                        <img src='" . $image_path . "' alt='" . $product['PRODUCT_NAME'] . "'>
+                        <hr style='border-width: 2px;'>
+                        <div class='buy-now1'>
+                            <h1 class='seller-button'>" . $product['PRODUCT_NAME'] . "</h1>
+                        </div>
+                      </div>";
+            }
+            ?>
             </div>
         </div>
     </section>
+
+
+
+
 
     <!-- Maps -->
 
@@ -98,6 +139,17 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const category = this.getAttribute('data-category');
             window.location.href = `products.php?category=${encodeURIComponent(category)}`;
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const topSellers = document.querySelectorAll('.best-seller .seller-item');
+
+    topSellers.forEach(seller => {
+        seller.addEventListener('click', function() {
+            const productId = this.getAttribute('data-category');
+            window.location.href = `productdetails.php?product_id=${productId}`;
         });
     });
 });

@@ -5,6 +5,8 @@ $shop_id = isset($_GET['shop_id']) ? $_GET['shop_id'] : null;
 $categoryFilter = isset($_GET['category']) ? $_GET['category'] : 'all';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'none';
 $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
+$productName = isset($_GET['productName']) ? $_GET['productName'] : null;
+
 
 // Construct base SQL query
 $sql = "SELECT p.*, 
@@ -21,6 +23,7 @@ $sql = "SELECT p.*,
         ) avg_review ON p.product_id = avg_review.product_id
         LEFT JOIN discount d ON p.product_id = d.product_id
         WHERE p.PRODUCT_ADMIN_VERIFICATION = 1";
+
 
 // Filter by shop ID
 if ($shop_id) {
@@ -118,7 +121,7 @@ while ($row = oci_fetch_assoc($stmt)) {
     echo "
     <div class='best-p1'>
     <a href='productdetails.php?product_id=" . htmlspecialchars($row['PRODUCT_ID']) . "'>
-        <img src='./images/Vegetables-Fruits/" . htmlspecialchars($row['PRODUCT_IMAGE']) . "' alt='Product Photo'>
+        <img src='./images/products/" . htmlspecialchars($row['PRODUCT_IMAGE']) . "' alt='Product Photo'>
     </a>
         <div class='best-p1-txt'>
             <div class='name-of-p'>

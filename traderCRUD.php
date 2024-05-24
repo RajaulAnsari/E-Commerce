@@ -52,7 +52,7 @@ function fetchProducts($conn, $shopId) {
 
 // Handle form submissions
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['product_image'])) {
-    $targetDirectory = "./images/Vegetables-Fruits/"; // Directory where images will be stored
+    $targetDirectory = "./images/products/"; // Directory where images will be stored
     $targetFile = $targetDirectory . basename($_FILES["product_image"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));

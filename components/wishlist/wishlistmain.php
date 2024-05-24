@@ -119,7 +119,7 @@ if (isset($_SESSION['uusername'])) {
             ?>
             <tr>
                 <td>
-                    <img src="./images/Vegetables-Fruits/<?php echo $pimage; ?>" alt="<?php echo $pname; ?>" width="50"
+                    <img src="./images/products/<?php echo $pimage; ?>" alt="<?php echo $pname; ?>" width="50"
                         height="50">
                     <?php echo $pname; ?>
                 </td>
