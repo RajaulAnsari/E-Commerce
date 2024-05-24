@@ -4,7 +4,6 @@
   text-transform: uppercase;
   background-color: #00ADB5;
   padding: 10px;
-  margin: 0 auto;
   border-radius: 12px 12px 0px 0px;
   font-size: 35px;
   color: black;
@@ -12,8 +11,16 @@
 
 .product-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjusted minmax value */
   grid-gap: 20px;
+}
+
+.best-p1 {
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: rgb(9, 212, 9) 0px 0px 10px;
+  position: relative; /* Relative positioning for button placement */
+  height: 45vh;
 }
 
 .best-p1:hover {
@@ -23,23 +30,16 @@
   transition: 0.4s;
 }
 
-.best-p1 {
-  border: 1px solid #ccc;
-  padding: 10px;
-  box-shadow: rgb(9, 212, 9) 0px 0px 10px;
-}
-
 .best-p1 img {
-  width: 80%;
-  height: auto;
-  /* border-radius: 5px; */
+  width: 100%; /* Make the image responsive */
+  height: 50%; /* Ensure aspect ratio is maintained */
 }
 
 .best-p1-txt {
   padding: 10px;
 }
-.category-filter select{
-  /* width: 100%; */
+
+.category-filter select {
   padding: 5px;
   margin: 10px 0;
   border: 1px solid #cccccc;
@@ -61,39 +61,39 @@
   margin-top: 5px;
 }
 
-.buy-now{
-  display: grid;
-  grid-gap: 1rem;
-}
-.buy-now button i{
-  font-size: 1.5em;
-  color: #ffffff;
-  background-color: green;
-
+.buy-now {
+  position: absolute; /* Position the button container */
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 20px); /* Adjust width */
+  display: flex;
+  justify-content: space-between; /* Distribute buttons evenly */
+  gap: 10px;
 }
 
 .buy-now button {
+  flex: 1; /* Each button takes equal space */
   background-color: #ff8800;
   color: #fff;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 0;
   cursor: pointer;
   border-radius: 5px;
   font: 0.9em sans-serif;
+  transition: background-color 0.3s ease;
 }
 
-
-.buy-now button a {
-  text-decoration: none;
-  color: #fff;
+.buy-now button i {
+  font-size: 1.5em;
 }
+
 .buy-now button:hover {
   background-color: #59c288;
 }
 
-
 @media (max-width: 700px) {
-    .category-filter label {
-        display:flex;
-    }
+  .product-container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjusted minmax value */
+  }
 }
