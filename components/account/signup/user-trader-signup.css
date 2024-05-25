@@ -1,112 +1,137 @@
 .user-div {
-  position: relative;
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 20px;
-  max-height: auto;
+    position: relative;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    max-height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 .register > p > a {
-  text-decoration: underline;
-  color: blue;
+    text-decoration: underline;
+    color: blue;
 }
 
 .user-div > img {
-  max-width: 100%;
-  height: auto;
-  margin-top: 20px;
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
 }
 
 .greet {
-  font-size: 20px;
-  margin-bottom: 20px;
-  position: absolute;
-  top: 10px;
-  left: 10px;
+    font-size: 20px;
+    margin-bottom: 20px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
 .register {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.form-container {
-  width: 100%;
-  margin-top: 25%;
-  max-height: auto;
-}
-
-.uform > select{
-  width: 90%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-
-}
-
-.uform > input,
-.uform > button,
-.remember {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-}
-
-.remember {
-  display: flex;
-  align-items: center;
-}
-
-@media (max-width: 1100px) {
-  .form-container {
-    margin-top: 28%;
-  }
-}
-@media (max-width: 880px) {
-  .form-container {
-    margin-top: 42%;
-  }
-}
-
-@media (max-width:470px){
-  .register{
-    margin-top: 55px;
-    /* margin-left: 200px; */
-  }
-  image-container{
-    margin-top: 20%;
-  
-  }
-}
-
-@media (min-width: 768px) {
-  .user-div {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .image-container,
-  .form-container {
-    width: 60%;
-  }
-
-  .user-form {
-    margin-top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .uform > input,
-  .uform > button,
-  .remember {
-    width: 90%;
-  }
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
 }
 
 .image-container {
-  margin-top: 10%;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+}
+
+.form-container {
+    flex: 1;
+    max-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5%;
+}
+
+.uform > select,
+.uform > input,
+.uform > button,
+.remember {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 1100px) {
+    .form-container {
+        margin-top: 8%;
+    }
+
+    .greet {
+        font-size: 18px;
+    }
+
+    .register {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 880px) {
+    .form-container {
+        margin-top: 12%;
+    }
+
+    .greet {
+        font-size: 16px;
+    }
+
+    .register {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 470px) {
+    .register {
+        margin-top: 55px;
+        font-size: 10px;
+    }
+    .register > p{
+        margin-right: 210px;
+    }
+
+    .greet {
+        font-size: 14px;
+        top: 5px;
+        left: 5px;
+    }
+
+    .image-container {
+        margin-top: 40%;
+    }
+}
+
+@media (min-width: 768px) {
+    .user-div {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .image-container,
+    .form-container {
+        width: 45%;
+    }
+
+    .uform > input,
+    .uform > button,
+    .remember {
+        width: 90%;
+    }
 }
