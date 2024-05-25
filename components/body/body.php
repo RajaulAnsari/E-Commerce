@@ -13,8 +13,9 @@ oci_free_statement($stmt);
 
 
 $sqlr = "
+
 SELECT * FROM (
-    SELECT p.PRODUCT_ID, p.PRODUCT_NAME, p.PRODUCT_IMAGE, COUNT(DISTINCT ra.PRODUCT_ID) AS product_count
+    SELECT p.PRODUCT_ID, p.PRODUCT_NAME, p.PRODUCT_IMAGE, COUNT(*) AS product_count
     FROM REVIEW_ACCESS ra
     LEFT JOIN PRODUCT p ON ra.PRODUCT_ID = p.PRODUCT_ID
     WHERE ra.IS_COLLECTED = 1
