@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
     }
 
     // Check file size
-    if ($_FILES["image"]["size"] > 500000) {
+    if ($_FILES["image"]["size"] > 1000000) {
         echo "Sorry, your file is too large.";
         $uploadOk = 0;
     }
@@ -114,16 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["update_profile"])) {
     oci_bind_by_name($updateAddressStmt, ":tusername", $tusername);
     oci_execute($updateAddressStmt);
     oci_free_statement($updateAddressStmt);
-
-    // Update password
-    // Ensure to hash the new password before updating it in the database
-    // $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-    // $updatePasswordSql = "UPDATE TRADER SET TRADER_PASSWORD = :new_password WHERE TUSER_NAME = :tusername";
-    // $updatePasswordStmt = oci_parse($conn, $updatePasswordSql);
-    // oci_bind_by_name($updatePasswordStmt, ":new_password", $hashedPassword);
-    // oci_bind_by_name($updatePasswordStmt, ":tusername", $tusername);
-    // oci_execute($updatePasswordStmt);
-    // oci_free_statement($updatePasswordStmt);
 
     // Redirect to refresh the page and display updated information
     header("Location: ".$_SERVER['PHP_SELF']);

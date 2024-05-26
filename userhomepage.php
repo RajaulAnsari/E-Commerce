@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"])) {
     } else {
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
             // Image uploaded successfully, update image path in the database
-            $imagePath = basename($targetFile);
+            $imagePath = $targetFile;
             // Update the database with the new image path
             $updateSql = "UPDATE USER_CLECK SET USER_IMAGE = :IMAGE_PATH WHERE UUSER_NAME = :uusername";
             $updateStmt = oci_parse($conn, $updateSql);

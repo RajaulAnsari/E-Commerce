@@ -347,7 +347,8 @@ oci_close($conn);
                     required min="0">
                 <input type="text" name="allergy_information" id="allergy_information"
                     placeholder="Allergy Information">
-                <input type="file" name="product_image" id="product_image" accept="image/*" placeholder="Product Image">
+                <input type="file" name="product_image" id="product_image" accept="image/*" placeholder="Product Image"
+                    required>
                 <input type="number" name="product_stock" id="product_stock" placeholder="Product Stock" required
                     min="0">
                 <select name="product_category" id="product_category" required>
