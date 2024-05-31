@@ -219,7 +219,7 @@ if ($uusername) {
     }
 } else {
     // uusername not set in the session
-    echo "uusername not set.";
+    // echo "uusername not set.";
 }
 
 function generateStars($rating) {

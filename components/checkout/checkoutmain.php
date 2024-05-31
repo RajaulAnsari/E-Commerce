@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['confirmPayment'])) {
     </br>
     </br>
     <div class="collection-slot-title">
-        <h2>User Dashboard</h2>
+        <h2>Collection Slot</h2>
     </div>
     </br>
     </br>

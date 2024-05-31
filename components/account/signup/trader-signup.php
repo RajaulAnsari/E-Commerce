@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Prepare the SQL statement for SHOP
             $sql_shop = "INSERT INTO \"SHOP\" 
-                         (SHOP_ID, SHOP_NAME, SHOP_ADDRESS, PHONE_NUMBER, SHOP_DESCRIPTION, USER_ID, SHOP_IMAGE, SHOP_ADMIN_VERIFICATION) 
+                         (SHOP_ID, SHOP_NAME, SHOP_ADDRESS, PHONE_NUMBER, SHOP_DESCRIPTION, TRADER_ID, SHOP_IMAGE, SHOP_ADMIN_VERIFICATION) 
                          VALUES (SHOP_ID_SEQ.NEXTVAL, :shopname, :shopaddress, :contact, :shopdescription, :userid, :shopimage,0)
                          RETURNING SHOP_ID INTO :shop_id";
 

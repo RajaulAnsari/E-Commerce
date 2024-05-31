@@ -92,7 +92,7 @@ CREATE TABLE SHOP (
 	SHOP_ADDRESS   VARCHAR2(255), 
 	PHONE_NUMBER    INTEGER, 
 	SHOP_DESCRIPTION   VARCHAR2(255), 
-	USER_ID    INTEGER NOT NULL,
+	TRADER_ID    INTEGER NOT NULL,
     SHOP_ADMIN_VERIFICATION NUMBER,
     SHOP_IMAGE VARCHAR2(255),
     CREATED_AT DATE
@@ -105,7 +105,6 @@ DROP SEQUENCE SHOP_ID_SEQ;
 -- Create the sequence for generating user IDs
 CREATE SEQUENCE SHOP_ID_SEQ
     MINVALUE 1
-    MAXVALUE 10
     START WITH 1
     INCREMENT BY 1
     NOCACHE;
@@ -127,8 +126,8 @@ END;
 
 -- Adding the SHOP_NAME is unique
 -- refering the shop table in Trader so be uniques or Primary
-ALTER TABLE SHOP
-ADD CONSTRAINT uk_SHOP_NAME UNIQUE (SHOP_NAME);
+--ALTER TABLE SHOP
+--ADD CONSTRAINT uk_SHOP_NAME UNIQUE (SHOP_NAME);
 
 -- Adding  the "USER_ID" into Primary Key
 ALTER TABLE SHOP
@@ -136,9 +135,13 @@ ADD CONSTRAINT pk_SHOP PRIMARY KEY (SHOP_ID);
 
 -- This constraint ensures that the foreign key of table "SHOP"
 -- correctly references the primary key of table "SHOP"
+--ALTER TABLE SHOP
+--ADD CONSTRAINT fk_SHOP FOREIGN KEY (USER_ID)
+--REFERENCES SHOP(SHOP_ID);
+
 ALTER TABLE SHOP
-ADD CONSTRAINT fk_SHOP FOREIGN KEY (USER_ID)
-REFERENCES SHOP(SHOP_ID);
+ADD CONSTRAINT fk_SHOP_TRADER_ID FOREIGN KEY (TRADER_ID)
+REFERENCES TRADER(TRADER_ID);
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -755,7 +758,8 @@ CREATE TABLE TRADER (
 	TRADER_IMAGE   VARCHAR2(255),
 	IS_VERIFIED   NUMBER,
     TRADER_ADMIN_VERIFICATION NUMBER,
-    SHOP_ID INTEGER
+    SHOP_ID INTEGER,
+    USER_ID  INTEGER
 
 );
 
@@ -796,6 +800,10 @@ ADD CONSTRAINT pk_TRADER PRIMARY KEY (TRADER_ID);
 ALTER TABLE TRADER
 ADD CONSTRAINT fk_TRADER_SHOP_ID FOREIGN KEY (SHOP_ID)
 REFERENCES SHOP(SHOP_ID);
+
+ALTER TABLE TRADER
+ADD CONSTRAINT fk_TRADER_USER_ID FOREIGN KEY (USER_ID)
+REFERENCES USER_CLECK(USER_ID);
 
 ------------------------------------------------------------------------------------------------------------------------------
 
@@ -873,6 +881,7 @@ DROP SEQUENCE REVENUE_ID_SEQ;
 
 -- Create the sequence for generating user IDs
 CREATE SEQUENCE REVENUE_ID_SEQ
+    MINVALUE 1
     START WITH 1
     INCREMENT BY 1
     NOCACHE;
