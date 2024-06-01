@@ -91,6 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" name="uusername" placeholder="Username" required><br>
                     <input type="email" name="email" placeholder="Email" required><br>
                     <input type="password" name="password" id="password" placeholder="Password" required><br>
+                    <div id="passwordError1" style="color: red; display: none;">Password must contain at least one
+                        uppercase letter, one lowercase letter, one number, and be at least 8 characters.</div>
                     <input type="password" name="confirmpassword" id="confirmPassword" placeholder="Confirm Password"
                         required><br>
                     <div id="passwordError" style="color: red; display: none;">Passwords do not match</div>
