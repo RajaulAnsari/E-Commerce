@@ -4,19 +4,19 @@ include 'connection.php';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
+    // Retrieve form data and sanitize
+    $firstname = htmlspecialchars($_POST['firstname']);
+    $lastname = htmlspecialchars($_POST['lastname']);
+    $username = htmlspecialchars($_POST['username']);
+    $email = htmlspecialchars($_POST['email']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirmpassword'];
-    $address = $_POST['address'];
-    $contact = $_POST['contact'];
-    $productcategories = $_POST['productcategories'];
-    $shopname = $_POST['shopname'];
-    $shopaddress = $_POST['shopaddress'];
-    $shopdescription = $_POST['shopdescription'];
+    $address = htmlspecialchars($_POST['address']);
+    $contact = htmlspecialchars($_POST['contact']);
+    $productcategories = htmlspecialchars($_POST['productcategories']);
+    $shopname = htmlspecialchars($_POST['shopname']);
+    $shopaddress = htmlspecialchars($_POST['shopaddress']);
+    $shopdescription = htmlspecialchars($_POST['shopdescription']);
     $shopimage = $_FILES['shopimage']['name'];
 
     // Check if passwords match
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Prepare the SQL statement for TRADER
         $sql_trader = "INSERT INTO \"TRADER\" 
                        (TRADER_ID, TRADER_FIRST_NAME, TRADER_LAST_NAME, EMAIL_ADDRESS, TRADER_PASSWORD, TRADER_ADDRESS, CONTACT_NO, IS_VERIFIED, TRADER_ADMIN_VERIFICATION, PRODUCT_CATEGORY, SHOP_NAME, TUSER_NAME) 
-                       VALUES (TRADER_ID_SEQ.NEXTVAL, :firstname, :lastname, :email, :password, :address, :contact, 0,0, :productcategories, :shopname, :username)
+                       VALUES (TRADER_ID_SEQ.NEXTVAL, :firstname, :lastname, :email, :password, :address, :contact, 0, 0, :productcategories, :shopname, :username)
                        RETURNING TRADER_ID INTO :trader_id";
 
         $stmt_trader = oci_parse($conn, $sql_trader);
@@ -56,10 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (!empty($shopimage)) {
                 $target_dir = "./images/shop/";
                 $target_file = $target_dir . basename($shopimage);
-                move_uploaded_file($_FILES["shopimage"]["tmp_name"], $target_file);
-
-                // Store only the basename of the uploaded file
-                $shopimage_name = basename($shopimage);
+                if (move_uploaded_file($_FILES["shopimage"]["tmp_name"], $target_file)) {
+                    $shopimage_name = basename($shopimage);
+                } else {
+                    $shopimage_name = null;
+                }
             } else {
                 $shopimage_name = null;
             }
@@ -67,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Prepare the SQL statement for SHOP
             $sql_shop = "INSERT INTO \"SHOP\" 
                          (SHOP_ID, SHOP_NAME, SHOP_ADDRESS, PHONE_NUMBER, SHOP_DESCRIPTION, TRADER_ID, SHOP_IMAGE, SHOP_ADMIN_VERIFICATION) 
-                         VALUES (SHOP_ID_SEQ.NEXTVAL, :shopname, :shopaddress, :contact, :shopdescription, :userid, :shopimage,0)
+                         VALUES (SHOP_ID_SEQ.NEXTVAL, :shopname, :shopaddress, :contact, :shopdescription, :userid, :shopimage, 0)
                          RETURNING SHOP_ID INTO :shop_id";
 
             $stmt_shop = oci_parse($conn, $sql_shop);
@@ -86,27 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Execute the statement
             $result_shop = oci_execute($stmt_shop);
 
-            // Check if the SHOP was successfully registered
-            $subject = "Verify Shop Registration";
-            $html = "
-
-            <div style='font-family: Arial, sans-serif; border: 2px solid #007bff; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
-                <h2 style='color: green; margin-bottom: 20px;'>Shop Registration</h2>
-                <p>Hello Admin,</p>
-                <p>A new shop has been registered with CleckHub. Please verify the shop details.</p>
-                <p>Shop Details:</p>
-                <ul>
-                    <li>Shop Name: $shopname</li>
-                    <li>Shop Address: $shopaddress</li>
-                    <li>Shop Description: $shopdescription</li>
-                </ul>            
-            <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/shopVerificationByAdmin.php?shopid=" . urlencode($shop_id) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Email Address</a>
-            ";
-
-            // Send verification email
-            sendVerificationEmail('cleckhub2@gmail.com', $subject, $html);
-
-
             if ($result_shop) {
                 // Update the TRADER table with the SHOP_ID
                 $sql_update_trader = "UPDATE \"TRADER\" SET SHOP_ID = :shop_id WHERE TRADER_ID = :trader_id";
@@ -115,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 oci_bind_by_name($stmt_update_trader, ":trader_id", $trader_id);
                 oci_execute($stmt_update_trader);
 
-                // Define email subject and body
+                // Send verification email to the trader
                 $subject = "Verify Your Email Address";
                 $html = "
                 <div style='font-family: Arial, sans-serif; border: 2px solid #007bff; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
@@ -126,11 +106,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p style='margin-top: 20px; font-size: 14px; color: #777;'>If you did not register for CleckHub, please ignore this email.</p>
                 </div>
                 ";
-
-                // Send verification email
                 sendVerificationEmail($email, $subject, $html);
 
-                //Define email subject and body
+                // Send verification email to the admin
                 $subject = "Trader Registration";
                 $html = "
                 <div style='font-family: Arial, sans-serif; border: 2px solid #007bff; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
@@ -153,13 +131,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <li>Shop Address: $shopaddress</li>
                         <li>Shop Description: $shopdescription</li>
                     </ul>
-
-                    <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/traderVerificationByAdmin.php?email=" . urlencode($email) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Trader</a>
+                    <a href='http://{$_SERVER['HTTP_HOST']}/E-Commerce/traderVerificationByAdmin.php?email=" . urlencode($email) . "&shopid=" . urlencode($shop_id) . "' style='display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; margin-top: 20px;'>Verify Trader</a>
                 ";
-
-                // Send email to admin
                 sendVerificationEmail('cleckhub2@gmail.com', $subject, $html);
-                
 
                 echo "<script>alert('Registration successful! Verification Required.');</script>";
                 echo "<script>window.location = './tradersignin.php'</script>";
@@ -207,16 +181,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div id="passwordError" style="color: red; display: none;">Passwords do not match</div>
                     <input type="text" name="address" placeholder="Address" required><br>
                     <input type="tel" name="contact" placeholder="Contact" required><br>
-
                     <select name="productcategories" required>
                         <option value="" disabled selected>Select Product Category</option>
                         <option value="Fruits">Fruits</option>
                         <option value="Vegetables">Vegetables</option>
                         <option value="Meat">Meat</option>
-                        <option value="Meat">Bakery</option>
-                        <option value="Meat">Fish</option>
+                        <option value="Bakery">Bakery</option>
+                        <option value="Fish">Fish</option>
                     </select><br>
-
                     <input type="text" name="shopname" placeholder="Shop Name" required><br>
                     <input type="text" name="shopaddress" placeholder="Shop Address" required><br>
                     <input type="text" name="shopdescription" placeholder="Shop Description" required><br>
@@ -225,10 +197,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="file" name="shopimage" id="shopimage" accept="image/*"
                             style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; width: 90%;">
                     </div>
-
                     <label class="remember"><input type="checkbox" name="remember" value="remember" required>&nbsp I
-                        agree to the
-                        terms and conditions</label><br>
+                        agree to the terms and conditions</label><br>
                     <button type="submit" id="submitButton">Register</button>
                 </form>
             </div>
