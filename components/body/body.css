@@ -219,3 +219,22 @@ img {
   margin: 10px 0;
   font-size: 1.2em;
 }
+
+
+@media (min-width: 656px) and (max-width: 702px) {
+  #collection .buy-now button {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 556px) and (max-width: 575px) {
+  #collection .buy-now button {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 425px) {
+  #collection .buy-now button {
+    font-size: 15px;
+  }
+}
