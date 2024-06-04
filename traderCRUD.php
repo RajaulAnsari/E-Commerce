@@ -206,20 +206,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['product_image'])) {
 // Fetch products after any operations
 $products = fetchProducts($conn, $shopId);
 
-// Handle edit and delete actions
+// Handle delete operation
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['delete'])) {
         $productId = $_POST['product_id'];
 
-        $sql = "DELETE FROM PRODUCT WHERE PRODUCT_ID = :product_id AND SHOP_ID = :shop_id";
-        $stmt = oci_parse($conn, $sql);
-        oci_bind_by_name($stmt, ":product_id", $productId);
-        oci_bind_by_name($stmt, ":shop_id", $shopId);
-        oci_execute($stmt);
-        oci_free_statement($stmt);
+        if (!empty($productId)) {
+            // Delete associated discount records first
+            $deleteDiscountSql = "DELETE FROM DISCOUNT WHERE PRODUCT_ID = :product_id";
+            $deleteDiscountStmt = oci_parse($conn, $deleteDiscountSql);
+            oci_bind_by_name($deleteDiscountStmt, ":product_id", $productId);
+            oci_execute($deleteDiscountStmt);
+            oci_free_statement($deleteDiscountStmt);
 
-        echo "<script>alert('Product deleted successfully.')</script>";
-        echo "<script>window.location = 'traderCRUD.php';</script>";
+            // Now proceed with deleting the product
+            $deleteProductSql = "DELETE FROM PRODUCT WHERE PRODUCT_ID = :product_id AND SHOP_ID = :shop_id";
+            $deleteProductStmt = oci_parse($conn, $deleteProductSql);
+            oci_bind_by_name($deleteProductStmt, ":product_id", $productId);
+            oci_bind_by_name($deleteProductStmt, ":shop_id", $shopId);
+            oci_execute($deleteProductStmt);
+            oci_free_statement($deleteProductStmt);
+
+            echo "<script>alert('Product deleted successfully.')</script>";
+            echo "<script>window.location = 'traderCRUD.php';</script>";
+        } else {
+            echo "<script>alert('Product ID is missing.')</script>";
+        }
     }
 }
 
